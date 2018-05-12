@@ -1,16 +1,30 @@
 { pkgs }:
 
 let
-my_plugins = import ./plugins.nix { inherit (pkgs) vimUtils fetchFromGitHub; };
+  my_plugins = import ./plugins.nix { inherit (pkgs) vimUtils fetchFromGitHub; };
+  configurable_nix_path = <nixpkgs/pkgs/applications/editors/vim/configurable.nix>;
+  my_vim_configurable = with pkgs; vimUtils.makeCustomizable (callPackage configurable_nix_path {
+    inherit (darwin.apple_sdk.frameworks) CoreServices Cocoa Foundation CoreData;
+    inherit (darwin) libobjc cf-private;
 
-in with pkgs; vim_configurable.customize {
-  name = "vim";
+    features = "hugeX"; # one of  tiny, small, normal, big or huge
+    lua = pkgs.lua5_1;
+    gui = "auto";
+    python = python3;
+
+    # optional features by flags
+    flags = [ "python" "X11" ];
+  });
+
+
+in with pkgs; my_vim_configurable.customize {
+  name = "ovim";
   vimrcConfig = {
     customRC = builtins.readFile ./vimrc;
     vam.knownPlugins = vimPlugins // my_plugins;
     vam.pluginDictionaries = [
       { names = [
-        "vim-wombat"
+        "vim-colorschemes"
         "ultisnips"
         "nerdtree"
         "ale"
@@ -24,6 +38,7 @@ in with pkgs; vim_configurable.customize {
         "vim-javascript"
         "elm-vim"
         "vim-elixir"
+        "vim-nix"
       ]; }
     ];
   };

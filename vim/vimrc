@@ -49,6 +49,8 @@ set softtabstop=2
 set shiftwidth=2
 " set expandtab "ignoring tabs putting spaces raplacing tabs
 
+""colorscheme
+colorscheme wombat
 
 " /*** NERDTree Config ***/
 
