@@ -11,26 +11,19 @@ in with pkgs; vim_configurable.customize {
     vam.pluginDictionaries = [
       { names = [
         "vim-wombat"
+        "ultisnips"
         "nerdtree"
         "ale"
         "ctrlp"
         "vim-addon-nix"
         "youcompleteme"
-        "molokai"
         "fugitive"
         "gitgutter"
         "vim-airline"
         "vim-airline-themes"
-        "sleuth"
-        "vim-go"
         "vim-javascript"
-        "vim-vue"
         "elm-vim"
-        "vim-pony"
-        "nim-vim"
         "vim-elixir"
-        "alchemist-vim"
-        "hexmode"
       ]; }
     ];
   };

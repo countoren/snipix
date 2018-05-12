@@ -1,5 +1,16 @@
 { vimUtils, fetchFromGitHub }:
 {
+  ultisnips = vimUtils.buildVimPluginFrom2Nix {
+    name = "ultisnips-countoren-2018-01-12";
+    src = fetchFromGitHub {
+      owner = "countoren";
+      repo = "ultisnips";
+      rev = "423f264e753cec260b4f14455126e6db7ba429af";
+      sha256 = "19g3k0nqzizv39rxwgkca9n2gsd19z2wwsmicr0zcgnf50nhkznh";
+    };
+    dependencies = [];
+  };
+
   ale = vimUtils.buildVimPluginFrom2Nix {
     name = "ale-2017-07-10";
     src = fetchFromGitHub {
@@ -33,16 +44,6 @@
     dependencies = [];
   };
 
-  vim-pony = vimUtils.buildVimPluginFrom2Nix {
-    name = "vim-pony-2016-11-14";
-    src = fetchFromGitHub {
-      owner = "jakwings";
-      repo = "vim-pony";
-      rev = "26ad120229dbb4470cd9de2b6f6a57a0fa1ac6c6";
-      sha256 = "1s19dpj7kglc05bb5yyq1w9aa2sg76h56cldjcvdckj5x3r7j5ni";
-    };
-    dependencies = [];
-  };
 
   vim-javascript = vimUtils.buildVimPluginFrom2Nix {
     name = "vim-javascript-2016-11-10";
@@ -55,47 +56,4 @@
     dependencies = [];
   };
 
-  vim-vue = vimUtils.buildVimPluginFrom2Nix {
-    name = "vim-vue-2016-10-22";
-    src = fetchFromGitHub {
-      owner = "posva";
-      repo = "vim-vue";
-      rev = "e13f9abf5ff71954226f71f60175f78efd7bfadd";
-      sha256 = "07zwhzna5g22scjy2mq4clsgpkfavpgxiqvnfbfydgc52h73l27r";
-    };
-    dependencies = [];
-  };
-
-  nim-vim = vimUtils.buildVimPluginFrom2Nix {
-    name = "nim.vim-2016-05-19";
-    src = fetchFromGitHub {
-      owner = "zah";
-      repo = "nim.vim";
-      rev = "dcf25798f4a3f75e9538f9915959061edbff97cf";
-      sha256 = "1jaiqkspfz2a4ny130dl0h6x9752flpcwwy0kscrqmlqf5fqiyvm";
-    };
-    dependencies = [];
-  };
-
-  alchemist-vim = vimUtils.buildVimPluginFrom2Nix {
-    name = "alchemist-vim-2016-11-07";
-    src = fetchFromGitHub {
-      owner = "slashmili";
-      repo = "alchemist.vim";
-      rev = "718d16c38f473254589f4e71b6b0680b55d88fcf";
-      sha256 = "0v2gb234rbzz31x1xgaq2x03hzzsijiaq3c96z3yhl82pvrfsfzy";
-    };
-    dependencies = [];
-  };
-
-  hexmode = vimUtils.buildVimPluginFrom2Nix {
-    name = "hexmode-2016-11-04";
-    src = fetchFromGitHub {
-      owner = "fidian";
-      repo = "hexmode";
-      rev = "27932330b9a36c91a6039267bc32a18060e82d57";
-      sha256 = "00xdv6d3rmalv342ajqd7cgbci97frd7pmsrgfnaqcfimycka3la";
-    };
-    dependencies = [];
-  };
 }
