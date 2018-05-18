@@ -37,6 +37,9 @@ set autowrite  " Writes on make/shell commands
 set timeoutlen=250  " Time to wait after ESC (default causes an annoying delay)
 " colorscheme vividchalk  " Uncomment this to set a default theme
 
+let &t_SI.="\e[5 q"
+let &t_SR.="\e[4 q"
+let &t_EI.="\e[1 q"
 
 "adding more history (default 20)
 set history=1000

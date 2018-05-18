@@ -7,9 +7,9 @@ let
     inherit (darwin.apple_sdk.frameworks) CoreServices Cocoa Foundation CoreData;
     inherit (darwin) libobjc cf-private;
 
-    features = "hugeX"; # one of  tiny, small, normal, big or huge
+    features = "huge"; # one of  tiny, small, normal, big or huge
     lua = pkgs.lua5_1;
-    gui = "auto";
+    gui = config.vim.gui or "auto";
     python = python3;
 
     # optional features by flags
@@ -39,6 +39,8 @@ in with pkgs; my_vim_configurable.customize {
         "elm-vim"
         "vim-elixir"
         "vim-nix"
+        "vimproc"
+        "vimshell"
       ]; }
     ];
   };
