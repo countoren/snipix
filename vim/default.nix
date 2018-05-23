@@ -25,12 +25,14 @@ in with pkgs; my_vim_configurable.customize {
     vam.pluginDictionaries = [
       { names = [
         "vim-colorschemes"
-        "ultisnips"
+        "youcompleteme"
+        "supertab"  # needed to integrate UltiSnips and YouCompleteMe
+        "ultisnips" # snippet engine
+        "vim-snippets"  # snippet database
         "nerdtree"
         "ale"
         "ctrlp"
         "vim-addon-nix"
-        "youcompleteme"
         "fugitive"
         "gitgutter"
         "vim-airline"
@@ -41,6 +43,7 @@ in with pkgs; my_vim_configurable.customize {
         "vim-nix"
         "vimproc"
         "vimshell"
+        "wombat256-vim"
       ]; }
     ];
   };
