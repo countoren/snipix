@@ -71,11 +71,12 @@ nmap <silent> <leader>vb :NERDTree $VIMFolder/bundle<CR>
 nmap <silent> <leader>c :NERDTreeToggle .<CR>
 nmap <silent> <leader>n :NERDTreeToggle<CR>
 
-"UltiSnips YCM
+"UltiSnips variables
 " make YCM compatible with UltiSnips (using supertab)
 let g:ycm_key_list_select_completion = ['<C-n>', '<Down>']
 let g:ycm_key_list_previous_completion = ['<C-p>', '<Up>']
 let g:SuperTabDefaultCompletionType = '<C-n>'
+let g:UltiSnipsSnippetsDir = "~/.nixpkgs/vim/UltiSnips"
 
 " better key bindings for UltiSnipsExpandTrigger
 let g:UltiSnipsExpandTrigger = "<tab>"
