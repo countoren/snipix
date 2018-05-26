@@ -3,7 +3,7 @@
 	allowUnfree = true;
 
 	packageOverrides = pkgs_: with pkgs_; {
-		vim = import ./vim { inherit pkgs; };
+		mvim = import ./vim { inherit pkgs; };
     macvim = stdenv.mkDerivation {
       name = "macvim-147";
       src = fetchurl {
