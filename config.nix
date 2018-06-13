@@ -2,8 +2,26 @@
 # Allow proprietary packages
 	allowUnfree = true;
 
-	packageOverrides = pkgs_: with pkgs_; {
-		mvim = import ./vim { inherit pkgs; };
+  packageOverrides = pkgs_: with pkgs_; {
+    bash-config = import ./bash-config {
+        inherit (pkgs) stdenv;
+    };
+
+
+    mvim = import ./vim { inherit pkgs; };
+    mmvim = import ./vim/macvim.nix { inherit stdenv
+      fetchFromGitHub
+      ncurses
+      gettext
+      pkgconfig
+      cscope
+      python
+      ruby
+      tcl
+      perl
+      luajit
+      darwin; 
+    };
     macvim = stdenv.mkDerivation {
       name = "macvim-147";
       src = fetchurl {
@@ -25,6 +43,7 @@
         ln -sf $out/bin/mvim $out/bin/gvim
       '';
     };
+
 
   };
 }
