@@ -1,15 +1,13 @@
 #!/usr/bin/env bash
 set -e
 
-echo "Installing nix profile"
-#nix-env -i all
-
-pushd $HOME > /dev/null
-
-echo "Creating dotfiles links in user home"
-
-ls -A .nix-profile/userHome/ | xargs -I {} ln -sf .nix-profile/userHome/{} {}
-
-popd > /dev/null
-
-echo "Done"
+echo "Installing nix"
+curl https://nixos.org/nix/install | sh
+echo "Installing git"
+nix-env -i git
+echo "cloning my nix packages"
+git clone https://github.com/countoren/nixpkgs.git ~/.nixpkgs
+echo "installing HomeInstall"
+nix-env -i homeInstall
+echo "running homeInstall"
+homeInstall

@@ -7,21 +7,17 @@
         inherit (pkgs) stdenv;
     };
 
+    homeInstall = pkgs.writeShellScriptBin "homeInstall"   (builtins.readFile ./HomeInstall/homeInstallSymLinks);
 
-    mvim = import ./vim { inherit pkgs; };
-    mmvim = import ./vim/macvim.nix { inherit stdenv
-      fetchFromGitHub
-      ncurses
-      gettext
-      pkgconfig
-      cscope
-      python
-      ruby
-      tcl
-      perl
-      luajit
-      darwin; 
+    dotfiles = with pkgs; buildEnv {
+      name = "dotfiles";
+      paths = [
+        bash-config
+      ];
     };
+
+    ovim = import ./vim { inherit pkgs; };
+
     macvim = stdenv.mkDerivation {
       name = "macvim-147";
       src = fetchurl {
