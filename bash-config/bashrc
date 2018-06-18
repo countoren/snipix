@@ -1,1 +1,2 @@
 ovim -c 'VimShell'
+echo 'lalalala'
