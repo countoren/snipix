@@ -1,36 +1,19 @@
-let 
-  d = dotfilePath: {stdenv}:
-    let dotfileName = baseNameOf dotfilePath;
-    in
-    stdenv.mkDerivation rec {
-      name = dotfileName;
-
-      phases = [ "installPhase" ];
-
-      src = dotfilePath;
-
-      installPhase = ''
-        install -dm 755 $out/userHome
-        substitute $src $out/userHome/.''+dotfileName;
-    };
-in
 {
 # Allow proprietary packages
 	allowUnfree = true;
 
   packageOverrides = pkgs_: with pkgs_; {
-    bash-config = import ./bash-config {
-        inherit (pkgs) stdenv;
-    };
-
-
 
     homeInstall = pkgs.writeShellScriptBin "homeInstall"   (builtins.readFile ./HomeInstall/homeInstallSymLinks);
 
     dotfiles = with pkgs; buildEnv {
       name = "dotfiles";
-      paths = [
-        (d ./bash-config/bashrc { inherit (pkgs) stdenv; })
+      paths =       
+      let dotfile = import ./HomeInstall/toDotFileExp.nix  { inherit stdenv; };
+      in
+      [
+        (dotfile ./bash-config/bashrc)
+        (dotfile ./HomeInstall/bash_profile)
       ];
     };
 
