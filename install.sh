@@ -4,6 +4,7 @@ set -e
 echo "Installing nix"
 curl https://nixos.org/nix/install | sh
 source /etc/bashrc
+source /etc/profile
 if [ ! -d "~/.nixpkgs" ]; then
 	echo "Installing git"
 	nix-env -i git
