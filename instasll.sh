@@ -3,9 +3,10 @@ set -e
 
 echo "Installing nix"
 curl https://nixos.org/nix/install | sh
-echo "Installing git"
-nix-env -i git
+source /etc/bashrc
 if [ ! -d "~/.nixpkgs" ]; then
+	echo "Installing git"
+	nix-env -i git
 	echo "cloning my nix packages"
 	git clone https://github.com/countoren/nixpkgs.git ~/.nixpkgs
 fi
