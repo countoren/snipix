@@ -2,7 +2,7 @@
 
 run 
 
-curl https://raw.githubusercontent.com/countoren/nixpkgs/master/instasll.sh | sh
+curl https://raw.githubusercontent.com/countoren/nixpkgs/master/install.sh | sh
 
 
 to install profile
