@@ -14,4 +14,4 @@ fi
 echo "installing HomeInstall"
 nix-env -i homeInstall
 echo "running homeInstall"
-homeInstall
+eval 'homeInstall'

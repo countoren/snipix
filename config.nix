@@ -2,11 +2,11 @@
 # Allow proprietary packages
 	allowUnfree = true;
 
-  packageOverrides = pkgs_: with pkgs_; {
+  packageOverrides = pkgs: with pkgs; rec {
 
     homeInstall = pkgs.writeShellScriptBin "homeInstall"   (builtins.readFile ./HomeInstall/homeInstallSymLinks);
 
-    dotfiles = with pkgs; buildEnv {
+    dotfiles = buildEnv {
       name = "dotfiles";
       paths =       
       let dotfile = import ./HomeInstall/toDotFileExp.nix  { inherit stdenv; };
@@ -14,6 +14,14 @@
       [
         (dotfile ./bash-config/bashrc)
         (dotfile ./HomeInstall/bash_profile)
+      ];
+    };
+
+    core = buildEnv {
+      name = "core";
+      paths = [  
+        dotfiles
+        ovim
       ];
     };
 
