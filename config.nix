@@ -9,11 +9,13 @@
     dotfiles = buildEnv {
       name = "dotfiles";
       paths =       
-      let dotfile = import ./HomeInstall/toDotFileExp.nix  { inherit stdenv; };
+      let dfUtils = import ./HomeInstall/toDotFileExp.nix  
+        { mkDerivation = stdenv.mkDerivation; writeText = pkgs.writeText; };
       in
       [
-        (dotfile ./bash-config/bashrc)
-        (dotfile ./HomeInstall/bash_profile)
+        (dfUtils.toDotfile ./bash-config/bashrc)
+        (dfUtils.toDotfileWithDeps ./bash-config/bashrc2 {inherit ovim;})
+        (dfUtils.toDotfile ./HomeInstall/bash_profile)
       ];
     };
 
