@@ -6,7 +6,7 @@ pushd $HOME > /dev/null
 
 echo "Creating dotfiles links in user home"
 
-ls -A .nix-profile/userHome/ | xargs -I {} ln -sf .nix-profile/userHome/{} {}
+ls -A .nix-profile/userHome/ | xargs -I {} sh -c 'mv -vn {} {}.backup-before-nix 2>/dev/null;  ln -sf .nix-profile/userHome/{} {}'
 
 popd > /dev/null
 
