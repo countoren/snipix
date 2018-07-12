@@ -1,107 +1,23 @@
-{ stdenv, fetchFromGitHub, ncurses, gettext
-, pkgconfig, cscope, python, ruby, tcl, perl, luajit
-, darwin
-}:
-
-stdenv.mkDerivation rec {
-  name = "omvim";
-
-  version = "7.4.909";
-
-  src = fetchFromGitHub {
-    owner = "macvim-dev";
-    repo = "macvim";
-    rev = "75aa7774645adb586ab9010803773bd80e659254";
-    sha256 = "0k04jimbms6zffh8i8fjm2y51q01m5kga2n4djipd3pxij1qy89y";
-  };
-
-  enableParallelBuilding = true;
-
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [
-    gettext ncurses luajit ruby tcl perl python
-  ];
-
-  patches = [ ./macvim.patch ];
-
-  postPatch = ''
-    substituteInPlace src/MacVim/mvim --replace "# VIM_APP_DIR=/Applications" "VIM_APP_DIR=$out/Applications"
-    # Don't create custom icons.
-    substituteInPlace src/MacVim/icons/Makefile --replace '$(MAKE) -C makeicns' ""
-    substituteInPlace src/MacVim/icons/make_icons.py --replace "dont_create = False" "dont_create = True"
-    # Full path to xcodebuild
-    substituteInPlace src/Makefile --replace "xcodebuild" "/usr/bin/xcodebuild"
-  '';
-
-  configureFlags = [
-      #"--enable-cscope" # TODO: cscope doesn't build on Darwin yet
-      "--enable-fail-if-missing"
-      "--with-features=huge"
-      "--enable-gui=macvim"
-      "--enable-multibyte"
-      "--enable-nls"
-      "--enable-luainterp=dynamic"
-      "--enable-pythoninterp=dynamic"
-      "--enable-perlinterp=dynamic"
-      "--enable-rubyinterp=dynamic"
-      "--enable-tclinterp=yes"
-      "--without-local-dir"
-      "--with-luajit"
-      "--with-lua-prefix=${luajit}"
-      "--with-ruby-command=${ruby}/bin/ruby"
-      "--with-tclsh=${tcl}/bin/tclsh"
-      "--with-tlib=ncurses"
-      "--with-compiledby=Nix"
-  ];
-
-  makeFlags = ''PREFIX=$(out) CPPFLAGS="-Wno-error"'';
-
-  # This is unfortunate, but we need to use the same compiler as XCode,
-  # but XCode doesn't provide a way to configure the compiler.
-  #
-  # If you're willing to modify the system files, you can do this:
-  #   http://hamelot.co.uk/programming/add-gcc-compiler-to-xcode-6/
-  #
-  # But we don't have that option.
-  preConfigure = ''
-    CC=/usr/bin/clang
-    DEV_DIR=$(/usr/bin/xcode-select -print-path)/Platforms/MacOSX.platform/Developer
-    configureFlagsArray+=(
-      "--with-developer-dir=$DEV_DIR"
-    )
-  '';
-
-  postConfigure = ''
-    substituteInPlace src/auto/config.mk --replace "PERL_CFLAGS	=" "PERL_CFLAGS	= -I${darwin.libutil}/include"
-  '';
-
-  postInstall = ''
-    mkdir -p $out/Applications
-    cp -r src/MacVim/build/Release/MacVim.app $out/Applications
-    rm -rf $out/MacVim.app
-    rm $out/bin/{Vimdiff,Vimtutor,Vim,ex,rVim,rview,view}
-    cp src/MacVim/mvim $out/bin
-    cp src/vimtutor $out/bin
-    for prog in "vimdiff" "vi" "vim" "ex" "rvim" "rview" "view"; do
-      ln -s $out/bin/mvim $out/bin/$prog
-    done
-    # Fix rpaths
-    exe="$out/Applications/MacVim.app/Contents/MacOS/Vim"
-    libperl=$(dirname $(find ${perl} -name "libperl.dylib"))
-    install_name_tool -add_rpath ${luajit}/lib $exe
-    install_name_tool -add_rpath ${tcl}/lib $exe
-    install_name_tool -add_rpath ${python}/lib $exe
-    install_name_tool -add_rpath $libperl $exe
-    install_name_tool -add_rpath ${ruby}/lib $exe
-  '';
-
-  meta = with stdenv.lib; {
-    broken = true; # needs ruby 2.2
-    description = "Vim - the text editor - for macOS";
-    homepage    = https://github.com/b4winckler/macvim;
-    license = licenses.vim;
-    maintainers = with maintainers; [ cstrahan ];
-    platforms   = platforms.darwin;
-  };
+{ mkDerivation, fetchFromGitHub}:
+mkDerivation {
+      name = "macvim-8.0.127-python-countoren";
+      src = fetchFromGitHub {
+        owner = "countoren";
+        repo = "Macvim-8.0.127-python";
+        rev = "c81e676a6b2dc08c736a25bf4b3260573ce68dc4";
+        sha256 = "1cpsy2na3lfg2mh0h3z4zp7ldn8rrwycvrb9mzw4vhvif636g2rk";
+      };
+      buildCommand = ''
+        mkdir -p $out/Applications
+        cp -rfv $src/MacVim.app $out/Applications
+        chmod 755 $out/Applications/MacVim.app/Contents/MacOS/* \
+                  $out/Applications/MacVim.app/Contents/bin/*
+        mkdir -p $out/bin
+        ln -sf $out/Applications/MacVim.app/Contents/bin/mvim $out/bin/mvim
+        ln -sf $out/bin/mvim $out/bin/vim
+        ln -sf $out/bin/mvim $out/bin/vi
+        ln -sf $out/bin/mvim $out/bin/gvim
+      '';
 }
-
+#gitVim = fetchFromGitHub { owner = "countoren"; repo = "Macvim-8.0.127-python"; rev = "c81e676a6b2dc08c736a25bf4b3260573ce68dc4"; sha256 = "0k04jimbms6zffh8i8fjm2y51q01m5kga2n4djipd3pxij1qy89y"; }
+#mvim = with pkgs; with stdenv; import ./vim/macvim.nix { inherit mkDerivation fetchFromGitHub p7zip; }
