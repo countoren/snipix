@@ -27,11 +27,11 @@
       ];
     };
 
-    vimrc = import ./vim/VimrcAndPlugins.nix { inherit pkgs; };
+    myvimrc = import ./vim/VimrcAndPlugins.nix { inherit pkgs; };
     ovim = import ./vim/default.nix { inherit pkgs; };
 
     mvim_pure = with pkgs; with stdenv; import ./vim/macvim.nix { inherit mkDerivation fetchFromGitHub; };
 
-    #macvim = pkgs.writeShellScriptBin "macvim" ''${mvim_pure}/bin/mvim -u ${vimrc}'';
+    omvim = pkgs.writeShellScriptBin "omvim" ''${mvim_pure}/bin/mvim -u ${myvimrc} "$@"'';
   };
 }
