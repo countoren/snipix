@@ -1,7 +1,7 @@
 {
 # Allow proprietary packages
 	allowUnfree = true;
-  allowBroken = true;
+  allowBroken = false;
 
   packageOverrides = pkgs: with pkgs; rec {
 
@@ -27,11 +27,24 @@
       ];
     };
 
+    macCore = buildEnv {
+      name = "mac-core";
+      paths = [  
+        core
+        omvim
+      ];
+    };
+
     myvimrc = import ./vim/VimrcAndPlugins.nix { inherit pkgs; };
-    ovim = import ./vim/default.nix { inherit pkgs; };
 
-    mvim_pure = with pkgs; with stdenv; import ./vim/macvim.nix { inherit mkDerivation fetchFromGitHub; };
+    tvim = import ./vim/minimalVim.nix { inherit pkgs; };
+    ovim = import ./vim { inherit pkgs; name = "ovim"; vimrcDrv = myvimrc; };
 
-    omvim = pkgs.writeShellScriptBin "omvim" ''${mvim_pure}/bin/mvim -u ${myvimrc} "$@"'';
+    omvim = with pkgs; with stdenv; import ./vim/macvim.nix { 
+      inherit mkDerivation fetchFromGitHub writeShellScriptBin; 
+      name = "omvim";
+      vimrcDrv = myvimrc;
+    };
+
   };
 }
