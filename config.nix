@@ -5,6 +5,12 @@
 
   packageOverrides = pkgs: with pkgs; rec {
 
+    test = pkgs.writeShellScriptBin "test" ''
+    if [ -f "$HOME/Dropbox/nixpkgs/config.nix" ]; then
+      mkdir -p ~/mybla
+      echo "import ~/Dropbox2/nixpkgs/config.nix" > ~/mybla/file
+    fi
+      '';
     homeInstall = pkgs.writeShellScriptBin "homeInstall" (builtins.readFile ./HomeInstall/homeInstallSymLinks);
 
     dotfiles = buildEnv {
