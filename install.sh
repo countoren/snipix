@@ -2,7 +2,8 @@
 set -e
 
 echo "what enviorment to install?"
-read env
+read env </dev/ttyn
+
 
 echo "Installing nix"
 curl https://nixos.org/nix/install | sh
