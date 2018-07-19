@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 set -e
 
+echo "what enviorment to install?"
+read env
+
 echo "Installing nix"
 curl https://nixos.org/nix/install | sh
 echo 'Loading nix enviorment to current shell'
@@ -27,3 +30,6 @@ echo "installing HomeInstall"
 nix-env -i homeInstall
 echo "running homeInstall"
 eval 'homeInstall'
+
+echo installing $env
+eval 'nix-env -i $env'
