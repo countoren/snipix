@@ -2,7 +2,7 @@
 set -e
 
 echo "what enviorment to install?"
-read env </dev/ttyn
+read env
 
 
 echo "Installing nix"
