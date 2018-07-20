@@ -1,10 +1,6 @@
 #!/usr/bin/env bash
 set -e
 
-echo "what enviorment to install?"
-read env
-
-
 echo "Installing nix"
 curl https://nixos.org/nix/install | sh
 echo 'Loading nix enviorment to current shell'
@@ -27,10 +23,5 @@ nix-channel --add https://nixos.org/channels/nixpkgs-unstable
 nix-channel --update
 echo 'Regsitered to unstable channel'
 
-echo "installing HomeInstall"
-nix-env -i homeInstall
-echo "running homeInstall"
-eval 'homeInstall'
-
-echo installing $env
-eval 'nix-env -i $env'
+echo "installing $1"
+nix-env -i $1
