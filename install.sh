@@ -25,3 +25,5 @@ echo 'Regsitered to unstable channel'
 
 echo "installing $1"
 nix-env -i $1
+
+eval 'homeInstall'

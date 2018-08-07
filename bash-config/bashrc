@@ -1,3 +1,8 @@
-{ovim}:''
-${ovim}/bin/ovim -c 'VimShell'
+{stdenv, ovim}:''
+#${ovim}/bin/ovim -c 'VimShell'
+''+
+stdenv.lib.strings.optionalString stdenv.isDarwin ''
+#On MacOS:
+osascript -e 'tell application "Terminal" to set current settings of front window to (first settings set whose name is "Homebrew")'
+osascript -e 'tell application "Terminal" to set the font size of window 1 to 14'
 ''

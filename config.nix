@@ -11,7 +11,8 @@
       echo "import ~/Dropbox2/nixpkgs/config.nix" > ~/mybla/file
     fi
       '';
-    homeInstall = pkgs.writeShellScriptBin "homeInstall" (builtins.readFile ./HomeInstall/homeInstallSymLinks);
+
+
 
     dotfiles = buildEnv {
       name = "dotfiles";
@@ -20,15 +21,24 @@
         { mkDerivation = stdenv.mkDerivation; writeText = pkgs.writeText; };
       in
       [
-        (dfUtils.toDotfileWithDeps ./bash-config/bashrc {inherit ovim;})
+        (dfUtils.toDotfileWithDeps ./bash-config/bashrc {inherit stdenv ovim;})
         (dfUtils.toDotfile ./HomeInstall/bash_profile)
       ];
     };
 
+    homeInstall = pkgs.writeShellScriptBin "homeInstall" (builtins.readFile ./HomeInstall/homeInstallSymLinks);
+    bashrc = 
+    let dfUtils = import ./HomeInstall/dotfilesUtils.nix  
+      { mkDerivation = stdenv.mkDerivation; writeText = pkgs.writeText; };
+    in
+    (dfUtils.toDotfileWithDeps ./bash-config/bashrc {inherit ovim;});
+
     core = buildEnv {
       name = "core";
       paths = [  
-        dotfiles
+        homeInstall
+
+        git
         ovim
       ];
     };
@@ -51,6 +61,5 @@
       name = "omvim";
       vimrcDrv = myvimrc;
     };
-
   };
 }
