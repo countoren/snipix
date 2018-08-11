@@ -27,7 +27,3 @@ echo "installing $1"
 nix-env -i $1
 
 eval 'homeInstall'
-#On Macos
-if [ $1 = "mac-core" ]; then
-	eval 'startApps'
-fi

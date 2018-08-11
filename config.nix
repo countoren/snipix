@@ -27,11 +27,10 @@
     };
 
     homeInstall = pkgs.writeShellScriptBin "homeInstall" (builtins.readFile ./HomeInstall/homeInstallSymLinks);
-    bashrc = 
-    let dfUtils = import ./HomeInstall/dotfilesUtils.nix  
-      { mkDerivation = stdenv.mkDerivation; writeText = pkgs.writeText; };
-    in
-    (dfUtils.toDotfileWithDeps ./bash-config/bashrc {inherit ovim;});
+
+    startApps = pkgs.writeShellScriptBin "startApps" ''
+      open $HOME/.nix-profile/Applications/Spectacle.app
+    '';
 
     core = buildEnv {
       name = "core";
@@ -47,7 +46,10 @@
       name = "mac-core";
       paths = [  
         core
+
+        startApps
         omvim
+        spectacle
       ];
     };
 
@@ -61,5 +63,20 @@
       name = "omvim";
       vimrcDrv = myvimrc;
     };
+
+    spectacle = stdenv.mkDerivation {
+      name = "spectacle";
+      src = fetchurl { 
+        url = "https://s3.amazonaws.com/spectacle/downloads/Spectacle+1.2.zip"; 
+        sha256="037kayakprzvs27b50r260lwh2r9479f2pd221qmdv04nkrmnvbn"; 
+      };
+      buildInputs = [ unzip ];
+      buildCommand = ''
+        mkdir -p $out/Applications
+        unzip $src -d $out/Applications
+      '';
+    };
+
+
   };
 }
