@@ -35,8 +35,11 @@
     core = buildEnv {
       name = "core";
       paths = [  
+	#my tools
         homeInstall
+	
 
+	#core packages
         git
         ovim
       ];
@@ -47,7 +50,10 @@
       paths = [  
         core
 
+	#my tools
         startApps
+	
+	#mac core packages
         omvim
         spectacle
       ];
