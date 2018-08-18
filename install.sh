@@ -43,5 +43,5 @@ nix-env -i $1
 eval 'homeInstall'
 #On Macos fixup scripts
 if [ $1 = "mac-core" ]; then
-	eval 'startApps'
+	eval 'startStatusMenuApps'
 fi

@@ -1,18 +1,9 @@
 {
-# Allow proprietary packages
+  # Allow proprietary packages
 	allowUnfree = true;
   allowBroken = false;
 
   packageOverrides = pkgs: with pkgs; rec {
-
-    test = pkgs.writeShellScriptBin "test" ''
-    if [ -f "$HOME/Dropbox/nixpkgs/config.nix" ]; then
-      mkdir -p ~/mybla
-      echo "import ~/Dropbox2/nixpkgs/config.nix" > ~/mybla/file
-    fi
-      '';
-
-
 
     dotfiles = buildEnv {
       name = "dotfiles";
@@ -28,18 +19,19 @@
 
     homeInstall = pkgs.writeShellScriptBin "homeInstall" (builtins.readFile ./HomeInstall/homeInstallSymLinks);
 
-    startApps = pkgs.writeShellScriptBin "startApps" ''
-      open $HOME/.nix-profile/Applications/Spectacle.app
+    startApps = pkgs.writeShellScriptBin "startStatusMenuApps" ''
+      for filename in $HOME/.nix-profile/StatusMenu/*.app; do
+        open "$filename"
+      done
     '';
 
     core = buildEnv {
       name = "core";
       paths = [  
-	#my tools
+        #my tools
         homeInstall
-	
 
-	#core packages
+        #core packages
         git
         ovim
       ];
@@ -50,12 +42,15 @@
       paths = [  
         core
 
-	#my tools
+        #my tools
         startApps
 	
-	#mac core packages
+        #mac core packages
         omvim
+
+        #status menu Apps
         spectacle
+        scrollReveser
       ];
     };
 
@@ -78,11 +73,38 @@
       };
       buildInputs = [ unzip ];
       buildCommand = ''
-        mkdir -p $out/Applications
-        unzip $src -d $out/Applications
+        mkdir -p $out/StatusMenu
+        unzip $src -d $out/StatusMenu
       '';
     };
 
+    scrollReveser = stdenv.mkDerivation {
+      name = "scrollReveser";
+      src = fetchurl { 
+        url = "https://pilotmoon.com/downloads/ScrollReverser-1.7.6.zip"; 
+        sha256="1f6lmw121gnvysxq4j1k1idx83dyychlxzacpwn2s5bhjh467x8d"; 
+      };
+      buildInputs = [ unzip ];
+      buildCommand = ''
+        mkdir -p $out/StatusMenu
+        unzip $src -d $out/StatusMenu
+      '';
+    };
 
+    my_vb = stdenv.mkDerivation {
+      name = "my_vb";
+      src = fetchurl { 
+        url = "https://download.virtualbox.org/virtualbox/5.2.18/VirtualBox-5.2.18-124319-OSX.dmg"; 
+        sha256="0xw38yandhc3sazq8dzfq1x8dr7b94fzqlinmsfl01k0nxx5dbw9"; 
+      };
+      buildInputs = [ p7zip ];
+      buildCommand = ''
+        7z x $src
+        cd VirtualBox
+        mkdir -p $out/Applications
+        cp -rfv MacVim.app $out/Applications
+        unzip $src -d $out/Applications
+      '';
+    };
   };
 }
