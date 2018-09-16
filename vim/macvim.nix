@@ -1,7 +1,6 @@
-{ mkDerivation, fetchFromGitHub, writeShellScriptBin, name, vimrcDrv }:
-let mvimDrv = 
+{ mkDerivation, fetchFromGitHub, name, vimrcDrv }:
   mkDerivation {
-        name = "macvim-8.0.127-python-countoren";
+        name = name;
         src = fetchFromGitHub {
           owner = "countoren";
           repo = "Macvim-8.0.127-python";
@@ -10,6 +9,8 @@ let mvimDrv =
         };
         buildCommand = ''
           mkdir -p $out/Applications
+          mv -fv $src/MacVim.app/Contents/bin/mvim $src/MacVim.app/Contents/bin/mvimOriginal 
+          echo '$src/MacVim.app/Contents/bin/mvimOriginal -u ${vimrcDrv} "$@"'>$src/MacVim.app/Contents/bin/mvim
           cp -rfv $src/MacVim.app $out/Applications
           chmod 755 $out/Applications/MacVim.app/Contents/MacOS/* \
                     $out/Applications/MacVim.app/Contents/bin/*
@@ -19,6 +20,4 @@ let mvimDrv =
           ln -sf $out/bin/mvim $out/bin/vi
           ln -sf $out/bin/mvim $out/bin/gvim
         '';
-  };
-in
-  writeShellScriptBin name ''${mvimDrv}/bin/mvim -u ${vimrcDrv} "$@"''
+  }

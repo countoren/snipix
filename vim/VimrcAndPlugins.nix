@@ -1,6 +1,7 @@
-{ pkgs }:
+{ pkgs, additionalPlugins? [] }:
 with pkgs;
 let 
+
   my_plugins = import ./plugins.nix { inherit vimUtils fetchFromGitHub; };
 in
   vimUtils.vimrcFile {
@@ -10,6 +11,7 @@ in
       { names = [
         "vim-colorschemes"
         "youcompleteme"
+        "commentary"
         "supertab"  # needed to integrate UltiSnips and YouCompleteMe
         "ultisnips" # snippet engine
         "vim-snippets"  # snippet database
@@ -28,6 +30,6 @@ in
         "vimproc"
         "vimshell"
         "wombat256-vim"
-      ]; }
+      ] ++ additionalPlugins; }
     ];
   }

@@ -4,6 +4,48 @@
   allowBroken = false;
 
   packageOverrides = pkgs: with pkgs; rec {
+    core = buildEnv {
+      name = "core";
+      paths = [  
+        #my tools
+        homeInstall
+        nshell
+
+        #core packages
+        git
+        ovim
+      ];
+    };
+
+
+    macCore = buildEnv {
+      name = "mac-core";
+      paths = [  
+        core
+
+        #my tools
+        startStatusMenuApps
+	
+        #mac core packages
+        omvim
+
+        #status menu Apps
+        spectacle
+      ];
+    };
+
+    macHome = buildEnv {
+      name = "mac-home";
+      paths = [  
+        macCore
+        #home packages
+        scrollReveser
+      ];
+    };
+
+    nixosVM = ''
+    qemu-system-x86_64 -smp 4 -m 8G -net nic -net user,hostname=oren -drive format=raw,file=nixos-graphical-18.03.133114.a4e068ff9c8-x86_64-linux.iso 
+     '' ;
 
     dotfiles = buildEnv {
       name = "dotfiles";
@@ -12,47 +54,28 @@
         { mkDerivation = stdenv.mkDerivation; writeText = pkgs.writeText; };
       in
       [
-        (dfUtils.toDotfileWithDeps ./bash-config/bashrc {inherit stdenv ovim;})
-        (dfUtils.toDotfile ./HomeInstall/bash_profile)
+        (dfUtils.toDotfileWithDeps ./dotfiles/bashrc {inherit stdenv ovim;})
+        (dfUtils.toDotfileWithDeps ./dotfiles/profile {inherit stdenv ovim;})
+        (dfUtils.toDotfile ./dotfiles/bash_profile)
       ];
     };
 
+    #contains nix-env -i dotfiles
     homeInstall = pkgs.writeShellScriptBin "homeInstall" (builtins.readFile ./HomeInstall/homeInstallSymLinks);
 
-    startApps = pkgs.writeShellScriptBin "startStatusMenuApps" ''
+    #nix shell with user's nixpkgs
+    nshell = pkgs.writeShellScriptBin "startStatusMenuApps" ''
+      nix-shell -I nixpkgs=~/.nix-defexpr/channels/nixpkgs
+    '';
+
+
+
+    startStatusMenuApps = pkgs.writeShellScriptBin "startStatusMenuApps" ''
       for filename in $HOME/.nix-profile/StatusMenu/*.app; do
         open "$filename"
       done
     '';
 
-    core = buildEnv {
-      name = "core";
-      paths = [  
-        #my tools
-        homeInstall
-
-        #core packages
-        git
-        ovim
-      ];
-    };
-
-    macCore = buildEnv {
-      name = "mac-core";
-      paths = [  
-        core
-
-        #my tools
-        startApps
-	
-        #mac core packages
-        omvim
-
-        #status menu Apps
-        spectacle
-        scrollReveser
-      ];
-    };
 
     myvimrc = import ./vim/VimrcAndPlugins.nix { inherit pkgs; };
 
@@ -60,9 +83,16 @@
     ovim = import ./vim { inherit pkgs; name = "ovim"; vimrcDrv = myvimrc; };
 
     omvim = with pkgs; with stdenv; import ./vim/macvim.nix { 
-      inherit mkDerivation fetchFromGitHub writeShellScriptBin; 
+      inherit mkDerivation fetchFromGitHub ; 
       name = "omvim";
       vimrcDrv = myvimrc;
+    };
+    
+    buildMVim = { additionalPlugins }:
+      with pkgs; with stdenv; import ./vim/macvim.nix { 
+      inherit mkDerivation fetchFromGitHub ; 
+      name = "omvim";
+      vimrcDrv = import ./vim/VimrcAndPlugins.nix { inherit pkgs additionalPlugins;};
     };
 
     spectacle = stdenv.mkDerivation {
@@ -91,6 +121,24 @@
       '';
     };
 
+  sourcetree = 
+  let app =
+    stdenv.mkDerivation rec {
+      name = "sourcetree-${version}";
+      version = "2.7.3";
+      src = fetchurl { 
+        url = "https://downloads.atlassian.com/software/sourcetree/Sourcetree_${version}a.zip?_ga=2.247266564.1694723893.1537054121-1133708473.1537054121";
+        sha256="0mm3076phha6bnryb7q01548fqwxrf9y996qmanycdv15dbkr372"; 
+      };
+      buildInputs = [ unzip ];
+      buildCommand = ''
+        mkdir -p $out/Applications
+        unzip $src -d $out/Applications
+     '';
+    };
+  in pkgs.writeShellScriptBin "sourcetree" '' open "${app}/Applications/SourceTree.App" '';
+
+
     my_vb = stdenv.mkDerivation {
       name = "my_vb";
       src = fetchurl { 
@@ -104,7 +152,7 @@
         mkdir -p $out/Applications
         cp -rfv MacVim.app $out/Applications
         unzip $src -d $out/Applications
-      '';
+     '';
     };
   };
 }
