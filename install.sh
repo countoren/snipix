@@ -15,8 +15,7 @@ fi
 echo "Installing nix"
 curl https://nixos.org/nix/install | sh
 echo 'Loading nix enviorment to current shell'
-. '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh'
-
+. '~/.nix-profile/etc/profile.d/nix.sh'
 
 if [ -f "$HOME/Dropbox/nixpkgs/config.nix" ]; then
 			echo "creating config.nix and linking it to Dropbox config.nix..."
@@ -42,6 +41,6 @@ nix-env -i $1
 
 eval 'homeInstall'
 #On Macos fixup scripts
-if [ $1 = "mac-core" ]; then
+if [ $1 = "mac-home" ]; then
 	eval 'startStatusMenuApps'
 fi
