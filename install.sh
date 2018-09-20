@@ -15,7 +15,7 @@ fi
 echo "Installing nix"
 curl https://nixos.org/nix/install | sh
 echo 'Loading nix enviorment to current shell'
-. '~/.nix-profile/etc/profile.d/nix.sh'
+eval ". '~/.nix-profile/etc/profile.d/nix.sh'"
 
 if [ -f "$HOME/Dropbox/nixpkgs/config.nix" ]; then
 			echo "creating config.nix and linking it to Dropbox config.nix..."
