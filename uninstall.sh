@@ -1,9 +1,6 @@
 #!/usr/bin/env bash
 set -e
 
-echo "Uninstalling nix"
-sudo launchctl unload /Library/LaunchDaemons/org.nixos.nix-daemon.plist
-sudo rm /Library/LaunchDaemons/org.nixos.nix-daemon.plist
 
 echo "Restoring etc/bashrc"
 sudo mv /etc/bashrc.backup-before-nix /etc/bashrc

@@ -1,7 +1,6 @@
 { pkgs, additionalPlugins? [] }:
 with pkgs;
 let 
-
   my_plugins = import ./plugins.nix { inherit vimUtils fetchFromGitHub; };
 in
   vimUtils.vimrcFile {
