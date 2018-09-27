@@ -31,8 +31,8 @@ elif [ ! -d ~/.nixpkgs ]; then
 	git clone https://github.com/countoren/nixpkgs.git ~/.nixpkgs
 fi
 
-echo 'Regsitering to unstable channel...'
-nix-channel --add https://nixos.org/channels/nixpkgs-unstable
+echo 'Regsitering to 2018.09 darwin channel...'
+nix-channel --add https://nixos.org/channels/nixpkgs-18.09-darwin
 nix-channel --update
 echo 'Regsitered to unstable channel'
 
