@@ -82,18 +82,13 @@
     tvim = import ./vim/minimalVim.nix { inherit pkgs; };
     ovim = import ./vim { inherit pkgs; name = "ovim"; vimrcDrv = myvimrc; };
 
-    omvim = with pkgs; with stdenv; import ./vim/macvim.nix { 
+    mymvim = with pkgs; with stdenv; import ./vim/macvim.nix { 
       inherit mkDerivation fetchFromGitHub makeWrapper; 
       name = "omvim";
       vimrcDrv = myvimrc;
     };
     
-    buildMVim = { additionalPlugins }:
-      with pkgs; with stdenv; import ./vim/macvim.nix { 
-      inherit mkDerivation fetchFromGitHub makeWrapper; 
-      name = "omvim";
-      vimrcDrv = import ./vim/VimrcAndPlugins.nix { inherit pkgs additionalPlugins;};
-    };
+      
 
     spectacle = stdenv.mkDerivation {
       name = "spectacle";
