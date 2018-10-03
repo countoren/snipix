@@ -82,12 +82,17 @@
     tvim = import ./vim/minimalVim.nix { inherit pkgs; };
     ovim = import ./vim { inherit pkgs; name = "ovim"; vimrcDrv = myvimrc; };
 
-    mymvim = with pkgs; with stdenv; import ./vim/macvim.nix { 
-      inherit mkDerivation fetchFromGitHub makeWrapper; 
-      name = "omvim";
-      vimrcDrv = myvimrc;
-    };
-    
+    omvim = buildMVim { name = "omvim"; };    
+    blavim = buildMVim { name = "blavim"; additionalPlugins = [ "nerdcommenter" ]; };    
+
+    buildMVim = { name, additionalPlugins? [] }:
+      let app = 
+      with stdenv; import ./vim/macvim.nix { 
+	      inherit mkDerivation fetchFromGitHub makeWrapper; 
+	      name = "app_"+name;
+	      vimrcDrv = import ./vim/VimrcAndPlugins.nix { inherit pkgs additionalPlugins;};
+      };
+      in pkgs.writeShellScriptBin name '' open "${app}/Applications/MacVim.App" '';
       
 
     spectacle = stdenv.mkDerivation {

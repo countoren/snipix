@@ -17,6 +17,7 @@
           chmod 755 $out/Applications/MacVim.app/Contents/bin
 
           wrapProgram $out/Applications/MacVim.app/Contents/bin/mvim --add-flags '-u ${vimrcDrv} "$@"'
+
           mkdir -p $out/bin
           ln -sf $out/Applications/MacVim.app/Contents/bin/mvim $out/bin/mvim
           ln -sf $out/bin/mvim $out/bin/vim
