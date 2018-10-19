@@ -22,16 +22,6 @@
     dependencies = [];
   };
 
-  elm-vim = vimUtils.buildVimPluginFrom2Nix {
-    name = "elm.vim-2017-01-13";
-    src = fetchFromGitHub {
-      owner = "ElmCast";
-      repo = "elm-vim";
-      rev = "0c1fbfdf12f165681b8134ed2cae2c148105ac40";
-      sha256 = "0l871hzg55ysns5h6v7xq63lwf4135m3xggm2s4q2pmzizivk0x2";
-    };
-    dependencies = [];
-  };
 
   vim-wombat = vimUtils.buildVimPluginFrom2Nix {
     name = "vim-wombat-2017-12-22";

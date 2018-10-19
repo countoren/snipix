@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 set -e
-nix-env -i dotfiles
+nix-env -iA nixpkgs.dotfiles
 pushd $HOME > /dev/null
 
 echo "Creating dotfiles links in user home"

@@ -178,5 +178,3 @@ command! -nargs=1 VimGrep execute 'vimgrep /<f-args>/ **/*.*'
 command! -nargs=1 Grep execute 'grep -R "<f-args>" **/*'
 
 
-
-

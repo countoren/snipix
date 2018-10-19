@@ -9,7 +9,6 @@
       paths = [  
         #my tools
         homeInstall
-        nshell
 
         #core packages
         git
@@ -63,12 +62,6 @@
     #contains nix-env -i dotfiles
     homeInstall = pkgs.writeShellScriptBin "homeInstall" (builtins.readFile ./HomeInstall/homeInstallSymLinks);
 
-    #nix shell with user's nixpkgs
-    nshell = pkgs.writeShellScriptBin "startStatusMenuApps" ''
-      nix-shell -I nixpkgs=~/.nix-defexpr/channels/nixpkgs
-    '';
-
-
 
     startStatusMenuApps = pkgs.writeShellScriptBin "startStatusMenuApps" ''
       for filename in $HOME/.nix-profile/StatusMenu/*.app; do
@@ -83,17 +76,17 @@
     ovim = import ./vim { inherit pkgs; name = "ovim"; vimrcDrv = myvimrc; };
 
     omvim = buildMVim { name = "omvim"; };    
-    blavim = buildMVim { name = "blavim"; additionalPlugins = [ "nerdcommenter" ]; };    
 
-    buildMVim = { name, additionalPlugins? [] }:
+    buildMVim = { name, additionalPlugins? [], additionalCustPlugins? {} }:
       let app = 
       with stdenv; import ./vim/macvim.nix { 
-	      inherit mkDerivation fetchFromGitHub makeWrapper; 
+	      inherit mkDerivation fetchFromGitHub; 
 	      name = "app_"+name;
-	      vimrcDrv = import ./vim/VimrcAndPlugins.nix { inherit pkgs additionalPlugins;};
       };
-      in pkgs.writeShellScriptBin name '' open "${app}/Applications/MacVim.App" '';
-      
+      vimrcDrv = import ./vim/VimrcAndPlugins.nix { inherit pkgs additionalPlugins additionalCustPlugins;};
+    in writeShellScriptBin name ''${app}/bin/mvim -u ${vimrcDrv} "$@"'';
+
+    buildVSCode = (callPackage ./vscode) { };
 
     spectacle = stdenv.mkDerivation {
       name = "spectacle";
