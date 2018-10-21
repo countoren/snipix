@@ -86,7 +86,7 @@
       vimrcDrv = import ./vim/VimrcAndPlugins.nix { inherit pkgs additionalPlugins additionalCustPlugins;};
     in writeShellScriptBin name ''${app}/bin/mvim -u ${vimrcDrv} "$@"'';
 
-    buildVSCode = (callPackage ./vscode) { };
+    buildVSCode = (callPackage ./vscode) { inherit lib; };
 
     spectacle = stdenv.mkDerivation {
       name = "spectacle";

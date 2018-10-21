@@ -1,5 +1,5 @@
-{ writeShellScriptBin, buildEnv, vscode-with-extensions, vscode-extensions, vscode-utils }:
-{ keysbindingFile? ./keybindings.json, settingsFile? ./settings.json, vscodeMatketExtensions? []}:
+{ lib, writeShellScriptBin, writeTextFile, callPackage, buildEnv, vscode-with-extensions, vscode-extensions, vscode-utils }:
+{ keysbindingFile? ./keybindings.json, settingsFile? ./settings.json, vscodeMatketExtensions? [] }:
 let
   keybindings = builtins.toFile "keybindings" (builtins.readFile keysbindingFile);
   restoreKeybindings = writeShellScriptBin "vscode_restoreKeybindings" ''
@@ -9,13 +9,21 @@ let
       cp -rfv ~/Library/Application\ Support/Code/User/keybindings.json ${builtins.toString(keysbindingFile)}
   '';
 
-  settings = builtins.toFile "settings" (builtins.readFile settingsFile);
+  settingsStr = 
+  if lib.hasSuffix ".nix" settingsFile then callPackage (import settingsFile) {}
+  else (builtins.readFile settingsFile);
+  settings = writeTextFile { name = "settings"; text = settingsStr; };
   restoreSettings = writeShellScriptBin "vscode_restoreSetting" ''
       cp -rfv ${settings} ~/Library/Application\ Support/Code/User/settings.json
   '';
-  saveSettings = writeShellScriptBin "vscode_saveSettings" ''
+  saveSettings = writeShellScriptBin "vscode_saveSettings"
+  (if lib.hasSuffix ".nix" settingsFile then ''
+      echo 'source setting file is a nix function please update manually in:'
+      echo '${builtins.toString(settingsFile)}'
+  ''
+  else ''
       cp -rfv ~/Library/Application\ Support/Code/User/settings.json ${builtins.toString(settingsFile)}
-  '';
+  '');
 
 in
 {
