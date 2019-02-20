@@ -1,6 +1,11 @@
-{ lib, writeShellScriptBin, writeTextFile, callPackage, buildEnv, vscode-with-extensions, vscode-extensions, vscode-utils }:
-{ keysbindingFile? ./keybindings.json, settingsFile? ./settings.json, vscodeMatketExtensions? [] }:
+{ lib, writeShellScriptBin, writeTextFile, callPackage, buildEnv, vscode, vscode-with-extensions, vscode-extensions, vscode-utils }:
+{ keysbindingFile? ./keybindings.json, 
+  settingsFile? ./settings.json, 
+  additionalPostFixup? '''', 
+  vscodeMatketExtensions? [] 
+}:
 let
+  #Helpers
   keybindings = builtins.toFile "keybindings" (builtins.readFile keysbindingFile);
   restoreKeybindings = writeShellScriptBin "vscode_restoreKeybindings" ''
       cp -rfv ${keybindings} ~/Library/Application\ Support/Code/User/keybindings.json
@@ -25,23 +30,28 @@ let
       cp -rfv ~/Library/Application\ Support/Code/User/settings.json ${builtins.toString(settingsFile)}
   '');
 
-in
-{
-  name = "vscode-env";
-  buildInputs = [
-    restoreKeybindings
-    saveKeybindings
-    restoreSettings
-    saveSettings
-    ( vscode-with-extensions.override {
-      # When the extension is already available in the default extensions set.
+  #VSCode
+  createVscodeWithExtensions = import <nixpkgs/pkgs/applications/editors/vscode/with-extensions.nix> ;
+  vscodeWithNewPostFixup = vscode.overrideDerivation (old: {
+    postFixup = old.postFixup + additionalPostFixup;
+  });
+  vscode2 =
+    callPackage createVscodeWithExtensions {
       vscodeExtensions = with vscode-extensions; [
         bbenoist.Nix
       ]
       # Concise version from the vscode market place when not available in the default set.
       ++ (vscode-utils.extensionsFromVscodeMarketplace vscodeMatketExtensions );
-      }
-    )
+      vscode = vscodeWithNewPostFixup;
+    };
+in
+{
+  buildInputs = [
+    restoreKeybindings
+    saveKeybindings
+    restoreSettings
+    saveSettings
+    vscode2
   ];
 
   shellHook = '' 

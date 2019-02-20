@@ -9,6 +9,7 @@
       paths = [  
         #my tools
         homeInstall
+        ducks #show folder's space usage du -cks
 
         #core packages
         git
@@ -27,6 +28,7 @@
 	
         #mac core packages
         omvim
+        sourcetree
 
         #status menu Apps
         spectacle
@@ -147,5 +149,9 @@
         unzip $src -d $out/Applications
      '';
     };
+
+
+    #Utils
+    ducks = pkgs.writeShellScriptBin "ducks" '' du -cks * |sort -rn |head -11 '';
   };
 }

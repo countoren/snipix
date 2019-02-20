@@ -1,5 +1,4 @@
 {
-	"elm.makeCommand": "./node_modules/.bin/elm-make",
   "vim.easymotion": true,
   "vim.sneak": true,
   "vim.incsearch": true,
