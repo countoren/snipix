@@ -2,6 +2,7 @@
 { keysbindingFile? ./keybindings.json, 
   settingsFile? ./settings.json, 
   additionalPostFixup? '''', 
+  vscodeExtensions? [],
   vscodeMatketExtensions? [] 
 }:
 let
@@ -37,9 +38,9 @@ let
   });
   vscode2 =
     callPackage createVscodeWithExtensions {
-      vscodeExtensions = with vscode-extensions; [
+      vscodeExtensions = with vscode-extensions; [ 
         bbenoist.Nix
-      ]
+      ] ++ vscodeExtensions
       # Concise version from the vscode market place when not available in the default set.
       ++ (vscode-utils.extensionsFromVscodeMarketplace vscodeMatketExtensions );
       vscode = vscodeWithNewPostFixup;
