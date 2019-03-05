@@ -77,16 +77,8 @@
     tvim = import ./vim/minimalVim.nix { inherit pkgs; };
     ovim = import ./vim { inherit pkgs; name = "ovim"; vimrcDrv = myvimrc; };
 
-    omvim = buildMVim { name = "omvim"; };    
+    omvim = buildMVim { inherit stdenv; name = "omvim"; };    
 
-    buildMVim = { name, additionalPlugins? [], additionalCustPlugins? {} }:
-      let app = 
-      with stdenv; import ./vim/macvim.nix { 
-	      inherit mkDerivation fetchFromGitHub; 
-	      name = "app_"+name;
-      };
-      vimrcDrv = import ./vim/VimrcAndPlugins.nix { inherit pkgs additionalPlugins additionalCustPlugins;};
-    in writeShellScriptBin name ''${app}/bin/mvim -u ${vimrcDrv} "$@"'';
 
     buildVSCode = (callPackage ./vscode) { inherit lib; };
 
