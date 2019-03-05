@@ -77,7 +77,7 @@
     tvim = import ./vim/minimalVim.nix { inherit pkgs; };
     ovim = import ./vim { inherit pkgs; name = "ovim"; vimrcDrv = myvimrc; };
 
-    omvim = buildMVim { inherit stdenv; name = "omvim"; };    
+    omvim = import ./vim/buildMVim.nix { name = "omvim"; };    
 
 
     buildVSCode = (callPackage ./vscode) { inherit lib; };
@@ -145,5 +145,8 @@
 
     #Utils
     ducks = pkgs.writeShellScriptBin "ducks" '' du -cks * |sort -rn |head -11 '';
+
+    gpushAll = pkgs.writeShellScriptBin "gpushAll" ''git add -A; git commit -m "$@"; git push'';
+    
   };
 }

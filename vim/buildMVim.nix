@@ -1,9 +1,9 @@
 { name, additionalPlugins? [], additionalCustPlugins? {} ,
-  #dependencies
-  stdenv
+  pkgs? import <nixpkgs>{}
 }:
+with pkgs;
 let app = 
-  with stdenv; import ./vim/macvim.nix { 
+  with stdenv; import ./macvim.nix { 
     inherit mkDerivation fetchFromGitHub; 
     name = "app_"+name;
   };
