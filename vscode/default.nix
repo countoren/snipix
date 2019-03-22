@@ -34,7 +34,7 @@ let
   #VSCode
   createVscodeWithExtensions = import <nixpkgs/pkgs/applications/editors/vscode/with-extensions.nix> ;
   vscodeWithNewPostFixup = vscode.overrideDerivation (old: {
-    postFixup = old.postFixup + additionalPostFixup;
+    postFixup = additionalPostFixup;
   });
   vscode2 =
     callPackage createVscodeWithExtensions {
