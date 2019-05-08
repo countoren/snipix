@@ -31,10 +31,10 @@ elif [ ! -d ~/.nixpkgs ]; then
 	git clone https://github.com/countoren/nixpkgs.git ~/.nixpkgs
 fi
 
-echo 'Regsitering to 2018.03 darwin channel...'
-nix-channel --add https://nixos.org/channels/nixpkgs-18.03-darwin nixpkgs
-nix-channel --update
-echo 'Regsitered to unstable channel'
+#echo 'Regsitering to 2018.03 darwin channel...'
+#nix-channel --add https://nixos.org/channels/nixpkgs-18.03-darwin nixpkgs
+#nix-channel --update
+#echo 'Regsitered to unstable channel'
 
 echo "installing $1"
 nix-env -i $1

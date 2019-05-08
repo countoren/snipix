@@ -1,3 +1,6 @@
+let 
+ps1904 = import ./nixpkgs1904.nix;
+in
 {
   # Allow proprietary packages
 	allowUnfree = true;
@@ -7,6 +10,9 @@
     core = buildEnv {
       name = "core";
       paths = [  
+        #nix
+        ps1904.nixops
+
         #my tools
         homeInstall
         ducks #show folder's space usage du -cks
