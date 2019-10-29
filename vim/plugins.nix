@@ -1,12 +1,12 @@
 { vimUtils, fetchFromGitHub }:
 {
   ultisnips = vimUtils.buildVimPluginFrom2Nix {
-    name = "ultisnips-countoren-2018-01-12";
+    name = "ultisnips-countoren-2019-07-08";
     src = fetchFromGitHub {
       owner = "countoren";
       repo = "ultisnips";
-      rev = "423f264e753cec260b4f14455126e6db7ba429af";
-      sha256 = "19g3k0nqzizv39rxwgkca9n2gsd19z2wwsmicr0zcgnf50nhkznh";
+      rev = "86c7a7f";
+      sha256 = "16a6ahgssbdras8hd7c2i5ncc17ngzlw8695cq7sw1k88wwks6fg";
     };
     dependencies = [];
   };

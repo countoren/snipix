@@ -1,6 +1,16 @@
 #loading nix
 . $HOME/.nix-profile/etc/profile.d/nix.sh
 
+# vim -c "call timer_start(1, { tid -> execute('terminal')}) | call timer_start(150, { tid -> execute('silent! on')}) "
+
 osascript -e 'tell application "Terminal" to set current settings of front window to (first settings set whose name is "Homebrew")'
 osascript -e 'tell application "Terminal" to set the font size of window 1 to 14'
 
+
+PROMPT='%F{green}%n%f@%F{magenta}%m%f %F{blue}%B%~%b%f %# '
+RPROMPT='[%F{yellow}%?%f]'
+
+set -o vi
+
+unset VIM
+unset VIMRUNTIME

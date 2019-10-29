@@ -1,6 +1,3 @@
-let 
-ps1904 = import ./nixpkgs1904.nix;
-in
 {
   # Allow proprietary packages
 	allowUnfree = true;
@@ -11,15 +8,26 @@ in
       name = "core";
       paths = [  
         #nix
-        ps1904.nixops
+        nrepl
+        nixops
+
+        #TopManage
+        tmsshBambooLinuxAgent
 
         #my tools
         homeInstall
         ducks #show folder's space usage du -cks
 
+
         #core packages
         git
         ovim
+        #git my utils
+        gpushAll
+        gupdateforked
+
+        #pass
+
       ];
     };
 
@@ -50,6 +58,7 @@ in
       ];
     };
 
+
     nixosVM = ''
     qemu-system-x86_64 -smp 4 -m 8G -net nic -net user,hostname=oren -drive format=raw,file=nixos-graphical-18.03.133114.a4e068ff9c8-x86_64-linux.iso 
      '' ;
@@ -64,6 +73,7 @@ in
         (dfUtils.toDotfileWithDeps ./dotfiles/bashrc {inherit stdenv ovim;})
         (dfUtils.toDotfileWithDeps ./dotfiles/profile {inherit stdenv ovim;})
         (dfUtils.toDotfile ./dotfiles/bash_profile)
+        (dfUtils.toDotfile ./dotfiles/zshrc)
       ];
     };
 
@@ -78,15 +88,18 @@ in
     '';
 
 
-    myvimrc = import ./vim/VimrcAndPlugins.nix { inherit pkgs; };
+    myvimrc = import ./vim/VimrcAndPlugins.nix { pkgs = ps1803; };
 
-    tvim = import ./vim/minimalVim.nix { inherit pkgs; };
-    ovim = import ./vim { inherit pkgs; name = "ovim"; vimrcDrv = myvimrc; };
+    tvim = import ./vim/minimalVim.nix { inherit vimConfigurableFile; pkgs = ps1803; };
+    ovim = import ./vim { };
 
-    omvim = import ./vim/buildMVim.nix { name = "omvim"; };    
+    omvim = import ./vim/macvim.nix { };    
 
 
     buildVSCode = (callPackage ./vscode) { inherit lib; };
+
+
+    dev = import ./dev { inherit pkgs; };
 
     spectacle = stdenv.mkDerivation {
       name = "spectacle";
@@ -114,22 +127,33 @@ in
       '';
     };
 
-  sourcetree = 
-  let app =
-    stdenv.mkDerivation rec {
-      name = "sourcetree-${version}";
-      version = "2.7.3";
-      src = fetchurl { 
-        url = "https://downloads.atlassian.com/software/sourcetree/Sourcetree_${version}a.zip?_ga=2.247266564.1694723893.1537054121-1133708473.1537054121";
-        sha256="0mm3076phha6bnryb7q01548fqwxrf9y996qmanycdv15dbkr372"; 
+
+
+    #clipboard helper app
+    clipy = 
+      let installer = fetchurl { 
+        url = "https://github.com/Clipy/Clipy/releases/download/1.1.2/Clipy_1.1.2.dmg"; 
+        sha256="133daq2qyv54canpj5dnd8b21b3a04w7sib11pf5ww73ni5kx191"; 
       };
-      buildInputs = [ unzip ];
-      buildCommand = ''
-        mkdir -p $out/Applications
-        unzip $src -d $out/Applications
-     '';
-    };
-  in pkgs.writeShellScriptBin "sourcetree" '' open "${app}/Applications/SourceTree.App" '';
+    in pkgs.writeShellScriptBin "clipy-installer" '' open "${installer}" '';
+
+
+    sourcetree = 
+    let app =
+      stdenv.mkDerivation rec {
+        name = "sourcetree-${version}";
+        version = "2.7.3";
+        src = fetchurl { 
+          url = "https://downloads.atlassian.com/software/sourcetree/Sourcetree_${version}a.zip?_ga=2.247266564.1694723893.1537054121-1133708473.1537054121";
+          sha256="0mm3076phha6bnryb7q01548fqwxrf9y996qmanycdv15dbkr372"; 
+        };
+        buildInputs = [ unzip ];
+        buildCommand = ''
+          mkdir -p $out/Applications
+          unzip $src -d $out/Applications
+       '';
+      };
+    in pkgs.writeShellScriptBin "sourcetree" '' open "${app}/Applications/SourceTree.App" '';
 
 
     my_vb = stdenv.mkDerivation {
@@ -148,11 +172,32 @@ in
      '';
     };
 
+    # pass = import ./pass { inherit pkgs;};
+
+
+    #PI - home
+    piHome = writeShellScriptBin "piHome" ''ssh pi@192.168.0.107'';
+    
+    #TopManage
+    #ssh
+    tmsshBambooLinuxAgentOld = pkgs.writeShellScriptBin "tmsshBambooLinuxAgentOld" "sshpass -f <(pass topmanage/ssh/bambooLinuxAgent) ssh orenrozen@172.16.31.38";
+
+    tmsshBambooLinuxAgent = pkgs.writeShellScriptBin "tmsshBambooLinuxAgent" "ssh orenrozen@172.16.31.46";
+
+    tmsshBambooLinuxAgentAsBambooUser = pkgs.writeShellScriptBin "tmsshBambooLinuxAgentAsBambooUser" "ssh -t orenrozen@172.16.31.46 'sudo su -l bambooagent'";
 
     #Utils
+
+    nrepl = pkgs.writeShellScriptBin "nrepl" "nix repl '<nixpkgs>'";
     ducks = pkgs.writeShellScriptBin "ducks" '' du -cks * |sort -rn |head -11 '';
+    hgrep = pkgs.writeShellScriptBin "hgrep" ''
+    HISTFILE=~/.bash_history
+      set -o history
+      history | grep $@
+    '';
 
     gpushAll = pkgs.writeShellScriptBin "gpushAll" ''git add -A; git commit -m "$@"; git push'';
+    gupdateforked = pkgs.writeShellScriptBin "gupdateforked" ''git fetch upstream && git rebase upstream/master && git push origin master $@'';
     
   };
 }

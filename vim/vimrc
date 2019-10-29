@@ -12,6 +12,10 @@ set grepprg=grep\ -nH\ $*
 " The following changes the default filetype back to 'tex':
 let g:tex_flavor='latex'
 
+
+" /*** VimShell ***/
+let g:vimshell_editor_command = "git"
+
 " /*** CtrlP ***/
 let g:ctrlp_custom_ignore = 'node_modules'
 
@@ -71,20 +75,11 @@ nmap <silent> <leader>vb :NERDTree $VIMFolder/bundle<CR>
 nmap <silent> <leader>c :NERDTreeToggle .<CR>
 nmap <silent> <leader>n :NERDTreeToggle<CR>
 
-"UltiSnips variables
-" make YCM compatible with UltiSnips (using supertab)
-let g:ycm_key_list_select_completion = ['<C-n>', '<Down>']
-let g:ycm_key_list_previous_completion = ['<C-p>', '<Up>']
-let g:SuperTabDefaultCompletionType = '<C-n>'
-let g:UltiSnipsSnippetsDir = "~/.nixpkgs/vim/UltiSnips"
-
-" better key bindings for UltiSnipsExpandTrigger
-let g:UltiSnipsExpandTrigger = "<tab>"
-let g:UltiSnipsJumpForwardTrigger = "<tab>"
-let g:UltiSnipsJumpBackwardTrigger = "<s-tab>"
 
 "Command line map
 nnoremap ; :
+
+
 
 " If I forgot to sudo a file, do that with :w!!
 cmap w!! %!sudo tee > /dev/null %
@@ -107,6 +102,16 @@ inoremap <C-]> <C-x><C-]>
 
  " set terminal to interactive
 set shellcmdflag=-ic
+
+" VIM Shell
+" set shell=/bin/zsh
+
+" VIM Terminal
+
+command! -nargs=* Tt :term <args>
+nmap <silent> <leader>t :term <CR>
+
+tnoremap <C-[><C-[> <C-\><C-n>
 			
  "Open Terminal
  
@@ -156,8 +161,6 @@ command! RFinder silent execute "!open ".getcwd()
 "Open Chrome for the buffered file
 command! Chrome silent exec "!open /Applications/Google\\ Chrome.app/ \"%\""
 
-"VIMRC
-command! Vimrc silent :tabe $MYVIMRC
 
 " open Bashrc command
 "

@@ -1,10 +1,8 @@
-{ pkgs }:
-
+{ vimConfigurableFile,  pkgs }:
 with pkgs; 
 let
-  configurable_nix_path = <nixpkgs/pkgs/applications/editors/vim/configurable.nix>;
   my_vim_configurable =
-  (vimUtils.makeCustomizable (callPackage configurable_nix_path {
+  (vimUtils.makeCustomizable (callPackage vimConfigurableFile {
     inherit (darwin.apple_sdk.frameworks) CoreServices Cocoa Foundation CoreData;
     inherit (darwin) libobjc cf-private;
     lua = pkgs.lua5_1;

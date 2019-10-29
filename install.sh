@@ -17,6 +17,8 @@ curl https://nixos.org/nix/install | sh
 echo 'Loading nix enviorment to current shell'
 eval ". '$HOME/.nix-profile/etc/profile.d/nix.sh'"
 
+[ -d ~/Dropbox/password-store ] && ln -s ~/Dropbox/password-store ~/.password-store 
+
 if [ -f "$HOME/Dropbox/nixpkgs/config.nix" ]; then
 			echo "creating config.nix and linking it to Dropbox config.nix..."
       mkdir -p ~/.nixpkgs

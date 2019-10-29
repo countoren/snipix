@@ -1,21 +1,34 @@
-{ mkDerivation, fetchFromGitHub, name }:
-  mkDerivation {
-        name = name;
-        src = fetchFromGitHub {
-          owner = "countoren";
-          repo = "Macvim-8.0.127-python";
-          rev = "c81e676a6b2dc08c736a25bf4b3260573ce68dc4";
-          sha256 = "1cpsy2na3lfg2mh0h3z4zp7ldn8rrwycvrb9mzw4vhvif636g2rk";
-        };
-        installPhase = ''
-          mkdir -p $out/Applications
-          cp -rfv $src/MacVim.app $out/Applications
-          chmod 755 $out/Applications/MacVim.app/Contents/MacOS/* \
-                    $out/Applications/MacVim.app/Contents/bin/*
-          mkdir -p $out/bin
-          ln -sf $out/Applications/MacVim.app/Contents/bin/mvim $out/bin/mvim
-          ln -sf $out/bin/mvim $out/bin/vim
-          ln -sf $out/bin/mvim $out/bin/vi
-          ln -sf $out/bin/mvim $out/bin/gvim
-        '';
-  }
+{ pkgs ? import <nixpkgs>{}
+, name ? "omvim"
+, nameterminal ? "omshell"
+, vimrcAndPlugins ? import ./VimrcAndPlugins.nix {}
+}:
+with pkgs;
+let macvim = stdenv.mkDerivation {
+  name = "macvim";
+  src = fetchurl { 
+    url = "https://github.com/macvim-dev/macvim/releases/download/snapshot-159/MacVim.dmg"; 
+    sha256="1j07j0pw3c1ff3b1825lzacf809jjr3ilaf0i3xnvxynqxk9r7ig"; 
+  };
+  buildInputs = [ undmg ];
+  buildCommand = ''
+    undmg < $src
+
+    mkdir -p $out/Applications
+    cp -rfv MacVim.app $out/Applications
+
+    ln -sf ${vimrcAndPlugins} $out/Applications/MacVim.app/Contents/Resources/vim/vimrc
+    ln -sf ${vimrcAndPlugins} $out/Applications/MacVim.app/Contents/Resources/vim/gvimrc
+  '';
+
+};
+in buildEnv
+{
+  name = "omvim";
+  paths = [
+    (writeShellScriptBin name '' ${macvim}/Applications/MacVim.app/Contents/bin/mvim "$@" '')
+    (writeShellScriptBin nameterminal '' ${macvim}/Applications/MacVim.app/Contents/bin/mvim . -c 'term ++curwin' "$@" '')
+
+  ];
+
+} 

@@ -1,10 +1,13 @@
-{ pkgs, additionalPlugins? [], additionalCustPlugins? {}, additionalVimrc? "" }:
+{ pkgs ? import <nixpkgs>{}
+, additionalPlugins? []
+, additionalCustPlugins? {}
+, additionalVimrc? "" 
+}:
 with pkgs;
 let 
-  buildAtts = rec {
-    my_plugins = import ./plugins.nix { inherit vimUtils fetchFromGitHub; };
-    vimrcFile = vimUtils.vimrcFile {
-      customRC = (builtins.readFile ./vimrc) 
+  my_plugins = import ./plugins.nix { inherit vimUtils fetchFromGitHub; };
+  vimrcFile = vimUtils.vimrcFile {
+    customRC = (builtins.readFile ./vimrc) 
       + (if additionalVimrc == "" then "" else ''
         "Env Specific configuration:
         ''+ additionalVimrc);
@@ -12,7 +15,7 @@ let
       vam.pluginDictionaries = [
         { names = [
           "vim-colorschemes"
-          "youcompleteme"
+          # "youcompleteme"
           "commentary"
           "supertab"  # needed to integrate UltiSnips and YouCompleteMe
           "ultisnips" # snippet engine
@@ -28,17 +31,18 @@ let
           "vim-javascript"
           "vim-nix"
           "vimproc"
-          "vimshell"
           "wombat256-vim"
         ] ++ additionalPlugins; }
       ];
     };
-    vimrcWithNixVimrc = writeText "vimrcWithNixVimrc" ''
-      source ${vimrcFile}
-      "Command to set this nix vimrc to be sourced from home vimrc
-      command! ReplaceHomeVimrcWithNixVimrc silent exec "!echo 'source ${vimrcFile}'> ~/.vimrc"
-      
-    '';
+  vimrcWithNixVimrc = writeText "vimrcWithNixVimrc" ''
+    source ${vimrcFile}
 
-  };
-  in buildAtts.vimrcWithNixVimrc
+    "VIMRC
+    command! Vimrc silent :tabe $MYVIMRC
+
+    "Command to set this nix vimrc to be sourced from home vimrc
+    command! ReplaceHomeVimrcWithNixVimrc silent exec "!echo 'source ${vimrcFile}'> ~/.vimrc"
+  '';
+  
+  in vimrcWithNixVimrc
