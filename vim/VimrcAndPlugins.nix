@@ -1,4 +1,5 @@
 { pkgs ? import <nixpkgs>{}
+, pkgsPath ? "~/Dropbox/nixpkgs"
 , additionalPlugins? []
 , additionalCustPlugins? {}
 , additionalVimrc? "" 
@@ -16,10 +17,12 @@ let
         { names = [
           "vim-colorschemes"
           # "youcompleteme"
+          "tlib"
+          "vim-addon-mw-utils"
           "commentary"
           "supertab"  # needed to integrate UltiSnips and YouCompleteMe
-          "ultisnips" # snippet engine
-          "vim-snippets"  # snippet database
+          "ultisnips-2019-07-08" # snippet engine
+          # "vim-snippets"  # snippet database
           "nerdtree"
           "ale"
           "ctrlp"
@@ -31,15 +34,23 @@ let
           "vim-javascript"
           "vim-nix"
           "vimproc"
-          "wombat256-vim"
+          # "wombat256-vim"
         ] ++ additionalPlugins; }
       ];
     };
   vimrcWithNixVimrc = writeText "vimrcWithNixVimrc" ''
+    let $MYVIMRC = '${pkgsPath}/vim/vimrc'
+    let $MYPKGS = '${pkgsPath}'
+
     source ${vimrcFile}
 
+
+    "My Nix pkgs
+    command! DPkgs silent :sp $MYPKGS
+    "Vim folder
+    command! DVim silent :sp $MYPKGS/vim
     "VIMRC
-    command! Vimrc silent :tabe $MYVIMRC
+    command! FVimrc silent :sp $MYVIMRC
 
     "Command to set this nix vimrc to be sourced from home vimrc
     command! ReplaceHomeVimrcWithNixVimrc silent exec "!echo 'source ${vimrcFile}'> ~/.vimrc"

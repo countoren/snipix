@@ -6,11 +6,7 @@
 osascript -e 'tell application "Terminal" to set current settings of front window to (first settings set whose name is "Homebrew")'
 osascript -e 'tell application "Terminal" to set the font size of window 1 to 14'
 
-
-PROMPT='%F{green}%n%f@%F{magenta}%m%f %F{blue}%B%~%b%f %# '
-RPROMPT='[%F{yellow}%?%f]'
-
-set -o vi
+# set -o vi
 
 unset VIM
 unset VIMRUNTIME

@@ -4,7 +4,7 @@
   allowBroken = false;
 
   packageOverrides = pkgs: with pkgs; rec {
-    core = buildEnv {
+    core =  { pkgsPath ? "~/.nixpkgs" } : buildEnv {
       name = "core";
       paths = [  
         #nix
@@ -21,27 +21,26 @@
 
         #core packages
         git
-        ovim
+        ( ovim { inherit pkgsPath; } )
         #git my utils
         gpushAll
         gupdateforked
 
-        #pass
 
       ];
     };
 
 
-    macCore = buildEnv {
+    macCore = a@{ pkgsPath ? "~/Dropbox/nixpkgs" } : buildEnv {
       name = "mac-core";
       paths = [  
-        core
+        ( core a )
 
         #my tools
         startStatusMenuApps
 	
         #mac core packages
-        omvim
+        (omvim { inherit pkgsPath; })
         sourcetree
 
         #status menu Apps
@@ -49,14 +48,14 @@
       ];
     };
 
-    macHome = buildEnv {
+    macHome =  a@{ pkgsPath ? "~/Dropbox/nixpkgs" } : (buildEnv {
       name = "mac-home";
       paths = [  
-        macCore
+        ( macCore a )
         #home packages
         scrollReveser
       ];
-    };
+    });
 
 
     nixosVM = ''
@@ -70,7 +69,7 @@
         { mkDerivation = stdenv.mkDerivation; writeText = pkgs.writeText; };
       in
       [
-        (dfUtils.toDotfileWithDeps ./dotfiles/bashrc {inherit stdenv ovim;})
+        (dfUtils.toDotfile ./dotfiles/bashrc)
         (dfUtils.toDotfileWithDeps ./dotfiles/profile {inherit stdenv ovim;})
         (dfUtils.toDotfile ./dotfiles/bash_profile)
         (dfUtils.toDotfile ./dotfiles/zshrc)
@@ -88,12 +87,15 @@
     '';
 
 
-    myvimrc = import ./vim/VimrcAndPlugins.nix { pkgs = ps1803; };
+    # myvimrc = import ./vim/VimrcAndPlugins.nix { };
 
-    tvim = import ./vim/minimalVim.nix { inherit vimConfigurableFile; pkgs = ps1803; };
-    ovim = import ./vim { };
+    # tvim = import ./vim/minimalVim.nix { inherit vimConfigurableFile; pkgs = ps1803; };
 
-    omvim = import ./vim/macvim.nix { };    
+    ovim = { pkgsPath ? "~/.nixpkgs" }:
+      import ./vim { vimrcWithPlugins = import ./vim/VimrcAndPlugins.nix { inherit pkgsPath; };};
+
+    omvim = { pkgsPath ? "~/Dropbox/nixpkgs" }:
+      import ./vim/macvim.nix { vimrcAndPlugins = import ./vim/VimrcAndPlugins.nix { inherit pkgsPath; };};    
 
 
     buildVSCode = (callPackage ./vscode) { inherit lib; };

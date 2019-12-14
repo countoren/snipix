@@ -1,0 +1,103 @@
+snippet vce "visual code extension"
+{
+	name = "${1:csharp}";
+	publisher = "${2:ms-vscode}";
+	version = "${3:1.21.5}";
+	sha256 = "${4:17a1m4mm11111111111111111111111111111111111111111111}";
+}
+endsnippet
+
+snippet hsdef "haskell default that imports project.nix"
+(import <nixpkgs>{}).haskell.packages.${1:ghc865}.callPackage ./${2:project}.nix {$3} $4
+endsnippet
+	
+snippet mksl "mkShell command"
+mkShell {
+  ${1:buildInputs = [ ${2:figlet} ]};
+
+  shellHook = ''${3:
+    ${4:trap "${5:'$PWD/nix/client' remove}" EXIT}
+	}
+  ''${6:;}
+}
+endsnippet
+
+snippet rcw "runCommand with make wrapper from https://github.com/NixOS/nixpkgs/blob/03e90ff4328b192cd19aa5a682e3e06e2f1e08f9/nixos/modules/services/cluster/kubernetes/flannel.nix"
+runCommand "${1:mk-docker-opts}" {${2:
+    nativeBuildInputs = [ ${3:makeWrapper} ];
+		preferLocalBuild = true;
+  }} ''${4:
+    mkdir -p $out
+    makeWrapper ${${5:pkgsName}}/bin/$5 $out/bin/$1 --add-flags "--${6:flagName}"
+}''
+endsnippet
+
+snippet rc "runcommand"
+runCommand "${1:name}" {${2:envVariable = true;}} ''${3:echo hello > $out}''
+endsnippet
+
+
+snippet f "start of a function  { pkgs ? ... }:"
+{ ${1: pkgs ? import ${2:<nixpkgs>} {}$3} }:
+$3	
+endsnippet
+snippet inh "inherit"
+inherit ${1:pkgs};
+endsnippet
+	
+snippet optl "optional list"
+stdenv.lib.optionals (${1:disableLargeAddressSpace}) [
+    ${2:"${3:--disable-large-address-space}"}
+]	
+endsnippet
+
+snippet mkapp "mk app derivation"
+let app =
+  stdenv.mkDerivation rec {
+    name = "${1:cord}-${version}";
+    version = "${2:0.5.7}";
+    src = ./.;
+    installPhase = '' 
+      ls $src
+      mkdir -p $out/Applications
+      cp -r $src/${3:CoRD}.app $out/Applications/$3.app
+    '';
+  };
+in pkgs.writeShellScriptBin "$1" '' open "${app}/Applications/$3.app" ''
+
+endsnippet
+
+snippet mk "mkDerivation"
+stdenv.mkDerivation ${1:rec }{
+	name = "${2:${3:sourcetree}-\$\{version\}}";${4:
+	version = "${5:2.7.3}";
+	}src = ${6:fetchurl { 
+		url = "${7:https://downloads.atlassian.com/software/sourcetree/Sourcetree_\$\{version\}a.zip?_ga=2.247266564.1694723893.1537054121-1133708473.1537054121}";
+		sha256="${8:0mm3076phha6bnryb7q01548fqwxrf9y996qmanycdv15dbkr372}"; 
+	} };
+	buildInputs = [ ${8:unzip} ];
+}
+endsnippet
+
+snippet wss "writeShellScriptBin"
+writeShellScriptBin "${1:sourcetree}" ''${2: open "\$\{${3:app}\}${4:/Applications/${5:SourceTree}.App}"}''
+endsnippet
+
+snippet ffgh "fetchFromGithub"
+(fetchFromGitHub {
+								 owner="${1:NixOS}";
+								 repo="${2:nixpkgs}";
+								 rev="${3:f4c0220}";
+								 sha256="${4:1h43sgg8kj4r28j4s181sfb00d5fxwgnfq27jf5dz4sng5iwhyyw}";
+}) ${5:\{\}}
+endsnippet
+
+
+snippet w "with"
+with $1
+endsnippet
+
+snippet i "import"
+import ${1:<nixpkgs>{}}
+endsnippet
+

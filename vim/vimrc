@@ -75,7 +75,6 @@ nmap <silent> <leader>vb :NERDTree $VIMFolder/bundle<CR>
 nmap <silent> <leader>c :NERDTreeToggle .<CR>
 nmap <silent> <leader>n :NERDTreeToggle<CR>
 
-
 "Command line map
 nnoremap ; :
 
@@ -112,7 +111,8 @@ command! -nargs=* Tt :term <args>
 nmap <silent> <leader>t :term <CR>
 
 tnoremap <C-[><C-[> <C-\><C-n>
-			
+autocmd VimEnter * if empty(bufname('')) | exe "terminal ++curwin" | endif
+
  "Open Terminal
  
 if $CurrentSystem == 'WorkMac'
@@ -121,38 +121,36 @@ else
 	let $terminalWindow = '{710, 0, 1300,900}'
 endif
 
-command! -nargs=* Terminal silent exec '!osascript
-			\ -e "tell application \"Terminal\" to do script \"cd '''.getcwd().'''; <args>\"" 
-			\ -e "tell application \"Terminal\" to set bounds of window 1 to  '.$terminalWindow.'" 
-			\ -e "tell application \"Terminal\" to activate" 
-			\ > /dev/null'
+"
 
-command! -nargs=* TerminalBoot2Docker silent exec '!osascript
-			\ -e "tell application \"Terminal\" to do script \"boot2docker ssh\"" 
-			\ -e "tell application \"Terminal\" to do script \"cd '''.getcwd().'''; <args>\" in window 1"
-			\ -e "tell application \"Terminal\" to set bounds of window 1 to  '.$terminalWindow.'" 
-			\ -e "tell application \"Terminal\" to activate" 
-			\ > /dev/null'
 
-command! -nargs=* TerminalFocus silent exec '!osascript
-			\ -e "tell application \"Terminal\" to activate" 
-			\ -e "tell application \"Terminal\" to do script \"<args>\" in window 1" 
-			\ > /dev/null'
+" command! -nargs=* Terminal silent exec '!osascript
+" 			\ -e "tell application \"Terminal\" to do script \"cd '''.getcwd().'''; <args>\"" 
+" 			\ -e "tell application \"Terminal\" to set bounds of window 1 to  '.$terminalWindow.'" 
+" 			\ -e "tell application \"Terminal\" to activate" 
+" 			\ > /dev/null'
 
-command! -nargs=* TerminalLeft silent exec '!osascript
-			\ -e "tell application \"Terminal\" to do script \"cd '''.getcwd().'''; <args>\"" 
-			\ -e "tell application \"Terminal\" to set bounds of window 1 to  '.$terminalWindow.'" 
-			\ -e "tell application \"Terminal\" to set position of window 1 to {0,0}" 
-			\ -e "tell application \"Terminal\" to activate" 
-			\ > /dev/null'
+" command! -nargs=* TerminalFocus silent exec '!osascript
+" 			\ -e "tell application \"Terminal\" to activate" 
+" 			\ -e "tell application \"Terminal\" to do script \"<args>\" in window 1" 
+" 			\ > /dev/null'
 
-command! -nargs=* TerminalBack silent exec '!osascript
-			\ -e "tell application \"Terminal\" to do script \"cd '''.getcwd().'''; <args>\"" 
-			\ -e "tell application \"Terminal\" to set bounds of window 1 to  '.$terminalWindow.'" 
-			\ > /dev/null'
+" command! -nargs=* TerminalLeft silent exec '!osascript
+" 			\ -e "tell application \"Terminal\" to do script \"cd '''.getcwd().'''; <args>\"" 
+" 			\ -e "tell application \"Terminal\" to set bounds of window 1 to  '.$terminalWindow.'" 
+" 			\ -e "tell application \"Terminal\" to set position of window 1 to {0,0}" 
+" 			\ -e "tell application \"Terminal\" to activate" 
+" 			\ > /dev/null'
 
-command! -nargs=* TerminalVimBundle  silent exec 'Terminal cd '.$VIMFolder.'bundle; <args>'
+" command! -nargs=* TerminalBack silent exec '!osascript
+" 			\ -e "tell application \"Terminal\" to do script \"cd '''.getcwd().'''; <args>\"" 
+" 			\ -e "tell application \"Terminal\" to set bounds of window 1 to  '.$terminalWindow.'" 
+" 			\ > /dev/null'
 
+
+" Vim Windows resize
+nnoremap <silent> <Leader>- :exe "resize " . (winheight(0) * 2/3)<CR>
+nnoremap <silent> <Leader>= :exe "resize " . (winheight(0) * 3/2)<CR>
 
  "Open Finder
 command! Finder silent execute "!open %:h"
