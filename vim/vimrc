@@ -25,7 +25,7 @@ set encoding=utf-8
 set wildmenu
 set ignorecase
 set hls
-set number
+set number relativenumber
 set ruler
 set showmatch
 set ls=2
