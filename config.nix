@@ -4,6 +4,17 @@
   allowBroken = false;
 
   packageOverrides = pkgs: with pkgs; rec {
+
+    # my fork of nixpkgs
+    mynixpkgs = import (fetchFromGitHub {
+      owner="countoren";
+      repo="nixpkgs-1";
+      rev="b9d33ae5e90f7be4d62f342bd3f508cce579348a";
+      sha256="1n4ds32zvpqgqkbwmjnwc089jgaqqdnbz8831111111111111111";
+    }) {};
+
+
+
     core =  { pkgsPath ? "~/.nixpkgs" } : buildEnv {
       name = "core";
       paths = [  
@@ -57,6 +68,8 @@
       ];
     });
 
+    
+
 
     nixosVM = ''
     qemu-system-x86_64 -smp 4 -m 8G -net nic -net user,hostname=oren -drive format=raw,file=nixos-graphical-18.03.133114.a4e068ff9c8-x86_64-linux.iso 
@@ -98,8 +111,7 @@
       import ./vim/macvim.nix { vimrcAndPlugins = import ./vim/VimrcAndPlugins.nix { inherit pkgsPath; };};    
 
 
-    buildVSCode = (callPackage ./vscode) { inherit lib; };
-
+    buildVSCode = mynixpkgs;
 
     dev = import ./dev { inherit pkgs; };
 
@@ -127,6 +139,34 @@
         mkdir -p $out/StatusMenu
         unzip $src -d $out/StatusMenu
       '';
+    };
+
+
+    #tools
+    dbeaver = let drv = stdenv.mkDerivation {
+      name = "dbeaver";
+      src = fetchurl { 
+        url = "https://dbeaver.io/files/dbeaver-ce-latest-macos.dmg"; 
+        sha256="1xsk795d06v7jnrvqwx6bnw77fml14wlcpv1x8cqg89v1qn9c01z"; 
+      };
+      buildInputs = [ undmg ];
+      buildCommand = ''
+        undmg < $src
+
+        mkdir -p $out/Applications
+        cp -rfv DBeaver.app $out/Applications
+      '';
+    };
+    in 
+    buildEnv {
+      name = "dbeaver";
+      paths = 
+      [
+        drv
+        (writeShellScriptBin "dbeaver" ''
+          open ${drv}/Applications/DBeaver.app
+        '')
+      ];
     };
 
 
@@ -187,6 +227,8 @@
     tmsshBambooLinuxAgent = pkgs.writeShellScriptBin "tmsshBambooLinuxAgent" "ssh orenrozen@172.16.31.46";
 
     tmsshBambooLinuxAgentAsBambooUser = pkgs.writeShellScriptBin "tmsshBambooLinuxAgentAsBambooUser" "ssh -t orenrozen@172.16.31.46 'sudo su -l bambooagent'";
+
+    tmpkgs = import ( fetchTarball  "https://code.topmanage.com/rest/api/latest/projects/DEVUTILS/repos/tmpkgs/archive?format=tgz&prefix=tmpkgs" ) {}; 
 
     #Utils
 
