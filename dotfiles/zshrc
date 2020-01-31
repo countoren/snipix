@@ -27,7 +27,7 @@ function zle-line-finish {
 }
 zle -N zle-line-finish
 
-PROMPT='%F{green}%n%f %F{magenta}[${vim_mode}]%f %F{blue}%B%~%b%f %# '
+PROMPT="%F{white}%*%f %F{magenta}%n%f %F{blue}[${vim_mode}]%f %F{green}%B%~%b%f"$'\n'"$ "
 
 
 unset VIM
