@@ -2,12 +2,12 @@
 . $HOME/.nix-profile/etc/profile.d/nix.sh
 
 
-# RPROMPT='[%F{yellow}%?%f]'
-
 set -o vi
 
 bindkey '^N' down-line-or-history
 bindkey '^P' up-line-or-history
+bindkey "^A" beginning-of-line
+bindkey "^E" end-of-line
 
 # show which vim mode we are in
 setopt PROMPT_SUBST
@@ -17,17 +17,17 @@ vim_cmd_mode="CMD"
 vim_mode=$vim_ins_mode
 
 function zle-keymap-select {
-  vim_mode="${${KEYMAP/vicmd/${vim_cmd_mode}}/(main|viins)/${vim_ins_mode}}"
-  zle reset-prompt
+	vim_mode="${${KEYMAP/vicmd/${vim_cmd_mode}}/(main|viins)/${vim_ins_mode}}"
+	zle reset-prompt
 }
 zle -N zle-keymap-select
 
 function zle-line-finish {
-  vim_mode=$vim_ins_mode
+	vim_mode=$vim_ins_mode
 }
 zle -N zle-line-finish
 
-PROMPT="%F{white}%*%f %F{magenta}%n%f %F{blue}[${vim_mode}]%f %F{green}%B%~%b%f"$'\n'"$ "
+PROMPT='%F{white}%*%f %F{magenta}%n%f %F{blue}[${vim_mode}]%f %F{green}%B%~%b%f'$'\n'"$ "
 
 
 unset VIM
