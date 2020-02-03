@@ -1,4 +1,3 @@
-// Place your key bindings in this file to overwrite the defaults
 [
 { "key": "shift+ctrl+d",        "command": "editor.action.goToDeclaration",
                                     "when": "editorHasDefinitionProvider && editorTextFocus && !isInEmbeddedEditor"

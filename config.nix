@@ -9,8 +9,8 @@
     mynixpkgs = import (fetchFromGitHub {
       owner="countoren";
       repo="nixpkgs-1";
-      rev="b9d33ae5e90f7be4d62f342bd3f508cce579348a";
-      sha256="1n4ds32zvpqgqkbwmjnwc089jgaqqdnbz8831111111111111111";
+      rev="db41faa13ce7343f78e9f7ed6d01cfab903f8f81";
+      sha256="0qwqqqlkslminnnq1cx5amxqh34arg67wqdck5zyv7qzyq9vbfjc";
     }) {};
 
 
@@ -111,7 +111,7 @@
       import ./vim/macvim.nix { vimrcAndPlugins = import ./vim/VimrcAndPlugins.nix { inherit pkgsPath; };};    
 
 
-    buildVSCode = mynixpkgs;
+    vscodeEnv = import ./vscode { vscodeEnv = mynixpkgs.vscode-utils.vscodeEnv; };
 
     dev = import ./dev { inherit pkgs; };
 
