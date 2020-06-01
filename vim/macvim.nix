@@ -26,6 +26,15 @@ in buildEnv
 {
   name = "omvim";
   paths = [
+    macvim
+    #this function will trigger vimrc sp function in order to split window when used terminal from vim
+    (writeShellScriptBin "sp" ''
+      printf '\033]51;["call", "Tapi_sp", ["%s"]]\007' `${coreutils}/bin/realpath $1`
+    '')
+    #this function will set working dir to terminal's pwd used terminal from vim
+    (writeShellScriptBin "cdv" ''
+      printf '\033]51;["call", "Tapi_lcd", ["%s"]]\007' "$(pwd)"
+    '')
     (writeShellScriptBin name '' ${macvim}/Applications/MacVim.app/Contents/bin/mvim "$@" '')
     (writeShellScriptBin nameterminal '' ${macvim}/Applications/MacVim.app/Contents/bin/mvim . -c 'term ++curwin' "$@" '')
 

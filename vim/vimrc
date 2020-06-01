@@ -33,6 +33,7 @@ set iskeyword+=_,$,@,%,#
 set foldmethod=marker
 set backspace=2
 set nocompatible
+set guifont=Menlo-Regular:h14
 
 set cf  " Enable error files & error jumping.
 set clipboard+=unnamed  " Yanks go on clipboard instead.
@@ -106,11 +107,39 @@ set shellcmdflag=-ic
 " set shell=/bin/zsh
 
 " VIM Terminal
+" Function to call from the the terminal in order to change working dir
+" arglist : [ cwd ]
+" change window local working directory
+function! Tapi_lcd(bufnum, arglist)
+	let winid = bufwinid(a:bufnum)
+	let cwd = get(a:arglist, 0, '''')
+	if winid == -1 || empty(cwd)
+		return
+	endif
+	exec 'cd ' . cwd
+endfunction
+
+function! Tapi_sp(bufnum, arglist)
+	let winid = bufwinid(a:bufnum)
+	let path = get(a:arglist, 0, '''')
+	if winid == -1 || empty(path)
+		return
+	endif
+	exec 'sp ' . path
+endfunction
+
 
 command! -nargs=* Tt :term <args>
 nmap <silent> <leader>t :term <CR>
 
 tnoremap <C-[><C-[> <C-\><C-n>
+tnoremap <C-w>; <C-w>:
+"window movement
+tnoremap <C-j> <C-w><C-j>
+tnoremap <C-k> <C-w><C-k>
+tnoremap <C-h> <C-w><C-h>
+tnoremap <C-l> <C-w><C-l>
+
 autocmd VimEnter * if empty(bufname('')) | exe "terminal ++curwin" | endif
 
  "Open Terminal
