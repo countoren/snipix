@@ -6,29 +6,55 @@
   packageOverrides = pkgs: with pkgs; rec {
 
     # my fork of nixpkgs
-    mynixpkgs = import (fetchFromGitHub {
-      owner="countoren";
-      repo="nixpkgs-1";
-      rev="db41faa13ce7343f78e9f7ed6d01cfab903f8f81";
-      sha256="0qwqqqlkslminnnq1cx5amxqh34arg67wqdck5zyv7qzyq9vbfjc";
-    }) {};
+    # mynixpkgs = import ~/Desktop/nixpkgs-1 {};
+    # mynixpkgs = import (fetchFromGitHub {
+    #   owner="countoren";
+    #   repo="nixpkgs-1";
+    #   rev="db41faa13ce7343f78e9f7ed6d01cfab903f8f81";
+    #   sha256="0qwqqqlkslminnnq1cx5amxqh34arg67wqdck5zyv7qzyq9vbfjc";
+    # }) {};
 
-
+    templatesEnv = pkgsPath : import ~/Desktop/githubTemplate2nix 
+    # templatesEnv = pkgsPath : import (fetchFromGitHub {
+    #   owner="countoren";
+    #   repo="templatesEnv";
+    #   rev="66eb5c1c8dd68276d8ae1af246bdcda0a5daeba0";
+    #   sha256="04nllgwp6cz6mdy3ladcwj88vh72wi5ws8csppg4hjjnp2f6064q";
+    # }) 
+    { githubToken = "d6e87c8a174afca0177f542cf89c100177c19a4c"; templatesFile = "${pkgsPath}/templates.nix"; };
+    templates = import ./templates.nix;
 
     core =  { pkgsPath ? "~/.nixpkgs" } : buildEnv {
       name = "core";
       paths = [  
+        #templating tool
+        (templatesEnv pkgsPath)
         #nix
         nrepl
         nixops
 
+        #TODO: use custom pass with password-store setup
+        # password-store for now is in dropbox
+        # synlink to use and import gpg key
+        pass
+        #to export key:
+        #gpg --export > pub.key
+        #gpg --export-secret-keys > prv.key
+        #import:
+        #gpg --import pub.key
+        #gpg --import prv.key : returns output of the keyid
+        #
+        #to make trusted:
+        #expect -c "spawn gpg --edit-key {keyid} trust quit; send \"5\ry\r\"; expect eof"
+        gnupg
+
         #TopManage
+        tmssh-mac-oren
         tmsshBambooLinuxAgent
 
         #my tools
         homeInstall
         ducks #show folder's space usage du -cks
-
 
         #core packages
         git
@@ -42,10 +68,10 @@
     };
 
 
-    macCore = a@{ pkgsPath ? "~/Dropbox/nixpkgs" } : buildEnv {
+    macCore = { pkgsPath ? "~/Dropbox/nixpkgs" } : buildEnv {
       name = "mac-core";
       paths = [  
-        ( core a )
+        ( core { inherit pkgsPath; } )
 
         #my tools
         startStatusMenuApps
@@ -59,10 +85,10 @@
       ];
     };
 
-    macHome =  a@{ pkgsPath ? "~/Dropbox/nixpkgs" } : (buildEnv {
+    macHome =  { pkgsPath ? "~/Dropbox/nixpkgs" } : (buildEnv {
       name = "mac-home";
       paths = [  
-        ( macCore a )
+        ( macCore { inherit pkgsPath; })
         #home packages
         scrollReveser
       ];
@@ -111,7 +137,7 @@
       import ./vim/macvim.nix { vimrcAndPlugins = import ./vim/VimrcAndPlugins.nix { inherit pkgsPath; };};    
 
 
-    vscodeEnv = import ./vscode { vscodeEnv = mynixpkgs.vscode-utils.vscodeEnv; };
+    vscodeEnv =  callPackage (import ./vscode) {};
 
     dev = import ./dev { inherit pkgs; };
 
@@ -222,6 +248,8 @@
     
     #TopManage
     #ssh
+
+    tmssh-mac-oren = pkgs.writeShellScriptBin "tmssh-mac-oren" "${sshpass}/bin/sshpass -f <(pass topmanage/ssh/macOren) ssh orenrozen@172.16.10.110";
     tmsshBambooLinuxAgentOld = pkgs.writeShellScriptBin "tmsshBambooLinuxAgentOld" "sshpass -f <(pass topmanage/ssh/bambooLinuxAgent) ssh orenrozen@172.16.31.38";
 
     tmsshBambooLinuxAgent = pkgs.writeShellScriptBin "tmsshBambooLinuxAgent" "ssh orenrozen@172.16.31.46";
