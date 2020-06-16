@@ -25,5 +25,9 @@
   "vim.handleKeys": {
     "<C-a>": false,
     "<C-f>": false
-  }
+  },
+	"terminal.integrated.shell.osx": "ovim",
+  "terminal.integrated.shellArgs.osx": [
+    "-v"
+  ]
 }
