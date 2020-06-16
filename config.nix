@@ -33,6 +33,9 @@
         nrepl
         nixops
 
+        #git
+        (import ./git {})
+
         #TODO: use custom pass with password-store setup
         # password-store for now is in dropbox
         # synlink to use and import gpg key
