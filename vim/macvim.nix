@@ -7,8 +7,8 @@ with pkgs;
 let macvim = stdenv.mkDerivation {
   name = "macvim";
   src = fetchurl { 
-    url = "https://github.com/macvim-dev/macvim/releases/download/snapshot-161/MacVim.dmg"; 
-    sha256="1m30821jhzx6307sjb566kn268kq5vp9x4dd6hv6dszh5r1z8gb2"; 
+    url = "https://github.com/macvim-dev/macvim/releases/download/snapshot-163/MacVim.dmg"; 
+    sha256="0dysy5nmn63cmr5kahij0657si49cfq6kylgnai2zd8995q7mc2s"; 
   };
   buildInputs = [ undmg ];
   buildCommand = ''
