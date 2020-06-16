@@ -31,6 +31,7 @@
         (templatesEnv pkgsPath)
         #nix
         nrepl
+        (import ./nixUtils {})
         nixops
 
         #git
