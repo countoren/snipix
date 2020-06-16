@@ -30,7 +30,6 @@
         #templating tool
         (templatesEnv pkgsPath)
         #nix
-        nrepl
         (import ./nixUtils {})
         nixops
 
@@ -264,7 +263,6 @@
 
     #Utils
 
-    nrepl = pkgs.writeShellScriptBin "nrepl" "nix repl '<nixpkgs>'";
     ducks = pkgs.writeShellScriptBin "ducks" '' du -cks * |sort -rn |head -11 '';
     hgrep = pkgs.writeShellScriptBin "hgrep" ''
     HISTFILE=~/.bash_history
