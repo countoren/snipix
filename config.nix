@@ -141,7 +141,7 @@
       import ./vim/macvim.nix { vimrcAndPlugins = import ./vim/VimrcAndPlugins.nix { inherit pkgsPath; };};    
 
 
-    vscodeEnv =  callPackage (import ./vscode) {};
+    myVSCodeConfig =  import ./vscode;
 
     dev = import ./dev { inherit pkgs; };
 

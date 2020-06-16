@@ -1,12 +1,5 @@
-{
-  vscodeEnv
-}:
-{
-  mutableExtensionsFile,
-  nixExtensions ? []
-}:
 with builtins;
-vscodeEnv {
+{
   nixExtensions = 
   [
     { name = "gitlens"; publisher = "eamodio"; version = "10.2.0"; 
@@ -23,8 +16,9 @@ vscodeEnv {
 
     { name = "Nix"; publisher = "bbenoist"; version = "1.0.1"; 
     sha256 = "0zd0n9f5z1f0ckzfjr38xw2zzmcxg1gjrava7yahg5cvdcw6l35b";  }
-  ] ++ nixExtensions;
-  settings= fromJSON (readFile (toPath ./settings.json));
-  keybindings= fromJSON (readFile (toPath ./keybindings.json));
-  inherit mutableExtensionsFile;
+  ] ;
+
+  settings = fromJSON (readFile (toPath ./settings.json));
+  # keybindings = fromJSON (readFile (toPath ./keybindings.json));
+  
 }
