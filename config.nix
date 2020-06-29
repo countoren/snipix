@@ -213,10 +213,10 @@
     let app =
       stdenv.mkDerivation rec {
         name = "sourcetree-${version}";
-        version = "2.7.3";
+        version = "4.0.1_234";
         src = fetchurl { 
-          url = "https://downloads.atlassian.com/software/sourcetree/Sourcetree_${version}a.zip?_ga=2.247266564.1694723893.1537054121-1133708473.1537054121";
-          sha256="0mm3076phha6bnryb7q01548fqwxrf9y996qmanycdv15dbkr372"; 
+          url = "https://product-downloads.atlassian.com/software/sourcetree/ga/Sourcetree_${version}.zip";
+          sha256="0c9ikh4s453qbiqfw6zxzqi6xbn8g6fw1nj4djzjj5y9s6v5kc5n"; 
         };
         buildInputs = [ unzip ];
         buildCommand = ''
@@ -224,7 +224,7 @@
           unzip $src -d $out/Applications
        '';
       };
-    in pkgs.writeShellScriptBin "sourcetree" '' open "${app}/Applications/SourceTree.App" '';
+    in pkgs.writeShellScriptBin "sourcetree" '' open -a "${app}/Applications/Sourcetree.app" "$@"'';
 
 
     my_vb = stdenv.mkDerivation {
