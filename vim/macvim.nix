@@ -12,7 +12,7 @@ let macvim = stdenv.mkDerivation {
   };
   buildInputs = [ undmg ];
   buildCommand = ''
-    undmg < $src
+    undmg "$src"
 
     mkdir -p $out/Applications
     cp -rfv MacVim.app $out/Applications
