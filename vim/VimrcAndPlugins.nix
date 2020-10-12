@@ -23,6 +23,7 @@ let
           "supertab"  # needed to integrate UltiSnips and YouCompleteMe
           "ultisnips-2019-07-08" # snippet engine
           # "vim-snippets"  # snippet database
+          "dhall-vim"
           "nerdtree"
           "ale"
           "ctrlp"
@@ -40,6 +41,7 @@ let
     };
   vimrcWithNixVimrc = writeText "vimrcWithNixVimrc" ''
     let $MYVIMRC = '${pkgsPath}/vim/vimrc'
+    let $VIMFolder = '${pkgsPath}/vim'
     let $MYPKGS = '${pkgsPath}'
 
     source ${vimrcFile}

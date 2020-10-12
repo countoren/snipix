@@ -1,20 +1,3 @@
-" IMPORTANT: win32 users will need to have 'shellslash' set so that latex
-" can be called correctly.
-set shellslash
-" IMPORTANT: grep will sometimes skip displaying the file name if you
-" search in a singe file. This will confuse Latex-Suite. Set your grep
-" program to always generate a file-name.
-set grepprg=grep\ -nH\ $*
-
-
-" OPTIONAL: Starting with Vim 7, the filetype of empty .tex files defaults to
-" 'plaintex' instead of 'tex', which results in vim-latex not being loaded.
-" The following changes the default filetype back to 'tex':
-let g:tex_flavor='latex'
-
-
-" /*** VimShell ***/
-let g:vimshell_editor_command = "git"
 
 " /*** CtrlP ***/
 let g:ctrlp_custom_ignore = 'node_modules'
@@ -31,7 +14,7 @@ set showmatch
 set ls=2
 set iskeyword+=_,$,@,%,#  
 set foldmethod=marker
-set backspace=2
+" set backspace=2
 set nocompatible
 set guifont=Menlo-Regular:h14
 
@@ -39,7 +22,7 @@ set cf  " Enable error files & error jumping.
 set clipboard+=unnamed  " Yanks go on clipboard instead.
 set history=256  " Number of things to remember in history.
 set autowrite  " Writes on make/shell commands
-set timeoutlen=250  " Time to wait after ESC (default causes an annoying delay)
+	set timeoutlen=250  " Time to wait after ESC (default causes an annoying delay)
 " colorscheme vividchalk  " Uncomment this to set a default theme
 
 let &t_SI.="\e[5 q"
@@ -52,27 +35,20 @@ set history=1000
 "Formatting
 
 " set smartindent
-set tabstop=2
-set softtabstop=2
-set shiftwidth=2
+set tabstop=4
+set softtabstop=4
+set shiftwidth=4
 " set expandtab "ignoring tabs putting spaces raplacing tabs
 
 ""colorscheme
 colorscheme wombat
 
-" /*** NERDTree Config ***/
+" Leader 
+let mapleader = " "
 
-if $CurrentSystem == 'WorkMac'
-" autocmd VimEnter * NERDTree /private/tmp/
-" autocmd VimEnter * /[ ][0-9]\+
-" autocmd VimEnter * let VmID = expand("<cword>")
-" autocmd VimEnter * let WindowsC =  "/private/tmp/".VmID."/C/"
-" autocmd VimEnter * wincmd p
-" autocmd VimEnter * NERDTreeToggle
-endif
+" /*** NERDTree Config ***/
 	
 nmap <silent> <leader>v :NERDTree $VIMFolder<CR>
-nmap <silent> <leader>vb :NERDTree $VIMFolder/bundle<CR>
 nmap <silent> <leader>c :NERDTreeToggle .<CR>
 nmap <silent> <leader>n :NERDTreeToggle<CR>
 
@@ -143,40 +119,6 @@ tnoremap <C-h> <C-w><C-h>
 tnoremap <C-l> <C-w><C-l>
 
 autocmd VimEnter * if empty(bufname('')) | exe "terminal ++curwin" | endif
-
- "Open Terminal
- 
-if $CurrentSystem == 'WorkMac'
-	let $terminalWindow = '{1280, 0, 2560,1440}'
-else
-	let $terminalWindow = '{710, 0, 1300,900}'
-endif
-
-"
-
-
-" command! -nargs=* Terminal silent exec '!osascript
-" 			\ -e "tell application \"Terminal\" to do script \"cd '''.getcwd().'''; <args>\"" 
-" 			\ -e "tell application \"Terminal\" to set bounds of window 1 to  '.$terminalWindow.'" 
-" 			\ -e "tell application \"Terminal\" to activate" 
-" 			\ > /dev/null'
-
-" command! -nargs=* TerminalFocus silent exec '!osascript
-" 			\ -e "tell application \"Terminal\" to activate" 
-" 			\ -e "tell application \"Terminal\" to do script \"<args>\" in window 1" 
-" 			\ > /dev/null'
-
-" command! -nargs=* TerminalLeft silent exec '!osascript
-" 			\ -e "tell application \"Terminal\" to do script \"cd '''.getcwd().'''; <args>\"" 
-" 			\ -e "tell application \"Terminal\" to set bounds of window 1 to  '.$terminalWindow.'" 
-" 			\ -e "tell application \"Terminal\" to set position of window 1 to {0,0}" 
-" 			\ -e "tell application \"Terminal\" to activate" 
-" 			\ > /dev/null'
-
-" command! -nargs=* TerminalBack silent exec '!osascript
-" 			\ -e "tell application \"Terminal\" to do script \"cd '''.getcwd().'''; <args>\"" 
-" 			\ -e "tell application \"Terminal\" to set bounds of window 1 to  '.$terminalWindow.'" 
-" 			\ > /dev/null'
 
 
 " Vim Windows resize
