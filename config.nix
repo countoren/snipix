@@ -14,7 +14,7 @@
     #   sha256="0qwqqqlkslminnnq1cx5amxqh34arg67wqdck5zyv7qzyq9vbfjc";
     # }) {};
 
-    templatesEnv = pkgsPath : import ~/Desktop/githubTemplate2nix 
+    templatesEnv = pkgsPath : import ~/Desktop/templatesEnv 
     # templatesEnv = pkgsPath : import (fetchFromGitHub {
     #   owner="countoren";
     #   repo="templatesEnv";
@@ -32,6 +32,7 @@
         #nix
         (import ./nixUtils {})
         nixops
+        cachix
 
         #git
         (import ./git {})
@@ -40,6 +41,11 @@
         # password-store for now is in dropbox
         # synlink to use and import gpg key
         pass
+        #if warning like :
+        # gpg: WARNING: server 'gpg-agent' is older than us (2.2.20 < 2.2.21)
+        # gpg: decryption failed: No secret key
+        # could restart gpg server with:
+        # gpgconf --kill all
         #to export key:
         #gpg --export > pub.key
         #gpg --export-secret-keys > prv.key
@@ -50,6 +56,8 @@
         #to make trusted:
         #expect -c "spawn gpg --edit-key {keyid} trust quit; send \"5\ry\r\"; expect eof"
         gnupg
+
+        raspTools
 
         #TopManage
         tmssh-mac-oren
@@ -65,6 +73,13 @@
         #git my utils
         gpushAll
         gupdateforked
+
+        #vim-like file manager
+        vifm
+
+        #nix version of:
+        bash
+        zsh
 
 
       ];
@@ -85,6 +100,14 @@
 
         #status menu Apps
         spectacle
+
+        vpnutil
+
+        #keyboard Shortcuts
+        skhd
+        (pkgs.writeShellScriptBin "keyboard-skhd-load-agent" ''
+          launchctl load ${skhd}/Library/LaunchDaemons/org.nixos.skhd.plist
+        '')
       ];
     };
 
@@ -93,7 +116,8 @@
       paths = [  
         ( macCore { inherit pkgsPath; })
         #home packages
-        scrollReveser
+        # not needed with magic mouse.
+        # scrollReveser
       ];
     });
 
@@ -114,7 +138,8 @@
         (dfUtils.toDotfile ./dotfiles/bashrc)
         (dfUtils.toDotfileWithDeps ./dotfiles/profile {inherit stdenv ovim;})
         (dfUtils.toDotfile ./dotfiles/bash_profile)
-        (dfUtils.toDotfile ./dotfiles/zshrc)
+        (dfUtils.toDotfileWithDeps ./dotfiles/zshrc { inherit pkgs; })
+        (dfUtils.toDotfile ./dotfiles/skhdrc)
       ];
     };
 
@@ -139,8 +164,8 @@
     omvim = { pkgsPath ? "~/Dropbox/nixpkgs" }:
       import ./vim/macvim.nix { vimrcAndPlugins = import ./vim/VimrcAndPlugins.nix { inherit pkgsPath; };};    
 
-
-    myVSCodeConfig =  import ./vscode;
+    vscode-addPersonalConfig =  import ./vscode;
+    myVSCodeConfig = vscode-addPersonalConfig {};
 
     dev = import ./dev { inherit pkgs; };
 
@@ -180,7 +205,7 @@
       };
       buildInputs = [ undmg ];
       buildCommand = ''
-        undmg < $src
+        undmg "$src"
 
         mkdir -p $out/Applications
         cp -rfv DBeaver.app $out/Applications
@@ -200,14 +225,6 @@
 
 
 
-    #clipboard helper app
-    clipy = 
-      let installer = fetchurl { 
-        url = "https://github.com/Clipy/Clipy/releases/download/1.1.2/Clipy_1.1.2.dmg"; 
-        sha256="133daq2qyv54canpj5dnd8b21b3a04w7sib11pf5ww73ni5kx191"; 
-      };
-    in pkgs.writeShellScriptBin "clipy-installer" '' open "${installer}" '';
-
 
     sourcetree = 
     let app =
@@ -224,7 +241,7 @@
           unzip $src -d $out/Applications
        '';
       };
-    in pkgs.writeShellScriptBin "sourcetree" '' open -a "${app}/Applications/Sourcetree.app" "$@"'';
+    in pkgs.writeShellScriptBin "stree" ''open -a "${app}/Applications/SourceTree.App" "$@"'';
 
 
     my_vb = stdenv.mkDerivation {
@@ -261,7 +278,43 @@
 
     tmpkgs = import ( fetchTarball  "https://code.topmanage.com/rest/api/latest/projects/DEVUTILS/repos/tmpkgs/archive?format=tgz&prefix=tmpkgs" ) {}; 
 
+    #VPN
+    vpnutil = stdenv.mkDerivation {
+      name = "vpnutil";
+      src = fetchzip { 
+            url = "https://blog.timac.org/2018/0719-vpnstatus/vpnutil.zip";
+            sha256 = "0467c66c0h1v7zix8g6dbdgi0gw8c8n6ljmxx24ibxlb4i6bznbf";
+          };
+      installPhase = ''
+        mkdir -p $out/bin
+        cp -v vpnutil $out/bin/vpnutil
+        '';
+      meta = {
+        homepage = "https://blog.timac.org/2018/0719-vpnstatus/";
+        description = ''Command line tool similar to scutil that can start and stop a VPN service from the Terminal. It also works with IKEv2 VPN services, something not supported by the built-in scutil'';
+        license = lib.licenses.mit;
+        platforms = ["x86_64-darwin"];
+      };
+    };
+
+
+    #Rasberry PI
+    raspTools = buildEnv {
+      name = "raspi-tools";
+      paths = 
+      [
+        #to unpack arm64 images from hydra
+        zstd
+
+        (pkgs.writeShellScriptBin "raspi-mount" '' 
+          echo 'NIX refs : https://nixos.wiki/wiki/NixOS_on_ARM#NixOS_installation_.26_configuration'
+          echo 'Ras p refs: https://www.raspberrypi.org/documentation/installation/installing-images/mac.md'
+          sudo dd if=$1 of=$2 
+        '')
+      ];
+    };
     #Utils
+
 
     ducks = pkgs.writeShellScriptBin "ducks" '' du -cks * |sort -rn |head -11 '';
     hgrep = pkgs.writeShellScriptBin "hgrep" ''
