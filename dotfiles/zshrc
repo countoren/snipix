@@ -1,3 +1,5 @@
+{ pkgs ? import <nixpkgs> {} }:
+''
 #loading nix
 . $HOME/.nix-profile/etc/profile.d/nix.sh
 
@@ -9,26 +11,18 @@ bindkey '^P' up-line-or-history
 bindkey "^A" beginning-of-line
 bindkey "^E" end-of-line
 
-# show which vim mode we are in
-setopt PROMPT_SUBST
+# Enable completion
+autoload -Uz compinit
+compinit 
 
-vim_ins_mode="INS"
-vim_cmd_mode="CMD"
-vim_mode=$vim_ins_mode
-
-function zle-keymap-select {
-	vim_mode="${${KEYMAP/vicmd/${vim_cmd_mode}}/(main|viins)/${vim_ins_mode}}"
-	zle reset-prompt
-}
-zle -N zle-keymap-select
-
-function zle-line-finish {
-	vim_mode=$vim_ins_mode
-}
-zle -N zle-line-finish
-
-PROMPT='%F{white}%*%f %F{magenta}%n%f %F{blue}[${vim_mode}]%f %F{green}%B%~%b%f'$'\n'"$ "
+# Source theme and plugins
+source ${./oren.zsh-theme}
+source ${pkgs.zsh-syntax-highlighting}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source ${pkgs.zsh-autosuggestions}/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+source ${pkgs.zsh-nix-shell}/share/zsh-nix-shell/nix-shell.plugin.zsh
+source ${pkgs.zsh-bd}/share/zsh-bd/bd.zsh
 
 
 unset VIM
 unset VIMRUNTIME
+''
