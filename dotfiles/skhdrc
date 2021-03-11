@@ -124,7 +124,7 @@ shift + alt - u : skhd -t "Ú"
 shift + alt - n : skhd -t "Ñ"
 
 :: normal @: echo "In normal mode"
-fn - space ; normal 
+ctrl + alt - s ; normal 
 
 # Open Apps
 :: open @: echo "In open mode"
@@ -134,7 +134,8 @@ normal < o ; open
     open < escape ; default
 
 # open MacVim
-    open < v : ~/.nix-profile/bin/omvim; cd -; skhd -k "escape"
+    open < v : cd ~/Desktop && ~/.nix-profile/bin/omvim; cd -; skhd -k "escape"
+    open < w : cd ~/Desktop/tmProjects && ~/.nix-profile/bin/omvim; cd -; skhd -k "escape"
 
 # open Chrome Browser
     open < c : open -a "/Applications/Google Chrome.app"; skhd -k "escape"
@@ -150,7 +151,8 @@ normal < o ; open
     normal < n ; opennew
 
 # opennew MacVim
-    opennew < v : ~/.nix-profile/bin/omvim; cd -; skhd -k "escape"
+    opennew < v : cd ~/Desktop && ~/.nix-profile/bin/omvim; cd -; skhd -k "escape"
+    opennew < w : cd ~/Desktop/tmProjects && ~/.nix-profile/bin/omvim; cd -; skhd -k "escape"
 
 # opennew new Chrome Browser
     opennew < c : open -na "/Applications/Google Chrome.app"; skhd -k "escape"

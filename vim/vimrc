@@ -43,6 +43,19 @@ set shiftwidth=4
 ""colorscheme
 colorscheme wombat
 
+"" Workarounf for gx (netrw) bug: https://github.com/vim/vim/issues/4738
+if has('macunix')
+  function! OpenURLUnderCursor()
+    let s:uri = matchstr(getline('.'), '[a-z]*:\/\/[^ >,;()"]*')
+    let s:uri = shellescape(s:uri, 1)
+    if s:uri != ''
+      silent exec "!open '".s:uri."'"
+      :redraw!
+    endif
+  endfunction
+  nnoremap gx :call OpenURLUnderCursor()<CR>
+endif
+
 " Leader 
 let mapleader = " "
 
@@ -52,9 +65,16 @@ nmap <silent> <leader>v :NERDTree $VIMFolder<CR>
 nmap <silent> <leader>c :NERDTreeToggle .<CR>
 nmap <silent> <leader>n :NERDTreeToggle<CR>
 
+
+"repeat F T movements 
+nnoremap <leader>, ,
+nnoremap , ;
+
 "Command line map
 nnoremap ; :
 
+" Open non existing file under the curosor 
+:noremap <leader>gf :e <cfile><cr>
 
 " set working folder to the file under the cursor
 command! Cdf :cd %:h
@@ -132,6 +152,8 @@ command! RFinder silent execute "!open ".getcwd()
 "Open Chrome for the buffered file
 command! Chrome silent exec "!open /Applications/Google\\ Chrome.app/ \"%\""
 
+"Open Brave for the buffered file
+command! Brave silent exec "!open /Applications/Brave\\ Browser.app/ \"%\""
 
 " open Bashrc command
 "

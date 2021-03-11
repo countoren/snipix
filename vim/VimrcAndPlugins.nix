@@ -20,6 +20,7 @@ let
           "tlib"
           "vim-addon-mw-utils"
           "commentary"
+          "surround"
           "supertab"  # needed to integrate UltiSnips and YouCompleteMe
           "ultisnips-2019-07-08" # snippet engine
           # "vim-snippets"  # snippet database
@@ -43,6 +44,9 @@ let
     let $MYVIMRC = '${pkgsPath}/vim/vimrc'
     let $VIMFolder = '${pkgsPath}/vim'
     let $MYPKGS = '${pkgsPath}'
+
+    " VIM Shell
+    set shell=${pkgs.zsh}/bin/zsh
 
     source ${vimrcFile}
 

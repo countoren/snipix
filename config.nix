@@ -33,10 +33,13 @@
         (import ./nixUtils {})
         nixops
         cachix
-
         #git
         (import ./git {})
 
+
+
+        #Signal env
+        signalTools
         #TODO: use custom pass with password-store setup
         # password-store for now is in dropbox
         # synlink to use and import gpg key
@@ -60,8 +63,7 @@
         raspTools
 
         #TopManage
-        tmssh-mac-oren
-        tmsshBambooLinuxAgent
+        (lib.attrValues (import ./topmanage/ssh.nix { inherit pkgs;}))
 
         #my tools
         homeInstall
@@ -98,15 +100,45 @@
         (omvim { inherit pkgsPath; })
         sourcetree
 
+        #Browsers
+
+        #Does not work
+        # error: only HFS file systems are supported.
+        # (mkDarwinApp {
+        #   name = "TOR";
+        #   url = "https://www.torproject.org/dist/torbrowser/10.0.12/TorBrowser-10.0.12-osx64_en-US.dmg";
+        #   sha256="0wf8pbasmy2qj4pf4ff09750qy9yqz210v2g48mbg4hz5bx1l959"; 
+        # })
+        #video players
+        (mkDarwinApp {
+          name = "VLC";
+          url = "https://ftp.osuosl.org/pub/videolan/vlc/3.0.12/macosx/vlc-3.0.12-intel64.dmg"; 
+          sha256="1lg5kd2b55072lnpq4k1f74cixqp2i6g63b883l4hx0dxrw5m2wv"; 
+        })
+
+        #Chat Apps
+
+        # Hangs on downloading...
+        # (mkDarwinApp { 
+        #   url = "https://download.delta.chat/desktop/v1.14.1/DeltaChat-1.14.1.dmg";
+        # })
+
         #status menu Apps
         spectacle
 
         vpnutil
 
         #keyboard Shortcuts
+        #might need a restart and reload of the daemon in order that the skhd dotfile will take effect
         skhd
         (pkgs.writeShellScriptBin "keyboard-skhd-load-agent" ''
           launchctl load ${skhd}/Library/LaunchDaemons/org.nixos.skhd.plist
+        '')
+        (pkgs.writeShellScriptBin "keyboard-skhd-remove-agent" ''
+          launchctl remove ${skhd}/Library/LaunchDaemons/org.nixos.skhd.plist
+        '')
+        (pkgs.writeShellScriptBin "keyboard-skhd-reload-agent" ''
+          keyboard-skhd-remove-agent && keyboard-skhd-load-agent
         '')
       ];
     };
@@ -124,9 +156,6 @@
     
 
 
-    nixosVM = ''
-    qemu-system-x86_64 -smp 4 -m 8G -net nic -net user,hostname=oren -drive format=raw,file=nixos-graphical-18.03.133114.a4e068ff9c8-x86_64-linux.iso 
-     '' ;
 
     dotfiles = buildEnv {
       name = "dotfiles";
@@ -196,6 +225,7 @@
     };
 
 
+
     #tools
     dbeaver = let drv = stdenv.mkDerivation {
       name = "dbeaver";
@@ -262,22 +292,35 @@
 
     # pass = import ./pass { inherit pkgs;};
 
+    #Signal signal-cli
+
+    # phoneNumber = 111111111;
+    #signalTools = with pkgs; buildEnv {
+    #    name = "sms-tools";
+    #    paths = 
+    #    [
+    #      signal-cli
+    #      (writeShellScriptBin "sms-register" ''signal-cli -u ${phoneNumber} register '')
+    #      #should take the output of register in order to verify
+    #      (writeShellScriptBin "sms-verify" '' signal-cli -u ${phoneNumber} verify $1 '')
+    #      (writeShellScriptBin "sms-msg" '' 
+    #        signal-cli -u ${phoneNumber} send -m "$2" $1
+    #      '')
+    #      (writeShellScriptBin "sms-msg-moises" '' 
+    #        signal-cli -u ${phoneNumber} send -m "$1" +50768613634
+    #      '')
+    #    ];
+    #  };
+
+
 
     #PI - home
     piHome = writeShellScriptBin "piHome" ''ssh pi@192.168.0.107'';
     
     #TopManage
-    #ssh
+    tmpkgs = import ./topmanage/tmpkgs.nix;
 
-    tmssh-mac-oren = pkgs.writeShellScriptBin "tmssh-mac-oren" "${sshpass}/bin/sshpass -f <(pass topmanage/ssh/macOren) ssh orenrozen@172.16.10.110";
-    tmsshBambooLinuxAgentOld = pkgs.writeShellScriptBin "tmsshBambooLinuxAgentOld" "sshpass -f <(pass topmanage/ssh/bambooLinuxAgent) ssh orenrozen@172.16.31.38";
-
-    tmsshBambooLinuxAgent = pkgs.writeShellScriptBin "tmsshBambooLinuxAgent" "ssh orenrozen@172.16.31.46";
-
-    tmsshBambooLinuxAgentAsBambooUser = pkgs.writeShellScriptBin "tmsshBambooLinuxAgentAsBambooUser" "ssh -t orenrozen@172.16.31.46 'sudo su -l bambooagent'";
-
-    tmpkgs = import ( fetchTarball  "https://code.topmanage.com/rest/api/latest/projects/DEVUTILS/repos/tmpkgs/archive?format=tgz&prefix=tmpkgs" ) {}; 
-
+    
     #VPN
     vpnutil = stdenv.mkDerivation {
       name = "vpnutil";
@@ -325,6 +368,11 @@
 
     gpushAll = pkgs.writeShellScriptBin "gpushAll" ''git add -A; git commit -m "$@"; git push'';
     gupdateforked = pkgs.writeShellScriptBin "gupdateforked" ''git fetch upstream && git rebase upstream/master && git push origin master $@'';
+
+
+    #Utils Functions
+    mkDarwinApp = import ./mkDarwinApp.nix {};
+    
     
   };
 }
