@@ -24,7 +24,7 @@ let macvim = stdenv.mkDerivation {
 };
 in buildEnv
 {
-  name = "omvim";
+  inherit name;
   paths = [
     macvim
     #this function will trigger vimrc sp function in order to split window when used terminal from vim
