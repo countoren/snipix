@@ -5,6 +5,7 @@
     { 
       name = "fsvim";
       nameterminal = "fsshell";
+      icon = "fscript";
       vimrcAndPlugins = import ./VimrcAndPlugins.nix
       {
         inherit pkgsPath;

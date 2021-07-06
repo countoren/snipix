@@ -2,6 +2,7 @@
 , name ? "omvim"
 , nameterminal ? "omshell"
 , vimrcAndPlugins ? import ./VimrcAndPlugins.nix {}
+, icon ? ""
 }:
 with pkgs;
 let macvim = stdenv.mkDerivation {
@@ -16,6 +17,9 @@ let macvim = stdenv.mkDerivation {
 
     mkdir -p $out/Applications
     cp -rfv MacVim.app $out/Applications
+      ${lib.optionalString (icon!="") ''
+      cp $out/Applications/MacVim.app/Contents/Resources/MacVim-${icon}.icns $out/Applications/MacVim.app/Contents/Resources/MacVim.icns
+      ''}
 
     ln -sf ${vimrcAndPlugins} $out/Applications/MacVim.app/Contents/Resources/vim/vimrc
     ln -sf ${vimrcAndPlugins} $out/Applications/MacVim.app/Contents/Resources/vim/gvimrc
@@ -37,6 +41,7 @@ in buildEnv
     '')
     (writeShellScriptBin name '' ${macvim}/Applications/MacVim.app/Contents/bin/mvim "$@" '')
     (writeShellScriptBin nameterminal '' ${macvim}/Applications/MacVim.app/Contents/bin/mvim . -c 'term ++curwin' "$@" '')
+
 
   ];
 
