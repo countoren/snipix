@@ -193,6 +193,9 @@
     omvim = { pkgsPath ? "~/Dropbox/nixpkgs" }:
       import ./vim/macvim.nix { vimrcAndPlugins = import ./vim/VimrcAndPlugins.nix { inherit pkgsPath; };};    
 
+    fsvim = import ./vim/fsvim.nix { pkgsPath = "~/Dropbox/nixpkgs"; };
+
+
     vscode-addPersonalConfig =  import ./vscode;
     myVSCodeConfig = vscode-addPersonalConfig {};
 

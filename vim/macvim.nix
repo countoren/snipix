@@ -2,6 +2,7 @@
 , name ? "omvim"
 , nameterminal ? "omshell"
 , vimrcAndPlugins ? import ./VimrcAndPlugins.nix {}
+#Resources folder contains list of vim logo icons per lang look for chosing the name of lang that is needed
 , icon ? ""
 }:
 with pkgs;

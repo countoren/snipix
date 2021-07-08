@@ -15,6 +15,7 @@
           "fzf-vim"
         ];
         additionalCustPlugins = {
+          LanguageClient-neovim = import ./LanguageClient.nix { inherit pkgs; };
           # https://github.com/ionide/Ionide-vim
           ionide-vim = pkgs.vimUtils.buildVimPluginFrom2Nix {
               name = "ionide-vim";

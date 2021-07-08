@@ -31,14 +31,15 @@ let &t_EI.="\e[1 q"
 
 "adding more history (default 20)
 set history=1000
-	
-"Formatting
 
-" set smartindent
-set tabstop=4
-set softtabstop=4
-set shiftwidth=4
-" set expandtab "ignoring tabs putting spaces raplacing tabs
+"Formatting
+set tabstop=4     " tabs are at proper location
+set softtabstop=0 " number of spaces while inserting tabs
+set expandtab     " don't use actual tab character (ctrl-v)
+set shiftwidth=4  " indenting is 4 spaces
+set smarttab
+set autoindent    " turns it on
+set smartindent   " does the right thing (mostly) in programs
 
 ""colorscheme
 colorscheme wombat
@@ -167,7 +168,9 @@ command! -nargs=* CWithCopy exec "redir @* | <args> | redir END"
 
 "VimGrep command
 "
-command! -nargs=* VimGrep execute 'vimgrep /'.<f-args>.'/ **/*.*'
+
+command! -nargs=* VGrep execute 'vimgrep /'.<f-args>.'/ **/*.*'
+command! -nargs=* VGrepCWFileExt execute 'vimgrep // **/*.'.<f-args>
 command! -nargs=1 CfdoReplace  execute 'cfdo %s//'.<f-args>.'/gc | update'
 
 
