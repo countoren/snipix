@@ -25,12 +25,14 @@ let
           "ultisnips-2019-07-08" # snippet engine
           # "vim-snippets"  # snippet database
           "dhall-vim"
-          "nerdtree"
+          "vifm-vim"
+          #"nerdtree"
           "ale"
           "ctrlp"
           "vim-addon-nix"
           "fugitive"
           "gitgutter"
+
           "vim-airline"
           "vim-airline-themes"
           "vim-javascript"
@@ -44,6 +46,10 @@ let
     let $MYVIMRC = '${pkgsPath}/vim/vimrc'
     let $VIMFolder = '${pkgsPath}/vim'
     let $MYPKGS = '${pkgsPath}'
+    let $EDITOR = 'sp'
+
+    " VIM Shell
+    set shell=${pkgs.zsh}/bin/zsh
 
     " VIM Shell
     set shell=${pkgs.zsh}/bin/zsh

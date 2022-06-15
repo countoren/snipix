@@ -1,6 +1,6 @@
 {
   # Allow proprietary packages
-	allowUnfree = true;
+  allowUnfree = true;
   allowBroken = false;
 
   packageOverrides = pkgs: with pkgs; rec {

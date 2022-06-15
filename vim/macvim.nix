@@ -1,7 +1,7 @@
 { pkgs ? import <nixpkgs>{}
 , name ? "omvim"
 , nameterminal ? "omshell"
-, vimrcAndPlugins ? import ./VimrcAndPlugins.nix {}
+, vimrcAndPlugins ? import ./VimrcAndPlugins.nix { additionalVimrc = "set guifont=Menlo-Regular:h14"; }
 #Resources folder contains list of vim logo icons per lang look for chosing the name of lang that is needed
 , icon ? ""
 }:

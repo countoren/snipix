@@ -1,35 +1,65 @@
 {
-  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-20.03";
+  description = "My system config";
+  inputs = {
+    nixpkgs.url = "nixpkgs/nixos-21.11";
+    home-manager.url = "github:nix-community/home-manager/release-21.11";
+    home-manager.inputs.nixpkgs.follows = "nixpkgs";
+    #vims.url = "path:vim";
+    #gpg.url = "/home/p1n3/nixpkgs/gpg";
+    #network.url = "path:network";
+  };
 
-  outputs = { self, nixpkgs }: 
-  let pkgs = import nixpkgs { system = "x86_64-darwin"; };
-    lpkgs = import nixpkgs { system = "x86_64-linux"; };
-  in 
-  {
-    defaultApp.x86_64-linux = lpkgs.writeShellScriptBin "bla" ''echo dlfkjdlskfdj'';
-    defaultApp.x86_64-darwin = pkgs.writeShellScriptBin "bla" ''echo dlfkjdlskfdj'';
-    nixosConfigurations.container = nixpkgs.lib.nixosSystem {
-      system = "x86_64-linux";
-      modules =
-        [ ({ pkgs, ... }: {
-            boot.isContainer = true;
+  outputs = { nixpkgs, home-manager,... }: 
+    let 
+       system = "x86_64-linux";
+       pkgs = import nixpkgs {
+          inherit system;
+          config = import ./config.nix;
+       };
+       lib = nixpkgs.lib;
+    in {
+       homeManagerConfigurations = {
+          p1n3 = home-manager.lib.homeManagerConfiguration {
+            inherit system;
 
-            # Let 'nixos-version --json' know about the Git revision
-            # of this flake.
-            system.configurationRevision = nixpkgs.lib.mkIf (self ? rev) self.rev;
+            username = "p1n3";
+            homeDirectory = "/home/p1n3";
+            configuration = {
+              imports = [ ./network/nixos.nix ];
+                home.packages = [ pkgs.wl-clipboard ];
+                programs.password-store = {
+                  enable = true;
+                  settings.PASSWORD_STORE_DIR = "/run/media/p1n3/Untitled\ 2/password-store";
+                  settings.PASSWORD_STORE_KEY = "countoren@gmail.com";
+                };
 
-            # Network configuration.
-            networking.useDHCP = false;
-            networking.firewall.allowedTCPPorts = [ 80 ];
-
-            # Enable a web server.
-            services.httpd = {
-              enable = true;
-              adminAddr = "morty@example.org";
-            };
-          })
-        ];
+                programs.git = {
+                  enable = true;
+                  userName = "countoren@protonmail.com";
+                };
+                
+                home.file.".bashrc".source = ./dotfiles/bashrc;
+                home.file.".zshrc".text  = import ./dotfiles/zshrc_nixos { inherit pkgs; };
+            }; #// ( import ./network/nixos.nix { inherit pkgs; });
+            
+          };	
+       };
+       nixosConfigurations = {
+         p1n3 = lib.nixosSystem {
+           inherit system;
+           modules = [ 
+                (import ./nixos/configuration.nix pkgs)
+                {
+                  config = { environment.systemPackages = [ 
+                    (import ./vim/linuxVim.nix { inherit pkgs; })
+                    (import ./git { inherit pkgs; })
+                    (import ./freetube { inherit pkgs;})
+                    ];
+                 };
+                }
+              ];
+         };
+       };
     };
 
-  };
-}
+  }

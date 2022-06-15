@@ -1,22 +1,15 @@
 { pkgs ? import <nixpkgs> {} 
-, additionalVimrc?  ''
-set clipboard=unnamed
-set clipboard=unnamedplus
-set columns=200
-set lines=100
-tmap <C-v> <C-W>"+
-let $EDITOR = 'sp'
-''
-, vimrcAndPlugins ? import ./VimrcAndPlugins.nix { inherit pkgs additionalVimrc; }
+, vimrcAndPlugins ? import ./VimrcAndPlugins.nix { inherit pkgs; }
 , name ? "vim"
 , vim ? pkgs.vimHugeX
 }:
 /*
+
 pkgs.vimHugeX
 .customize {
    name = "vim";
    vimrcConfig.customRC = builtins.readFile vimrcAndPlugins;
-   wrapGui = false; 
+   wrapGui = true; 
 }
 pkgs.vimUtils.vimWithRC {
       vimExecutable = "${vim}/bin/vim";
@@ -37,7 +30,6 @@ pkgs.vimUtils.vimWithRC {
 pkgs.symlinkJoin {
   inherit name;
   paths = [
-
     (vim.override { python = pkgs.python3; }) 
     #this function will trigger vimrc sp function in order to split window when used terminal from vim
     (pkgs.writeShellScriptBin "sp" ''

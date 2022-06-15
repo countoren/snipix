@@ -6,8 +6,6 @@ let hsvim =
     { 
       inherit pkgs;
       name = "hsvim";
-      nameterminal = "hsshell";
-      icon = "hs";
       vimrcAndPlugins = import ./VimrcAndPlugins.nix
       {
         inherit pkgs pkgsPath;
@@ -66,5 +64,5 @@ let hsvim =
     in 
     pkgs.buildEnv {
       name = "hsvim";
-      paths = [ hsvim pkgs.haskell-language-server pkgs.nodejs pkgs.ghc ];
+      paths = [ hsvim pkgs.haskell-language-server pkgs.nodejs pkgs.ghc pkgs.ghcid ];
     }

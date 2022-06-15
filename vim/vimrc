@@ -16,13 +16,12 @@ set iskeyword+=_,$,@,%,#
 set foldmethod=marker
 " set backspace=2
 set nocompatible
-set guifont=Menlo-Regular:h14
 
 set cf  " Enable error files & error jumping.
 set clipboard+=unnamed  " Yanks go on clipboard instead.
 set history=256  " Number of things to remember in history.
 set autowrite  " Writes on make/shell commands
-	set timeoutlen=250  " Time to wait after ESC (default causes an annoying delay)
+set timeoutlen=250  " Time to wait after ESC (default causes an annoying delay)
 " colorscheme vividchalk  " Uncomment this to set a default theme
 
 let &t_SI.="\e[5 q"
@@ -60,11 +59,18 @@ endif
 " Leader 
 let mapleader = " "
 
-" /*** NERDTree Config ***/
-	
-nmap <silent> <leader>v :NERDTree $VIMFolder<CR>
-nmap <silent> <leader>c :NERDTreeToggle .<CR>
-nmap <silent> <leader>n :NERDTreeToggle<CR>
+" /*** vifm config ***/
+
+let g:vifm_replace_netrw = 1
+let g:vifm_replace_netrw_cmd = "SplitVifm"
+let g:vifm_embed_split = 1
+" let g:vifm_embed_term = 1
+" Do not load netrw plugin
+let g:loaded_netrw = 1
+let g:loaded_netrwPlugin = 1
+nnoremap <leader>s :SplitVifm<CR>
+nnoremap <leader>v :VsplitVifm<CR>
+nnoremap <leader>d :DiffVifm<CR>
 
 
 "repeat F T movements 

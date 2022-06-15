@@ -1,14 +1,11 @@
 {
   description = "My VIMS";
   inputs.flake-utils.url = "github:numtide/flake-utils";
+  inputs.nixpkgs.url = "nixpkgs/nixos-21.11";
 
   outputs = { self, nixpkgs, flake-utils }: 
-    # flake-utils.lib.eachDefaultSystem (system: {
-    #   packages.hsvim = import ./hsvim.nix { pkgs = nixpkgs.legacyPackages.${system}; }; 
-    #   defaultPackage = self.packages.${system}.hsvim;
-    # })
     let darwinPkgs = { pkgs = nixpkgs.legacyPackages.x86_64-darwin; };
-        # vimrcAndPlugin = 
+        linuxPkgs = nixpkgs.legacyPackages.x86_64-linux;
     in
     {
       packages = {
@@ -18,8 +15,14 @@
           fsvim = import ./fsvim.nix darwinPkgs;
         };
         x86_64-linux = {
+          #linux vim no GUI
+          lvim = import ./linuxVim.nix { pkgs = linuxPkgs; };
         };
       };
+      nixosModule = {config, ...} : { 
+         config = { environment.systemPackages = [ self.packages.x86_64-linux.lvim ]; };
+      };
       defaultPackage.x86_64-darwin = self.packages.x86_64-darwin.omvim;
+      defaultPackage.x86_64-linux = self.packages.x86_64-linux.lvim;
     };
 }
