@@ -9,9 +9,12 @@
       ./hardware-configuration.nix
     ];
 
+
+
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
+  boot.loader.grub.configurationLimit = 20;
 
   networking.hostName = "p1n3"; # Define your hostname.
   # networking.defaultGateway = "192.168.1.1";
@@ -19,7 +22,7 @@
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # Set your time zone.
-  time.timeZone = "EST";
+  time.timeZone = "US/East-Indiana";
 
   # The global useDHCP flag is deprecated, therefore explicitly set to false here.
   # Per-interface useDHCP will be mandatory in the future, so this generated config
@@ -71,7 +74,6 @@
   services.xserver.libinput.touchpad.tappingDragLock = true;
   services.xserver.libinput.touchpad.disableWhileTyping = true;
   services.xserver.libinput.touchpad.accelSpeed = "1.27";
-
    # bigger tty fonts
   console.font =
     "${pkgs.terminus_font}/share/consolefonts/ter-u28n.psf.gz";
@@ -108,37 +110,8 @@
     androidenv.androidPkgs_9_0.platform-tools
     vifm
     fzf
-    #NixOS general utils scripts
-    (pkgs.writeShellScriptBin "install-system" ''
-	nixos-rebuild switch --flake "$@" .#
-    '')
 
-    (pkgs.writeShellScriptBin "install-home" ''
-	nix build .#homeManagerConfigurations.p1n3.activationPackage && ./result/activate
-    '')
-
-    (pkgs.writeShellScriptBin "nfrepl" ''
-        echo 'builtins.getFlake (toString ./.)' > repl.nix && nix repl ./repl.nix
-    '')
-    (pkgs.writeShellScriptBin "nfreplconfig" ''
-        echo '(builtins.getFlake (toString ./.)).nixosConfigurations.p1n3.config' > repl.nix && nix repl ./repl.nix
-    '')
-    (pkgs.writeShellScriptBin "nfreploptions" ''
-        echo '(builtins.getFlake (toString ./.)).nixosConfigurations.p1n3.options' > repl.nix && nix repl ./repl.nix
-    '')
-
-
-     (pkgs.writeShellScriptBin "nfreplnixpkgs" ''
-         echo 'import (builtins.getFlake (toString ./.)).inputs.nixpkgs { system = builtins.currentSystem; }' > repl.nix && nix repl ./repl.nix
-     '')
-
-    (pkgs.writeShellScriptBin "nfupdate" ''
-      nix flake lock --update-input $@
-    '')
-    (pkgs.writeShellScriptBin "nclean" ''
-       sudo nix-env -p /nix/var/nix/profiles/system --delete-generations +2
-    '')
-
+    gnomeExtensions.always-show-titles-in-overview
 
 
 
@@ -154,7 +127,7 @@
     protonvpn-cli
     dig 
     firefox
-    torbrowser
+    # torbrowser
     brave
     discord
     xclip

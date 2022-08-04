@@ -145,9 +145,6 @@ tnoremap <C-k> <C-w><C-k>
 tnoremap <C-h> <C-w><C-h>
 tnoremap <C-l> <C-w><C-l>
 
-autocmd VimEnter * if empty(bufname('')) | exe "terminal ++curwin" | endif
-
-
 " Vim Windows resize
 nnoremap <silent> <Leader>- :exe "resize " . (winheight(0) * 2/3)<CR>
 nnoremap <silent> <Leader>= :exe "resize " . (winheight(0) * 3/2)<CR>

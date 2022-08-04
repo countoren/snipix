@@ -66,6 +66,11 @@ let
 
     "Command to set this nix vimrc to be sourced from home vimrc
     command! ReplaceHomeVimrcWithNixVimrc silent exec "!echo 'source ${vimrcFile}'> ~/.vimrc"
+
+
+    "Start terminal if not open in file
+    autocmd VimEnter * if empty(bufname(''')) | exe "terminal ++curwin" | endif
+
   '';
   
   in vimrcWithNixVimrc

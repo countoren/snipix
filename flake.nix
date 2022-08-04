@@ -1,7 +1,8 @@
 {
   description = "My system config";
   inputs = {
-    nixpkgs.url = "nixpkgs/nixos-21.11";
+    nixpkgs.url = github:NixOS/nixpkgs;
+    nixpkgsOld.url = "nixpkgs/nixos-21.11";
     home-manager.url = "github:nix-community/home-manager/release-21.11";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     #vims.url = "path:vim";
@@ -9,10 +10,14 @@
     #network.url = "path:network";
   };
 
-  outputs = { nixpkgs, home-manager,... }: 
+  outputs = { nixpkgs, nixpkgsOld, home-manager,... }: 
     let 
        system = "x86_64-linux";
        pkgs = import nixpkgs {
+          inherit system;
+          config = import ./config.nix;
+       };
+       pkgsOld = import nixpkgsOld {
           inherit system;
           config = import ./config.nix;
        };
@@ -50,10 +55,14 @@
            modules = [ 
                 (import ./nixos/configuration.nix pkgs)
                 {
-                  config = { environment.systemPackages = [ 
-                    (import ./vim/linuxVim.nix { inherit pkgs; })
+                  config = {
+                    environment.systemPackages = [ 
+                    #ONIX - nixos p1n3
+                    #ONIX END
+                    #(import ./vim/linuxVim.nix { pkgs = pkgsOld; })
+                    (import ./vim/neovide.nix { inherit pkgs; })
                     (import ./git { inherit pkgs; })
-                    (import ./freetube { inherit pkgs;})
+                    (import ./nixUtils { inherit pkgs; })
                     ];
                  };
                 }

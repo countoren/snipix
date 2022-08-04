@@ -3,6 +3,12 @@
   allowUnfree = true;
   allowBroken = false;
 
+  permittedInsecurePackages = [
+    "python2.7-urllib3-1.26.2"
+    "python2.7-PyJWT-1.7.1"
+    "python2.7-pyjwt-1.7.1"
+  ];
+
   packageOverrides = pkgs: with pkgs; rec {
 
     # my fork of nixpkgs
