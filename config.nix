@@ -7,6 +7,8 @@
     "python2.7-urllib3-1.26.2"
     "python2.7-PyJWT-1.7.1"
     "python2.7-pyjwt-1.7.1"
+    "python-2.7.18.6"
+    "python2.7-certifi-2021.10.8"
   ];
 
   packageOverrides = pkgs: with pkgs; rec {
@@ -20,15 +22,17 @@
     #   sha256="0qwqqqlkslminnnq1cx5amxqh34arg67wqdck5zyv7qzyq9vbfjc";
     # }) {};
 
-    templatesEnv = pkgsPath : import ~/Desktop/templatesEnv 
+    #templatesEnv = pkgsPath : import ~/Desktop/templatesEnv 
     # templatesEnv = pkgsPath : import (fetchFromGitHub {
     #   owner="countoren";
     #   repo="templatesEnv";
     #   rev="66eb5c1c8dd68276d8ae1af246bdcda0a5daeba0";
     #   sha256="04nllgwp6cz6mdy3ladcwj88vh72wi5ws8csppg4hjjnp2f6064q";
     # }) 
+    /*
     { githubToken = "d6e87c8a174afca0177f542cf89c100177c19a4c"; templatesFile = "${pkgsPath}/templates.nix"; };
     templates = import ./templates.nix;
+    */
 
     core =  { pkgsPath ? "~/.nixpkgs" } : buildEnv {
       name = "core";

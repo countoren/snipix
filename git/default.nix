@@ -31,12 +31,15 @@ let
       grep -o '[a-f0-9]\{7\}' 
     '';
 
+    split = ''
+      ${git} subtree split --prefix=$1 -b $2
+    '';
+
     show = ''
       ${git} show --color=always "$@"
     '';
     showFancy = ''
       ${self.show} "$@" | ${diff-so-fancy} | ${less} -r
-
     '';
 
  

@@ -1,12 +1,11 @@
 { pkgs ? import <nixpkgs>{}
-, pkgsPath ? "~/Dropbox/nixpkgs"
+, pkgsPath ? toString  (import ../pkgsPath.nix)
 , additionalPlugins? []
-, additionalCustPlugins? {}
 , additionalVimrc? "" 
 }:
 with pkgs;
 let 
-  my_plugins = import ./plugins.nix { inherit vimUtils fetchFromGitHub; };
+  my_plugins = builtins.attrValues (import ./plugins.nix { inherit vimUtils fetchFromGitHub; });
 in 
 {
   customRC = ''
@@ -22,6 +21,7 @@ in
     set shell=${pkgs.zsh}/bin/zsh
 
     "Start terminal if not open in file
+    autocmd VimEnter * if empty(bufname(''')) | cd $MYPKGS | endif
     autocmd VimEnter * if empty(bufname(''')) | exe "terminal" | endif
     ''
     + (builtins.readFile ./vimrc) + ''
@@ -36,34 +36,34 @@ in
     "Env Specific configuration:
     ''+ additionalVimrc);
 
+    packages.myPackages = with pkgs.vimPlugins;
+    {
+      start = [
+    
+      vim-colorschemes
+      # YouCompleteMe
+      tlib
+      vim-addon-mw-utils
+      commentary
+      surround
+      supertab  # needed to integrate UltiSnips and YouCompleteMe
+      vim-snippets  # snippet database
+      dhall-vim
+      vifm-vim
+      ale
+      ctrlp
+      #vim-addon-nix
+      fugitive
+      gitgutter
+      vim-lastplace
 
-  vam.knownPlugins = vimPlugins // my_plugins // additionalCustPlugins;
-  vam.pluginDictionaries = [
-    { names = [
-      "vim-colorschemes"
-      # "youcompleteme"
-      "tlib"
-      "vim-addon-mw-utils"
-      "commentary"
-      "surround"
-      "supertab"  # needed to integrate UltiSnips and YouCompleteMe
-      "ultisnips-2019-07-08" # snippet engine
-      # "vim-snippets"  # snippet database
-      "dhall-vim"
-      "vifm-vim"
-      #"nerdtree"
-      "ale"
-      "ctrlp"
-      "vim-addon-nix"
-      "fugitive"
-      "gitgutter"
-
-      "vim-airline"
-      "vim-airline-themes"
-      "vim-javascript"
-      "vim-nix"
-      "vimproc"
-      # "wombat256-vim"
-    ] ++ additionalPlugins; }
-  ];
+      vim-airline
+      vim-airline-themes
+      vim-javascript
+      vim-nix
+      vimproc
+      ] 
+      ++ my_plugins 
+      ++ additionalPlugins; 
+    };
 }

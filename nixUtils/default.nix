@@ -5,6 +5,7 @@
 , browser ? "${pkgs.firefox}/bin/firefox"
 , xclip ? "${pkgs.xclip}/bin/xclip -selection c"
 , perl ? "${pkgs.perl}/bin/perl"
+, sd ? "${pkgs.sd}/bin/sd"
 , jq ? "${pkgs.jq}/bin/jq"
 , less ? "${pkgs.less}/bin/less"
 , vifm ? "${pkgs.vifm}/bin/vifm"
@@ -29,7 +30,7 @@ let
     #General
     projectFolder = getGitRootFolder;
     #NixOS general utils scripts
-    install-system  = ''nixos-rebuild switch --flake "$@" .#'';
+    install-system  = ''${self.create-nix-path} && nixos-rebuild switch --flake "$@" .#'';
 
     install-home = ''nix build .#homeManagerConfigurations.${user}.activationPackage && ./result/activate'';
 
@@ -50,8 +51,12 @@ let
     pkg-parse = ''sed  's/\* \(\S*\).*/\1/' '';
     pkg-name = ''sed  's/\* legacyPackages.${pkgs.system}\.\(\S*\).*/\1/' '';
 
-
     eval = ''nix eval "$@"'';
+
+    create-nix-path = ''
+      pkgsPath=$(${self.projectFolder})
+      echo "$pkgsPath" > $pkgsPath/pkgsPath.nix
+    '';
 
     search-pkgs = ''${self.search} nixpkgs | ${self.pkg-name} '';
     pkg-meta = ''${self.eval} --json nixpkgs#"$@".meta '';
@@ -66,6 +71,9 @@ let
     find-insertions-points = ''
       ${git} grep -n -P '${toUpper prefix}\s*-\s*\w*' $(${self.projectFolder})"/**.nix" | ${fzf} -1 -0 
     '';
+    find-insertion-points-file-only = ''
+      ${self.find-insertions-points} | awk -F ':' '{print $1}'
+    '';
 
     open-homepage =''
         ${browser} "$(${self.eval} --raw "$@"'.meta.homepage')" 
@@ -76,9 +84,25 @@ let
     #create function to edit package 
     #create function to build package 
 
-    # nix-build && ./result/bin/onix | sed 's/^\([^:]*\).*/\1/g' |   
-    insert-pkg = ''sed -z 's/\(#ONIX - nixos p1n3\)\([[:space:]]\+\)\(.*#ONIX END\)/\1\2jq\2\3/g' '';
-    onix = self.find-insertions-points;
+    #split-on-comment-section-help = '' echo '\1 - before pkgs \2 - spaces \3 - pkgs \4 - tail' '';
+    split-on-comment-section-help = ''
+      ${sd} --help
+      '';
+    #split-on-comment-section = ''sed -z "s;\(.*#${toUpper prefix}[^/]*\n\)\([\s\t]\+\)\(.*\)\(#${toUpper prefix} END.*\);$1;g" $2'';
+    #split-on-comment-section = ''${perl} -i -pe "s/\(.*#${toUpper prefix} - nixos p1n3.*?\n\)/$1/g" $2'';
+    split-on-comment-section = ''
+       ${sd} -p "(p1n3.*)(#${toUpper prefix} - nixos p1n3)" '$1' ../flake.nix
+      '';
+
+    #split-on-comment-section = ''sed -z 's/\(#${toUpper prefix} - nixos p1n3\)\([[:space:]]\+\)\(.*#${toUpper prefix} END\)/\1\2jq\2\3/g' $(${self.find-insertion-points-file-only})'';
+
+    show-pkgs = ''
+      ${self.split-on-comment-section} "\3" $1
+    '';
+
+
+
+    onix = self.show-pkgs;
   } 
   )));
 in

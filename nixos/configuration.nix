@@ -10,7 +10,6 @@
     ];
 
 
-
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
@@ -84,12 +83,22 @@
     GDK_SCALE = "0.75";
     GDK_DPI_SCALE = "1.25";
     _JAVA_OPTIONS = "-Dsun.java2d.uiScale=0.75";
+    QEMU_OPTS = "-m 4096 -smp 4 -enable-kvm";
   };
 
 
+  services.qemuGuest.enable = true;
   services.xserver.monitorSection = ''
     DisplaySize 768.0 432.0
   '';
+  /*
+  virtualisation = {
+      #diskSize = 8000; # MB
+      memorySize = 2048; # MB
+      cores = 2;
+      #writableStoreUseTmpfs = false;
+  };
+  */
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.p1n3 = {
@@ -133,6 +142,7 @@
     xclip
     bitwarden
     signal-desktop
+    element-desktop
     bitwarden-cli
     nixos-generators
     gparted 

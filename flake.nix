@@ -10,8 +10,8 @@
     #network.url = "path:network";
   };
 
-  outputs = { nixpkgs, nixpkgsOld, home-manager,... }: 
-    let 
+  outputs = { nixpkgs, nixpkgsOld, home-manager,... }:
+    let
        system = "x86_64-linux";
        pkgs = import nixpkgs {
           inherit system;
@@ -34,7 +34,8 @@
                 home.packages = [ pkgs.wl-clipboard ];
                 programs.password-store = {
                   enable = true;
-                  settings.PASSWORD_STORE_DIR = "/run/media/p1n3/Untitled\ 2/password-store";
+                  settings.PASSWORD_STORE_DIR = "/run/media/p1n3/Untitled\
+2/password-store";
                   settings.PASSWORD_STORE_KEY = "countoren@gmail.com";
                 };
 
@@ -42,25 +43,38 @@
                   enable = true;
                   userName = "countoren@protonmail.com";
                 };
-                
+
                 home.file.".bashrc".source = ./dotfiles/bashrc;
-                home.file.".zshrc".text  = import ./dotfiles/zshrc_nixos { inherit pkgs; };
+                home.file.".zshrc".text  = import ./dotfiles/zshrc_nixos {
+inherit pkgs; };
             }; #// ( import ./network/nixos.nix { inherit pkgs; });
-            
-          };	
+
+          };
        };
        nixosConfigurations = {
          p1n3 = lib.nixosSystem {
            inherit system;
-           modules = [ 
+           modules = [
                 (import ./nixos/configuration.nix pkgs)
                 {
                   config = {
-                    environment.systemPackages = [ 
+                    environment.systemPackages = with pkgs; [
                     #ONIX - nixos p1n3
                     #ONIX END
+                    wifite2
+                    iw
+                    macchanger
+                    john
                     #(import ./vim/linuxVim.nix { pkgs = pkgsOld; })
-                    (import ./vim/neovide.nix { inherit pkgs; })
+
+                    #PDF tools
+                    zathura
+                    pdfsandwich
+
+                    (import ./vim/neovide.nix { inherit pkgs;
+                      pkgsPath = toString (import ./pkgsPath.nix);
+
+                    })
                     (import ./git { inherit pkgs; })
                     (import ./nixUtils { inherit pkgs; })
                     ];

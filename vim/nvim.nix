@@ -2,10 +2,14 @@
 , lib ? pkgs.lib
 , gitDrv ? pkgs.git
 , fzf ? "${pkgs.fzf}/bin/fzf"
+, pkgsPath ? toString (import ../pkgsPath.nix)
 , additionalVimrc? ''
+
 set guifont=DejaVu\ Sans\ Mono:h15
+
+
 ''
-, vimrcConfig ? import ./vimrcConfig.nix { inherit pkgs additionalVimrc;  }
+, vimrcConfig ? import ./vimrcConfig.nix { inherit pkgs pkgsPath additionalVimrc;  }
 , prefix? "nvim"
 }:
 let 
@@ -40,8 +44,6 @@ let
     vsp = '' ${self.nvim-client-send} vsp "$@" '';
     cdv = '' ${self.nvim-client-send} cd $(pwd) '';
     nvim-server-file = ''echo $HOME"/.cache/nvim/$(date +"%d_%m_%YT%H_%M_%S").pipe" '';
-
-
 
     nvim-get-all-servers-with-location = ''
       for server in $(ls $HOME"/.cache/nvim" | grep ".pipe$"); do
