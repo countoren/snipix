@@ -37,6 +37,10 @@ pkgs.symlinkJoin {
     nvim
   ];
   buildInputs = [ pkgs.makeWrapper ];
+  postBuild = ''
+    wrapProgram $out/bin/neovide \
+      --add-flags "--maximized"
+  '';
   /*
   postBuild = ''
     ln -sf $out/share/icons/hicolor/* $out/share/icons

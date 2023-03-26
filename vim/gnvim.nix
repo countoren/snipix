@@ -1,4 +1,5 @@
-{ pkgs ? import <nixpkgs> {}
+{ pkgs ? (builtins.getFlake (toString ../.)).inputs.nixpkgs.legacyPackages.${builtins.currentSystem}
+, screenSize ? "1920x1080"
 , pkgsPath ? toString (import ../pkgsPath.nix)
 , additionalVimrc?  ''
 set guifont=DejaVu\ Sans\ Mono:h15
@@ -36,10 +37,12 @@ pkgs.symlinkJoin {
   paths = [
     pkgs.gnvim
     nvim
+    pkgs.xorg.xrandr
   ];
   buildInputs = [ pkgs.makeWrapper ];
   postBuild = ''
     wrapProgram $out/bin/gnvim \
-      --add-flags "--nvim $out/bin/nvim"
+      --add-flags "--geometry ${screenSize}" \
+      --add-flags "--nvim $out/bin/nvim" 
   '';
   } 

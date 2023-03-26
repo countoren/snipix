@@ -3,13 +3,13 @@
 , gitDrv ? pkgs.git
 , fzf ? "${pkgs.fzf}/bin/fzf"
 , pkgsPath ? toString (import ../pkgsPath.nix)
-, additionalVimrc? ''
-
-set guifont=DejaVu\ Sans\ Mono:h15
-
-
-''
-, vimrcConfig ? import ./vimrcConfig.nix { inherit pkgs pkgsPath additionalVimrc;  }
+, additionalVimrc? ""
+, vimrcConfig ? import ./vimrcConfig.nix { inherit pkgs pkgsPath;
+    additionalVimrc = additionalVimrc + ''
+      " nvim specific configs
+      autocmd TermOpen * startinsert
+    '';  
+}
 , prefix? "nvim"
 }:
 let 
@@ -51,7 +51,7 @@ let
       done
     '';
     nvim-get-server-file = ''
-      ls $HOME/.cache/nvim/*.pipe | ${fzf} -0 -1
+      ls $HOME/.cache/nvim/*.pipe | ${fzf} --tac -0 -1
     '';
 
     nvim-open = ''
