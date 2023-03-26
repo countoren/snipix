@@ -3,14 +3,14 @@
   inputs = {
     nixpkgs.url = github:NixOS/nixpkgs;
     nixpkgsOld.url = "nixpkgs/nixos-21.11";
-    home-manager.url = "github:nix-community/home-manager/release-21.11";
+    nixpkgsWork.url = github:NixOS/nixpkgs/9ef6e7727f4c31507627815d4f8679c5841efb00;
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     #vims.url = "path:vim";
     #gpg.url = "/home/p1n3/nixpkgs/gpg";
     #network.url = "path:network";
   };
 
-  outputs = { nixpkgs, nixpkgsOld, home-manager,... }:
+  outputs = { nixpkgs, nixpkgsOld, nixpkgsWork, home-manager,... }:
     let
        system = "x86_64-linux";
        pkgs = import nixpkgs {
@@ -21,9 +21,31 @@
           inherit system;
           config = import ./config.nix;
        };
+       pkgsWork = import nixpkgsWork {
+          inherit system;
+       };
        lib = nixpkgs.lib;
     in {
        homeManagerConfigurations = {
+          orozen = home-manager.lib.homeManagerConfiguration {
+            inherit pkgs;
+            modules = [
+              {
+                home.username = "orozen";
+                home.homeDirectory = "/home/orozen";
+                home.stateVersion = "22.11";
+
+                programs.git = {
+                  enable = true;
+                  userName = "orozen@carlsonsw.com";
+                };
+                home.file.".bashrc".source = ./dotfiles/bashrc;
+                home.file.".zshrc".text  = import ./dotfiles/zshrc_nixos { inherit pkgs; };
+
+              }
+            ];
+          };
+
           p1n3 = home-manager.lib.homeManagerConfiguration {
             inherit system;
 
@@ -52,6 +74,27 @@ inherit pkgs; };
           };
        };
        nixosConfigurations = {
+         work-vb = nixpkgsWork.lib.nixosSystem {
+           inherit system;
+           modules = [
+            ./nixos/work-vb/configuration.nix 
+            ./nixos/common.nix
+            {
+              config = {
+                environment.systemPackages = with pkgs; [
+                  ( pkgs.writeShellScriptBin "install-home" ''
+                      nix run .#homeManagerConfigurations.orozen.activationPackage
+                  '')
+                  (import ./vim/gnvim.nix { inherit pkgs;
+                        pkgsPath = "/home/orozen/nixpkgs";
+                  })
+                  (import ./git { inherit pkgs; })
+                  (import ./nixUtils { inherit pkgs; })
+                ];
+              };
+            }
+           ];
+         };
          p1n3 = lib.nixosSystem {
            inherit system;
            modules = [
@@ -70,8 +113,7 @@ inherit pkgs; };
                     #PDF tools
                     zathura
                     pdfsandwich
-
-                    (import ./vim/neovide.nix { inherit pkgs;
+(import ./vim/neovide.nix { inherit pkgs;
                       pkgsPath = toString (import ./pkgsPath.nix);
 
                     })

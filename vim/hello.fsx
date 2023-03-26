@@ -1,0 +1,6 @@
+type hello =
+     | A
+     | D
+
+
+

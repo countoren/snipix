@@ -39,7 +39,7 @@ in
     packages.myPackages = with pkgs.vimPlugins;
     {
       start = [
-    
+      vim-eunuch
       vim-colorschemes
       # YouCompleteMe
       tlib
