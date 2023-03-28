@@ -37,7 +37,8 @@
 
                 programs.git = {
                   enable = true;
-                  userName = "orozen@carlsonsw.com";
+                  userName = "Oren Rozen";
+                  userEmail = "orozen@carlsonsw.com";
                 };
                 home.file.".bashrc".source = ./dotfiles/bashrc;
                 home.file.".zshrc".text  = import ./dotfiles/zshrc_nixos { inherit pkgs; };
@@ -63,7 +64,7 @@
 
                 programs.git = {
                   enable = true;
-                  userName = "countoren@protonmail.com";
+                  userEmail = "countoren@protonmail.com";
                 };
 
                 home.file.".bashrc".source = ./dotfiles/bashrc;
