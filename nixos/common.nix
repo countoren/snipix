@@ -9,7 +9,7 @@
   };
   # Set your time zone.
   time.timeZone = "US/East-Indiana";
-  services.xserver.xkbOptions = "ctrl:swapcaps";
+  services.xserver.xkbOptions = "ctrl:nocaps";
   console.font =
     "${pkgs.terminus_font}/share/consolefonts/ter-u28n.psf.gz";
   services.xserver.dpi = 160;

@@ -5,6 +5,8 @@
 set guifont=DejaVu\ Sans\ Mono:h7
 set lazyredraw
 set title
+" rigght mouse click in gnvim is annoying open window without closing sometimes
+set mousemodel=extend
 augroup dirchange
     autocmd!
     autocmd DirChanged * let &titlestring=v:event['cwd']
