@@ -31,6 +31,11 @@ in
     command! DVim silent :sp $MYPKGS/vim
     "VIMRC
     command! FVimrc silent :sp $MYVIMRC
+
+    "sneak mapping
+    nnoremap <leader>, <Plug>Sneak_,
+    nnoremap , <Plug>Sneak_;
+
     ''
     + (if additionalVimrc == "" then "" else ''
     "Env Specific configuration:
@@ -53,6 +58,9 @@ in
       ale
       ctrlp
       #vim-addon-nix
+
+      #Motions
+      vim-sneak
       fugitive
       gitgutter
       vim-lastplace
