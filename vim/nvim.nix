@@ -1,15 +1,30 @@
+
 { pkgs ? (builtins.getFlake (toString ../.)).inputs.nixpkgs.legacyPackages.${builtins.currentSystem}
 , lib ? pkgs.lib
 , gitDrv ? pkgs.git
 , fzf ? "${pkgs.fzf}/bin/fzf"
 , pkgsPath ? toString (import ../pkgsPath.nix)
 , additionalVimrc? ""
+, additionalPlugins ? [] 
 , vimrcConfig ? import ./vimrcConfig.nix { inherit pkgs pkgsPath;
-    additionalVimrc = additionalVimrc + ''
+  additionalVimrc = additionalVimrc + ''
       " nvim specific configs
       autocmd TermOpen * startinsert
-    '';  
-}
+      luafile ${./config.lua}
+      '';  
+      additionalPlugins = with pkgs.vimPlugins; [
+        (nvim-treesitter.withPlugins (p: [ 
+          p.nix p.jq
+          p.c p.cpp p.javascript p.bash p.bibtex p.c_sharp p.css p.dockerfile 
+          p.git_rebase p.gitattributes p.gitignore p.html p.latex p.lua p.markdown 
+          p.markdown_inline p.rust p.sql p.typescript p.vim p.yaml p.go 
+        ]))
+
+      #does not work for now it seems ts-rainbow returns nil in config.lua
+      # local rainbow = require 'ts-rainbow'
+      #nvim-ts-rainbow2
+    ] ++ additionalPlugins;
+  }
 , prefix? "nvim"
 }:
 let 
