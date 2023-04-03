@@ -41,37 +41,57 @@ in
     "Env Specific configuration:
     ''+ additionalVimrc);
 
+    
+
     packages.myPackages = with pkgs.vimPlugins;
     {
       start = [
-      vim-eunuch
+
+      # Style
       vim-colorschemes
-      # YouCompleteMe
-      tlib
-      vim-addon-mw-utils
-      commentary
+      vim-airline
+      vim-airline-themes
+
+      # Errors showing 
+      ale
+
+      # Global Search
+      ctrlp
+
+      # Editing
       surround
+      commentary
       supertab  # needed to integrate UltiSnips and YouCompleteMe
       vim-snippets  # snippet database
-      dhall-vim
+      vim-lastplace
+      indentLine
+      # tlib not sure why i added it to be removed if there is no problem
       #LSP 
       vim-lsp
+
+
+      # Nix 
+      vim-nix
+
+      # Shell commands helper and file managers
+      vim-eunuch
       vifm-vim
-      ale
-      ctrlp
-      #vim-addon-nix
 
       #Motions
       vim-sneak
+
+      # Git
       fugitive
       gitgutter
-      vim-lastplace
 
-      vim-airline
-      vim-airline-themes
-      vim-javascript
-      vim-nix
-      vimproc
+      # Misc
+      # vimproc not sure if it is needed
+      # vim-addon-mw-utils
+
+
+
+
+
       ] 
       ++ my_plugins 
       ++ additionalPlugins; 
