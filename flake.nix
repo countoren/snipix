@@ -109,14 +109,12 @@ inherit pkgs; };
                     iw
                     macchanger
                     john
-                    #(import ./vim/linuxVim.nix { pkgs = pkgsOld; })
 
                     #PDF tools
                     zathura
                     pdfsandwich
-(import ./vim/neovide.nix { inherit pkgs;
+                    (import ./vim/neovide.nix { inherit pkgs;
                       pkgsPath = toString (import ./pkgsPath.nix);
-
                     })
                     (import ./git { inherit pkgs; })
                     (import ./nixUtils { inherit pkgs; })
