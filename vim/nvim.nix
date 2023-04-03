@@ -39,7 +39,8 @@ let
 
     nvim-client-expr = ''${nvim-exe} --server $(${self.nvim-get-server-file}) --remote-expr "execute(\"$@\")" '';
     nvim-client-expr-with-server = ''${nvim-exe} --server $(cat -) --remote-expr "execute(\"$@\")" '';
-    nvim-client-send = ''${nvim-exe} --server $(${self.nvim-get-server-file}) --remote-send "<C-\><C-N>:$1 $(${self.maybe-realpath} "''\${@:2}")<CR>" '';
+    # $NVIM - is nvim env variable that load with the specific nvim .pipe(address) path/url
+    nvim-client-send = ''${nvim-exe} --server $NVIM --remote-send "<C-\><C-N>:$1 $(${self.maybe-realpath} "''\${@:2}")<CR>" '';
     sp = '' ${self.nvim-client-send} sp "$@" '';
     vsp = '' ${self.nvim-client-send} vsp "$@" '';
     cdv = '' ${self.nvim-client-send} cd $(pwd) '';
