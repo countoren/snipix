@@ -54,6 +54,8 @@ in
       supertab  # needed to integrate UltiSnips and YouCompleteMe
       vim-snippets  # snippet database
       dhall-vim
+      #LSP 
+      vim-lsp
       vifm-vim
       ale
       ctrlp
