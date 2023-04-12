@@ -149,25 +149,8 @@ tnoremap <C-l> <C-w><C-l>
 nnoremap <silent> <Leader>- :exe "resize " . (winheight(0) * 2/3)<CR>
 nnoremap <silent> <Leader>= :exe "resize " . (winheight(0) * 3/2)<CR>
 
- "Open Finder
-command! Finder silent execute "!open %:h"
-command! RFinder silent execute "!open ".getcwd()
-
-"Open Chrome for the buffered file
-command! Chrome silent exec "!open /Applications/Google\\ Chrome.app/ \"%\""
-
-"Open Brave for the buffered file
-command! Brave silent exec "!open /Applications/Brave\\ Browser.app/ \"%\""
-
-" open Bashrc command
-"
-command! Bashrc silent :tabe ~/.bashrc
-command! BashrcShared silent :tabe ~/Dropbox/dotfiles/bashrc-shared-settings
-
-
 "Command with copy to clipboard
 command! -nargs=* CWithCopy exec "redir @* | <args> | redir END"
-
 
 "VimGrep command
 "
