@@ -48,32 +48,34 @@
           };
 
           p1n3 = home-manager.lib.homeManagerConfiguration {
-            inherit system;
+            inherit pkgs;
+            modules = [
+            ./network/nixos.nix
+            {
+              home.username = "p1n3";
+              home.homeDirectory = "/home/p1n3";
+              home.stateVersion = "22.11";
+              home.packages = [ pkgs.wl-clipboard ];
+              home.file.".bashrc".source = ./dotfiles/bashrc;
+              home.file.".zshrc".text  = import ./dotfiles/zshrc_nixos { inherit pkgs; };
 
-            username = "p1n3";
-            homeDirectory = "/home/p1n3";
-            configuration = {
-              imports = [ ./network/nixos.nix ];
-                home.packages = [ pkgs.wl-clipboard ];
-                programs.password-store = {
-                  enable = true;
-                  settings.PASSWORD_STORE_DIR = "/run/media/p1n3/Untitled\
-2/password-store";
-                  settings.PASSWORD_STORE_KEY = "countoren@gmail.com";
-                };
+              programs.password-store = {
+                enable = true;
+                settings.PASSWORD_STORE_DIR = "/run/media/p1n3/Untitled\
+                2/password-store";
+                settings.PASSWORD_STORE_KEY = "countoren@gmail.com";
+              };
 
-                programs.git = {
-                  enable = true;
-                  userEmail = "countoren@protonmail.com";
-                };
+              programs.git = {
+                enable = true;
+                userEmail = "countoren@protonmail.com";
+              };
 
-                home.file.".bashrc".source = ./dotfiles/bashrc;
-                home.file.".zshrc".text  = import ./dotfiles/zshrc_nixos {
-inherit pkgs; };
-            }; #// ( import ./network/nixos.nix { inherit pkgs; });
-
-          };
+            } #// ( import ./network/nixos.nix { inherit pkgs; });
+          ];
+         };
        };
+
        nixosConfigurations = {
          work-vb = nixpkgsWork.lib.nixosSystem {
            inherit system;
@@ -103,6 +105,9 @@ inherit pkgs; };
                 {
                   config = {
                     environment.systemPackages = with pkgs; [
+                    ( pkgs.writeShellScriptBin "install-home" ''
+                      nix run .#homeManagerConfigurations.p1n3.activationPackage
+                    '')
                     #ONIX - nixos p1n3
                     #ONIX END
                     wifite2
