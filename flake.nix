@@ -124,7 +124,7 @@
                     })
                     (import ./git { inherit pkgs; })
                     (import ./nixUtils { inherit pkgs; })
-                    #(import ./searchUtils { inherit pkgs; })
+                    (import ./searchUtils { inherit pkgs; })
                     ];
                  };
                 }
