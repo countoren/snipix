@@ -73,12 +73,18 @@ nnoremap <leader>v :VsplitVifm<CR>
 nnoremap <leader>d :DiffVifm<CR>
 
 
+
 "repeat F T movements 
 nnoremap <leader>, ,
 nnoremap , ;
 
 "Command line map
 nnoremap ; :
+
+
+" Go to file make gf as go to file with line number instead of gF
+nnoremap gf gF
+nnoremap <c-w>f <c-w>F
 
 " Open non existing file under the curosor 
 :noremap <leader>gf :e <cfile><cr>
