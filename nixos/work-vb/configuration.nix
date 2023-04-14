@@ -45,6 +45,11 @@
     xkbVariant = "";
   };
 
+  services.xserver.displayManager.sessionCommands = ''
+    xfconf-query -c xfce4-power-manager -p /xfce4-power-manager/lock-screen-suspend-hibernate -n -t bool -s false
+    xfconf-query -c xfce4-power-manager -p /xfce4-power-manager/lock-screen-suspend -n -t bool -s false
+  '';
+
   # Enable CUPS to print documents.
   services.printing.enable = true;
 
