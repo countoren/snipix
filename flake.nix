@@ -88,6 +88,7 @@
                   ( pkgs.writeShellScriptBin "install-home" ''
                       nix run .#homeManagerConfigurations.orozen.activationPackage
                   '')
+                  (import ./work { inherit pkgs;})
                   (import ./vim/gnvim.nix { inherit pkgs;
                         pkgsPath = "/home/orozen/nixpkgs";
                   })

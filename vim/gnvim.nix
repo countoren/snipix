@@ -19,7 +19,7 @@ tnoremap <c-l> <c-\><c-n><c-w>l
 tnoremap <a-;> <c-\><c-n>:
 
 ''
-, nvim ? import ./nvim.nix { inherit pkgs pkgsPath additionalVimrc;} 
+, nvim ? import ./wvim.nix { inherit pkgs pkgsPath additionalVimrc;} 
 }:
 /*
 let 
