@@ -140,8 +140,7 @@ function! Tapi_sp(bufnum, arglist)
 endfunction
 
 command! -nargs=* Tt :term <args>
- nmap <silent> gt :sp \| term<CR>
-nmap <silent> <leader>t :term <CR>
+nmap <silent> <leader>t :sp \| term<CR>
 
 tnoremap <C-[><C-[> <C-\><C-n>
 tnoremap <C-w>; <C-w>:
