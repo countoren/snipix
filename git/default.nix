@@ -78,8 +78,8 @@ let
 
     status = ''
       ${self.status-basic} | ${fzf} --no-sort \
-      --header 'ctrl-a add, ctrl-r reset, ctrl-h add -p, ctrl-H reset -p, ctrl-i ignore, ctrl-s sp in vim' \
-      --preview '${git} diff --cached --color=always {+2} | ${diff-so-fancy}' \
+      --header 'ctrl-a add, ctrl-r reset\n ctrl-h add -p, ctrl-H reset -p\n ctrl-i ignore, ctrl-s sp in vim' \
+      --preview '${git} diff --color=always {+2} | ${diff-so-fancy}' \
       --bind="ctrl-a:reload:${self.add-and-status} {+2..}" \
       --bind="ctrl-r:reload:${self.reset-and-status} {+2..}" \
       --bind="ctrl-h:execute(${git} add -p {+2..})+reload:${self.status-basic}" \
