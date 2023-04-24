@@ -13,6 +13,8 @@ let
     postBuild = ''
       wrapProgram $out/bin/vifm \
       --add-flags '-c "set vicmd=sp"'
+      #shorter the name for easy of use and remove conflicts
+      mv $out/bin/vifm $out/bin/vf 
     '';
   }; 
   my_plugins = builtins.attrValues (import ./plugins.nix { inherit vimUtils fetchFromGitHub; });
