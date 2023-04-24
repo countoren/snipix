@@ -1,10 +1,20 @@
 { pkgs ? import <nixpkgs>{}
+, vifm ? pkgs.vifm
 , pkgsPath ? toString  (import ../pkgsPath.nix)
 , additionalPlugins? []
 , additionalVimrc? "" 
 }:
 with pkgs;
 let 
+  insideVimVifm = pkgs.symlinkJoin {
+    name = "vifm-wrapped";
+    paths = [ vifm ];
+    buildInputs = [ pkgs.makeWrapper ];
+    postBuild = ''
+      wrapProgram $out/bin/vifm \
+      --add-flags '-c "set vicmd=sp"'
+    '';
+  }; 
   my_plugins = builtins.attrValues (import ./plugins.nix { inherit vimUtils fetchFromGitHub; });
 in 
 {
@@ -14,6 +24,7 @@ in
     let $MYPKGS = '${pkgsPath}'
     let $EDITOR = 'sp'
     let $PATH = $PATH.":${pkgs.rnix-lsp}/bin"
+    let $PATH = "${insideVimVifm}/bin:".$PATH
 
     " VIM Shell
     set shell=${pkgs.zsh}/bin/zsh
