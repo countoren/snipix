@@ -17,6 +17,8 @@
         --reverse \
         --ansi \
         --tiebreak=index \
+        --bind "alt-j:down" \
+        --bind "alt-k:up" \
         --bind "ctrl-J:down" \
         --bind "ctrl-K:up"''
 }:
