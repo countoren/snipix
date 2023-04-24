@@ -92,6 +92,7 @@
                   (import ./vim/gnvim.nix { inherit pkgs;
                         pkgsPath = "/home/orozen/nixpkgs";
                   })
+                  file
                   (import ./git { inherit pkgs; })
                   (import ./nixUtils { inherit pkgs; })
                   (import ./searchUtils { inherit pkgs; })
@@ -120,6 +121,8 @@
                     #PDF tools
                     zathura
                     pdfsandwich
+
+                    file
                     (import ./vim/neovide.nix { inherit pkgs;
                       pkgsPath = toString (import ./pkgsPath.nix);
                     })
