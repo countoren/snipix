@@ -139,8 +139,8 @@ function! Tapi_sp(bufnum, arglist)
 	exec 'sp ' . path
 endfunction
 
-
 command! -nargs=* Tt :term <args>
+ nmap <silent> gt :sp \| term<CR>
 nmap <silent> <leader>t :term <CR>
 
 tnoremap <C-[><C-[> <C-\><C-n>
