@@ -68,7 +68,8 @@
 
               programs.git = {
                 enable = true;
-                userEmail = "countoren@protonmail.com";
+                userName = "countoren";
+                userEmail = "countoren@gmail.com";
               };
 
             } #// ( import ./network/nixos.nix { inherit pkgs; });
