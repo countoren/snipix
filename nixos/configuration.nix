@@ -117,8 +117,6 @@
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     androidenv.androidPkgs_9_0.platform-tools
-    vifm
-    fzf
 
     gnomeExtensions.always-show-titles-in-overview
 
