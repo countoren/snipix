@@ -1,4 +1,3 @@
-
 { pkgs ? (builtins.getFlake (toString ../.)).inputs.nixpkgs.legacyPackages.${builtins.currentSystem}
 , lib ? pkgs.lib
 , gitDrv ? pkgs.git
@@ -77,6 +76,7 @@ let
     sp = '' ${self.nvim-client-send} sp "$@" '';
     ed = '' ${self.nvim-client-send} edit "$@" '';
     vsp = '' ${self.nvim-client-send} vsp "$@" '';
+    tabe = '' ${self.nvim-client-send} tabe "$@" '';
     cdv = '' ${self.nvim-client-send} cd $(pwd) '';
     nvim-server-file = ''echo $HOME"/.cache/nvim/$(date +"%d_%m_%YT%H_%M_%S").pipe" '';
 
