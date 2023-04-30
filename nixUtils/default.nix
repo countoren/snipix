@@ -36,6 +36,34 @@ let
 
     install-home = ''nix build .#homeManagerConfigurations.${user}.activationPackage && ./result/activate'';
 
+    # Registry 
+    
+    # assuming this format
+    # global flake:sops-nix github:Mic92/sops-nix
+    regBasic = '' nix registry list '';
+    getRegName = ''
+      awk '{ print $2 }' | cut -d':' -f2
+    '';
+    onlyUserRegNoNixpkgs = ''
+      grep "^user" | grep -v 'nixpkgs'
+    '';
+    regsNames = ''
+      ${self.regBasic} | ${self.getRegName}
+    '';
+
+    createRegLocal = ''
+      nix registry add $(${self.projectFolder})
+    '';
+    reg = ''
+      ${self.regBasic} | ${self.onlyUserRegNoNixpkgs} | ${fzf} \
+      --preview="nix flake show "'`echo {} | ${self.getRegName}`' 
+    '';
+
+    #Flakes
+    show = ''
+      nix flake show "$@"
+    '';
+
     #flake repl
     repl-basic = ''echo "$@" > repl.nix && nix repl ./repl.nix'';
     repl = ''${self.repl-basic} '${getFlakes}' '';
@@ -80,6 +108,7 @@ let
     open-homepage =''
         ${browser} "$(${self.eval} --raw "$@"'.meta.homepage')" 
     '';
+
 
     #create function that search in nixpkgs source folder
     #create function to open package in nix shell
