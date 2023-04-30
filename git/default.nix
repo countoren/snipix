@@ -36,6 +36,9 @@ let
     split = ''
       ${git} subtree split --prefix=$1 -b $2
     '';
+    subtree-add = ''
+      ${git} subtree add --prefix $2 git@github.com:$1/$2.git master --squash
+    '';
 
     show = ''
       ${git} show --color=always "$@"
