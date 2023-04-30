@@ -12,7 +12,8 @@ let
     buildInputs = [ pkgs.makeWrapper ];
     postBuild = ''
       wrapProgram $out/bin/vifm \
-      --add-flags '-c "set vicmd=sp"'
+      --add-flags '-c "set vicmd=vsp"' \
+      --add-flags ' .'
       #shorter the name for easy of use and remove conflicts
       mv $out/bin/vifm $out/bin/vf 
     '';
