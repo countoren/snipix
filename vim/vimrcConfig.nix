@@ -39,6 +39,9 @@ in
     let g:LanguageClient_serverCommands = {
     \ 'nix': ['rnix-lsp']
     \ }
+    " identLine
+    " Dont conceal (json)
+    let g:indentLine_setConceal = 0 
 
     " Language server key bindings
     function! LC_maps()
