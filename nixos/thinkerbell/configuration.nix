@@ -44,8 +44,8 @@
   services.xserver.enable = true;
 
   hardware.trackpoint.enable = true;
-  hardware.trackpoint.sensitivity = 20;
-  hardware.trackpoint.speed = 300;
+  # hardware.trackpoint.sensitivity = 20;
+  # hardware.trackpoint.speed = 300;
 
   # Enable the GNOME Desktop Environment.
   services.xserver.displayManager.gdm.enable = true;
