@@ -7,6 +7,8 @@
     extraGroups = [ "wheel" "adbusers"]; # Enable ‘sudo’ for the user.
   };
 
+  nixpkgs.config.allowUnfree = true;
+
   environment.systemPackages = with pkgs; [
 
     gnomeExtensions.always-show-titles-in-overview
@@ -31,7 +33,7 @@
     john
   ];
 
-  networking.hostName = "p1n3"; # Define your hostname.
+  networking.hostName = pkgs.lib.mkForce "p1n3"; # Define your hostname.
   # networking.defaultGateway = "192.168.1.1";
   # networking.nameservers = [ "8.8.8.8" ];
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
@@ -41,7 +43,6 @@
     "${pkgs.terminus_font}/share/consolefonts/ter-u28n.psf.gz";
 
   console.useXkbConfig = true;
-
 
   services.xserver.xkbOptions = "ctrl:swapcaps";
   boot.binfmt.emulatedSystems = [ "aarch64-linux" ];

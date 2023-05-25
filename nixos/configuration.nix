@@ -15,13 +15,6 @@
   boot.loader.efi.canTouchEfiVariables = true;
   boot.loader.grub.configurationLimit = 20;
 
-  networking.hostName = "p1n3"; # Define your hostname.
-  # networking.defaultGateway = "192.168.1.1";
-  # networking.nameservers = [ "8.8.8.8" ];
-  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
-
-  # Set your time zone.
-  time.timeZone = "US/East-Indiana";
 
   # The global useDHCP flag is deprecated, therefore explicitly set to false here.
   # Per-interface useDHCP will be mandatory in the future, so this generated config
@@ -43,7 +36,6 @@
   # Enable the X11 windowing system.
   services.xserver.enable = true;
 
-
   # Enable the GNOME Desktop Environment.
   services.xserver.displayManager.gdm.enable = true;
   services.xserver.desktopManager.gnome.enable = true;
@@ -53,12 +45,6 @@
   # services.xserver.layout = "us";
   # services.xserver.xkbOptions = "eurosign:e";
    
-  console.useXkbConfig = true;
-  services.xserver.xkbOptions = "ctrl:swapcaps";
-
-  
-  boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
-
 
   # Enable CUPS to print documents.
   # services.printing.enable = true;
@@ -67,27 +53,10 @@
   sound.enable = true;
   # hardware.pulseaudio.enable = true;
 
-  # Enable touchpad support (enabled default in most desktopManager).
-  services.xserver.libinput.enable = true;
-  services.xserver.libinput.touchpad.naturalScrolling = true;
-  services.xserver.libinput.touchpad.tappingDragLock = true;
-  services.xserver.libinput.touchpad.disableWhileTyping = true;
-  services.xserver.libinput.touchpad.accelSpeed = "1.27";
-   # bigger tty fonts
-  console.font =
-    "${pkgs.terminus_font}/share/consolefonts/ter-u28n.psf.gz";
-
   #160
   services.xserver.dpi = 160;
-  environment.variables = {
-    GDK_SCALE = "0.75";
-    GDK_DPI_SCALE = "1.25";
-    _JAVA_OPTIONS = "-Dsun.java2d.uiScale=0.75";
-    QEMU_OPTS = "-m 4096 -smp 4 -enable-kvm";
-  };
 
 
-  services.qemuGuest.enable = true;
   services.xserver.monitorSection = ''
     DisplaySize 768.0 432.0
   '';
@@ -100,73 +69,22 @@
   };
   */
 
-  # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.p1n3 = {
-    isNormalUser = true;
-    initialPassword = "p@ssw0rd";
-    extraGroups = [ "wheel" "adbusers"]; # Enable ‘sudo’ for the user.
-  };
 
    programs.adb.enable = true;
-
-   programs.zsh.enable = true;
-   users.defaultUserShell = pkgs.zsh;
 
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     androidenv.androidPkgs_9_0.platform-tools
-
-    gnomeExtensions.always-show-titles-in-overview
-
-
-
-    #core env
-    #((import ./config.nix).packageOverrides { inherit pkgs; }).core
-
-    #core vim
-    #(import ./vim/linuxVim.nix { inherit pkgs; })
-
-    #NIXOS specific packages
-    git
-    protonvpn-gui
-    protonvpn-cli
-    dig 
-    firefox
-    # torbrowser
-    brave
-    discord
-    xclip
-    bitwarden
-    signal-desktop
-    element-desktop
-    bitwarden-cli
-    nixos-generators
-    gparted 
-    nixops
-    traceroute
   ];
-
-  nix = {
-    package = pkgs.nixFlakes;
-    extraOptions = ''
-       experimental-features = nix-command flakes
-    '';
-  };
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
   # programs.mtr.enable = true;
-  programs.gnupg.agent = {
-    enable = true;
-    enableSSHSupport = true;
-  };
 
   # List services that you want to enable:
 
-  # Enable the OpenSSH daemon.
-  services.openssh.enable = true;
   #users.users.p1n3.openssh.authorizedKeys.keys = [ "" ];
 
   # Open ports in the firewall.

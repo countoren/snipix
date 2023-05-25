@@ -25,9 +25,6 @@
   # Enable networking
   networking.networkmanager.enable = true;
 
-  # Set your time zone.
-  time.timeZone = "America/Kentucky/Louisville";
-
   # Select internationalisation properties.
   i18n.defaultLocale = "en_US.UTF-8";
 
@@ -46,6 +43,10 @@
   # Enable the X11 windowing system.
   services.xserver.enable = true;
 
+  hardware.trackpoint.enable = true;
+  hardware.trackpoint.sensitivity = 20;
+  hardware.trackpoint.speed = 300;
+
   # Enable the GNOME Desktop Environment.
   services.xserver.displayManager.gdm.enable = true;
   services.xserver.desktopManager.gnome.enable = true;
@@ -54,10 +55,15 @@
   services.xserver = {
     layout = "us";
     xkbVariant = "";
+    xkbOptions = "ctrl:swapcaps";
   };
+  console.useXkbConfig = true;
 
   # Enable CUPS to print documents.
   services.printing.enable = true;
+
+  #160
+  services.xserver.dpi = 160;
 
   # Enable sound with pipewire.
   sound.enable = true;
@@ -80,15 +86,6 @@
   # services.xserver.libinput.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.countoren = {
-    isNormalUser = true;
-    description = "countoren";
-    extraGroups = [ "networkmanager" "wheel" ];
-    packages = with pkgs; [
-      firefox
-    #  thunderbird
-    ];
-  };
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget

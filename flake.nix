@@ -109,10 +109,10 @@
            modules = [
              ./nixos/thinkerbell/configuration.nix
              ./nixos/common.nix
+             ./nixos/personal.nix
                 {
                   config = {
                     environment.systemPackages = with pkgs; 
-                    (import ./nixos/personalPkgs.nix { inherit pkgs;}) ++
                     [
                     (pkgs.writeShellScriptBin "install-home" ''
                       nix run .#homeManagerConfigurations.p1n3.activationPackage
@@ -133,10 +133,10 @@
            inherit system;
            modules = [
                 (import ./nixos/configuration.nix pkgs)
+                ./nixos/personal.nix
                 {
                   config = {
                     environment.systemPackages = with pkgs; 
-                    (import ./nixos/personal.nix { inherit pkgs;}) ++
                     [
                     ( pkgs.writeShellScriptBin "install-home" ''
                       nix run .#homeManagerConfigurations.p1n3.activationPackage
