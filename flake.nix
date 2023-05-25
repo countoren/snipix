@@ -85,6 +85,8 @@
             ./nixos/common.nix
             {
               config = {
+                #override swapcaps from common
+                services.xserver.xkbOptions = "ctrl:nocaps";
                 environment.systemPackages = with pkgs; [
                   ( pkgs.writeShellScriptBin "install-home" ''
                       nix run .#homeManagerConfigurations.orozen.activationPackage
@@ -102,28 +104,46 @@
             }
            ];
          };
+         thinkerbell = lib.nixosSystem {
+           inherit system;
+           modules = [
+             ./nixos/thinkerbell/configuration.nix
+             ./nixos/common.nix
+                {
+                  config = {
+                    environment.systemPackages = with pkgs; 
+                    (import ./nixos/personalPkgs.nix { inherit pkgs;}) ++
+                    [
+                    (pkgs.writeShellScriptBin "install-home" ''
+                      nix run .#homeManagerConfigurations.p1n3.activationPackage
+                    '')
+                    (import ./vim/neovide.nix { inherit pkgs;
+                      pkgsPath = toString (import ./pkgsPath.nix);
+                    })
+                    (import ./git { inherit pkgs; })
+                    (import ./nixUtils { inherit pkgs; })
+                    (import ./searchUtils { inherit pkgs; })
+                    ];
+                  };
+		}
+                
+	   ];
+         };
          p1n3 = lib.nixosSystem {
            inherit system;
            modules = [
                 (import ./nixos/configuration.nix pkgs)
                 {
                   config = {
-                    environment.systemPackages = with pkgs; [
+                    environment.systemPackages = with pkgs; 
+                    (import ./nixos/personal.nix { inherit pkgs;}) ++
+                    [
                     ( pkgs.writeShellScriptBin "install-home" ''
                       nix run .#homeManagerConfigurations.p1n3.activationPackage
                     '')
                     #ONIX - nixos p1n3
                     #ONIX END
-                    wifite2
-                    iw
-                    macchanger
-                    john
 
-                    #PDF tools
-                    zathura
-                    pdfsandwich
-
-                    file
                     (import ./vim/neovide.nix { inherit pkgs;
                       pkgsPath = toString (import ./pkgsPath.nix);
                     })
