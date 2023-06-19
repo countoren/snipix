@@ -119,7 +119,23 @@ in
       }
 
       # Nix 
-      vim-nix
+      { 
+        plugin = vim-nix;
+        config = ''
+          " additonal help to vim-nix with cli statix(vim-nix uses it)
+          let $PATH = "${pkgs.statix}/bin:".$PATH
+          " origin :echo expand("statix fix --dry-run % > /tmp/diff") | vert diffpatch /tmp/diff
+
+          function! NIX_maps()
+            nnoremap <leader>ns :!statix fix --dry-run % > /tmp/diff"<CR>:vert diffpatch /tmp/diff<CR>
+            nnoremap <leader>nss :!statix fix %<CR>
+          endfunction
+          autocmd FileType nix call NIX_maps()
+
+          " TODO : nix-dead find dead code plugin
+
+        '';
+      }
 
 
       # Shell commands helper and file managers
