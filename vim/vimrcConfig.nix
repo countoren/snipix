@@ -36,39 +36,7 @@ in
     autocmd VimEnter * if empty(bufname(''')) | cd $MYPKGS | endif
     autocmd VimEnter * if empty(bufname(''')) | exe "terminal" | endif
 
-    let g:LanguageClient_serverCommands = {
-    \ 'nix': ['rnix-lsp']
-    \ }
-    " identLine
-    " Dont conceal (json)
-    let g:indentLine_setConceal = 0 
 
-    " Language server key bindings
-    function! LC_maps()
-      if has_key(g:LanguageClient_serverCommands, &filetype)
-        nnoremap <F5> :call LanguageClient_contextMenu()<CR>
-        nnoremap <silent> K :call LanguageClient#textDocument_hover()<CR>
-        nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
-        nnoremap <silent> gr :call LanguageClient#textDocument_references()<CR>
-        nnoremap <silent> gn :call LanguageClient#textDocument_rename()<CR>
-        nnoremap <leader>f :call LanguageClient_textDocument_codeAction()<CR>
-        nnoremap <leader>k :call LanguageClient#explainErrorAtPoint()<CR>
-        nnoremap <leader>e :call LanguageClient#diagnosticsNext()<CR>
-        nnoremap <leader>E :call LanguageClient#diagnosticsPrevious()<CR>
-        command! Symbols :call LanguageClient_textDocument_documentSymbol()
-        command! Fix :call LanguageClient_textDocument_codeAction()
-        nnoremap <leader>ld :call LanguageClient#textDocument_definition()<CR>
-        nnoremap <leader>lr :call LanguageClient#textDocument_rename()<CR>
-        nnoremap <leader>lt :call LanguageClient#textDocument_typeDefinition()<CR>
-        nnoremap <leader>lx :call LanguageClient#textDocument_references()<CR>
-        nnoremap <leader>la :call LanguageClient_workspace_applyEdit()<CR>
-        nnoremap <leader>lc :call LanguageClient#textDocument_completion()<CR>
-        nnoremap <leader>lh :call LanguageClient#textDocument_hover()<CR>
-        nnoremap <leader>ls :call LanguageClient_textDocument_documentSymbol()<CR>
-        nnoremap <leader>lm :call LanguageClient_contextMenu()<CR>
-      endif
-    endfunction
-    autocmd FileType * call LC_maps()
 
     ''
     + (builtins.readFile ./vimrc) + ''
@@ -113,7 +81,47 @@ in
       vim-lastplace
       indentLine
       # tlib not sure why i added it to be removed if there is no problem
-      LanguageClient-neovim
+
+      {
+         plugin = LanguageClient-neovim;
+         config = ''
+          let $PATH = $PATH.":${pkgs.rnix-lsp}/bin"
+
+          let g:LanguageClient_serverCommands = {
+          \ 'nix': ['rnix-lsp']
+          \ }
+          " identLine
+          " Dont conceal (json)
+          let g:indentLine_setConceal = 0 
+
+          " Language server key bindings
+          function! LC_maps()
+          if has_key(g:LanguageClient_serverCommands, &filetype)
+          nnoremap <F5> :call LanguageClient_contextMenu()<CR>
+          nnoremap <silent> K :call LanguageClient#textDocument_hover()<CR>
+          nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
+          nnoremap <silent> gr :call LanguageClient#textDocument_references()<CR>
+          nnoremap <silent> gn :call LanguageClient#textDocument_rename()<CR>
+          nnoremap <leader>f :call LanguageClient_textDocument_codeAction()<CR>
+          nnoremap <leader>k :call LanguageClient#explainErrorAtPoint()<CR>
+          nnoremap <leader>e :call LanguageClient#diagnosticsNext()<CR>
+          nnoremap <leader>E :call LanguageClient#diagnosticsPrevious()<CR>
+          command! Symbols :call LanguageClient_textDocument_documentSymbol()
+          command! Fix :call LanguageClient_textDocument_codeAction()
+          nnoremap <leader>ld :call LanguageClient#textDocument_definition()<CR>
+          nnoremap <leader>lr :call LanguageClient#textDocument_rename()<CR>
+          nnoremap <leader>lt :call LanguageClient#textDocument_typeDefinition()<CR>
+          nnoremap <leader>lx :call LanguageClient#textDocument_references()<CR>
+          nnoremap <leader>la :call LanguageClient_workspace_applyEdit()<CR>
+          nnoremap <leader>lc :call LanguageClient#textDocument_completion()<CR>
+          nnoremap <leader>lh :call LanguageClient#textDocument_hover()<CR>
+          nnoremap <leader>ls :call LanguageClient_textDocument_documentSymbol()<CR>
+          nnoremap <leader>lm :call LanguageClient_contextMenu()<CR>
+          endif
+          endfunction
+          autocmd FileType * call LC_maps()
+          '';
+      }
 
       # Nix 
       vim-nix
