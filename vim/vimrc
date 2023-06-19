@@ -117,10 +117,11 @@ noremap <leader>tc :tabclose
  " set terminal to interactive
 set shellcmdflag=-ic
 
+
 " VIM Shell
 " set shell=/bin/zsh
 
-" VIM Terminal
+" VIM Terminal - only on vim (not nvim, nvim uses server client as commands)
 " Function to call from the the terminal in order to change working dir
 " arglist : [ cwd ]
 " change window local working directory
