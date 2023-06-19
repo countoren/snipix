@@ -26,8 +26,8 @@ in
     let $VIMFolder = '${pkgsPath}/vim'
     let $MYPKGS = '${pkgsPath}'
     let $EDITOR = 'sp'
-    let $PATH = $PATH.":${pkgs.rnix-lsp}/bin"
     let $PATH = "${insideVimVifm}/bin:".$PATH
+
 
     " VIM Shell
     set shell=${pkgs.zsh}/bin/zsh
