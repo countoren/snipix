@@ -5,12 +5,14 @@
     nixpkgsOld.url = "nixpkgs/nixos-21.11";
     nixpkgsWork.url = github:NixOS/nixpkgs/9ef6e7727f4c31507627815d4f8679c5841efb00;
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
+    nix-alien.url = "github:thiagokokada/nix-alien";
+
     #vims.url = "path:vim";
     #gpg.url = "/home/p1n3/nixpkgs/gpg";
     #network.url = "path:network";
   };
 
-  outputs = { nixpkgs, nixpkgsOld, nixpkgsWork, home-manager,... }:
+  outputs = { nixpkgs, nixpkgsOld, nixpkgsWork, home-manager, nix-alien, ... }:
     let
        system = "x86_64-linux";
        pkgs = import nixpkgs {
@@ -25,6 +27,7 @@
           inherit system;
        };
        lib = nixpkgs.lib;
+       common = import ./nixos/common.nix { inherit nix-alien; };
     in {
        homeManagerConfigurations = {
           orozen = home-manager.lib.homeManagerConfiguration {
@@ -82,7 +85,7 @@
            inherit system;
            modules = [
             ./nixos/work-vb/configuration.nix 
-            ./nixos/common.nix
+            common
             {
               config = {
                 #override swapcaps from common
@@ -108,7 +111,7 @@
            inherit system;
            modules = [
              ./nixos/thinkerbell/configuration.nix
-             ./nixos/common.nix
+             common
              ./nixos/personal.nix
                 {
                   config = {
@@ -133,6 +136,7 @@
            inherit system;
            modules = [
                 (import ./nixos/configuration.nix pkgs)
+                common
                 ./nixos/personal.nix
                 {
                   config = {

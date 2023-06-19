@@ -1,3 +1,4 @@
+{ nix-alien } :
 { config, pkgs, ... }:
 {
   nix = {
@@ -25,6 +26,8 @@
   users.defaultUserShell = pkgs.zsh;
 
   environment.systemPackages = with pkgs; [
+    #outside deps
+    nix-alien
     vifm
     fzf
     git
