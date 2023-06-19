@@ -72,7 +72,9 @@ nnoremap <leader>s :SplitVifm<CR>
 nnoremap <leader>v :VsplitVifm<CR>
 nnoremap <leader>d :DiffVifm<CR>
 
-
+"diffs
+nnoremap <leader>p :diffput<CR>
+nnoremap <leader>g :diffget<CR>
 
 "repeat F T movements 
 nnoremap <leader>, ,
