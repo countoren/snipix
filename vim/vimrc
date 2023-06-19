@@ -111,6 +111,9 @@ inoremap <C-]> <C-x><C-]>
  map <C-h> <C-w><C-h>
  map <C-l> <C-w><C-l>
 
+" Close tab
+noremap <leader>tc :tabclose
+
  " set terminal to interactive
 set shellcmdflag=-ic
 
