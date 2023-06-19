@@ -80,6 +80,8 @@ let
     cdv = '' ${self.nvim-client-send} cd $(pwd) '';
     nvim-server-file = ''echo $HOME"/.cache/nvim/$(date +"%d_%m_%YT%H_%M_%S").pipe" '';
 
+    vimdiff = ''${self.nvim-client-send} "tabe $1 | vert diffs $2" '';
+
     nvim-get-all-servers-with-location = ''
       for server in $(ls $HOME"/.cache/nvim" | grep ".pipe$"); do
         echo "$server - "$(${self.nvim-client-expr} "pwd")
