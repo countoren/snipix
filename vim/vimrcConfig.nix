@@ -47,10 +47,6 @@ in
     "VIMRC
     command! FVimrc silent :sp $MYVIMRC
 
-    "sneak mapping
-    nnoremap <leader>, <Plug>Sneak_,
-    nnoremap , <Plug>Sneak_;
-
     ''
     + (if additionalVimrc == "" then "" else ''
     "Env Specific configuration:
@@ -80,7 +76,6 @@ in
       vim-snippets  # snippet database
       vim-lastplace
       indentLine
-      # tlib not sure why i added it to be removed if there is no problem
 
       {
          plugin = LanguageClient-neovim;
@@ -130,9 +125,6 @@ in
       # Shell commands helper and file managers
       vim-eunuch
       vifm-vim
-
-      #Motions
-      vim-sneak
 
       # Git
       fugitive
