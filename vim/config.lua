@@ -1,12 +1,21 @@
 -- local rainbow = require 'ts-rainbow'
-
+--
 require "nvim-treesitter.configs".setup {
     ensure_installed = {},
     highlight = {
         enable = true,
         -- nix-vim provide better syntax highlighting
         disable = { "nix" }
-    }, 
+    },
+    incremental_selection = {
+        enable = true,
+        keymaps = {
+            init_selection = 'gi',
+            scope_incremental = 'gi',
+            node_incremental = 'gk',
+            node_decremental = 'gj',
+        },
+    },
     -- rainbow = {
     --         query = {
     --            'rainbow-parens'
