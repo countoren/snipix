@@ -18,13 +18,12 @@ let
   getFlakes = ''(builtins.getFlake "'$(${getGitRootFolder})'")'';
   ssh = ''${pkgs.openssh}/bin/ssh'';
   commands = 
-  lib.attrValues (lib.fix (self: lib.mapAttrs writeShellScript (
+  lib.attrValues (lib.fix (self: lib.mapAttrs writeShellScript
   {
     #General
     projectFolder = getGitRootFolder;
     sshDeltaServer = ''${ssh} $(whoami)"@"192.168.56.220'';
-  } 
-  )));
+  }));
 in
 runCommand prefix {
   name = prefix;
