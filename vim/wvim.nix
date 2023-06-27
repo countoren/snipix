@@ -5,6 +5,8 @@
 import ./nvim.nix { inherit pkgs; 
   additionalVimrc = ''
     let $PATH = $PATH.":${pkgs.quick-lint-js}/bin"
+    let $PATH = $PATH.":${pkgs.gopls}/bin"
+    let $PATH = $PATH.":${pkgs.go}/bin"
   '' + additionalVimrc;
   additionalPlugins = with pkgs.vimPlugins; [
     vim-go
