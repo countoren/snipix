@@ -2,7 +2,7 @@
 , screenSize ? "1920x1080"
 , pkgsPath ? toString (import ../pkgsPath.nix)
 , additionalVimrc?  ''
-set guifont=DejaVu\ Sans\ Mono:h7
+set guifont=DejaVu\ Sans\ Mono:h11
 set lazyredraw
 set title
 " rigght mouse click in gnvim is annoying open window without closing sometimes
