@@ -142,13 +142,15 @@
                   config = {
                     environment.systemPackages = with pkgs; 
                     [
-                    ( pkgs.writeShellScriptBin "install-home" ''
+                    (pkgs.writeShellScriptBin "install-home" ''
                       nix run .#homeManagerConfigurations.p1n3.activationPackage
                     '')
 
                     (import ./vim/neovide.nix { inherit pkgs;
-                      pkgsPath = toString (import ./pkgsPath.nix);
+                        pkgsPath = toString (import ./pkgsPath.nix);
+                        additionalPlugins = import ./vim/fsVimrc.nix { inherit pkgs;};
                     })
+
                     (import ./git { inherit pkgs; })
                     (import ./nixUtils { inherit pkgs; })
                     (import ./searchUtils { inherit pkgs; })
