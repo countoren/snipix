@@ -29,7 +29,7 @@
     #outside deps
     # Tree
     tree
-    (writeShellScriptBin "t" ''tree $@ '')
+    (writeShellScriptBin "t" ''tree -C $@ '')
 
     nix-alien
     vifm
