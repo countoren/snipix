@@ -4,7 +4,7 @@
   users.users.p1n3 = {
     isNormalUser = true;
     initialPassword = "p@ssw0rd";
-    extraGroups = [ "wheel" "adbusers"]; # Enable ‘sudo’ for the user.
+    extraGroups = [ "wheel" "adbusers" "dialout" ]; # Enable ‘sudo’ for the user.
   };
 
   nixpkgs.config.allowUnfree = true;
@@ -22,6 +22,8 @@
     signal-desktop
     element-desktop
     bitwarden-cli
+    # Vims
+    
     # PDF tools
     zathura
     pdfsandwich
@@ -39,8 +41,8 @@
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # bigger tty fonts
-  console.font =
-    "${pkgs.terminus_font}/share/consolefonts/ter-u28n.psf.gz";
+  # console.font =
+  #   "${pkgs.terminus_font}/share/consolefonts/ter-u28n.psf.gz";
 
   console.useXkbConfig = true;
 
