@@ -17,7 +17,8 @@ tnoremap <c-l> <c-\><c-n><c-w>l
 tnoremap <a-;> <c-\><c-n>:
 
 ''
-, nvim ? import ./nvim.nix { inherit pkgs pkgsPath additionalVimrc;} 
+, additionalPlugins? []
+, nvim ? import ./nvim.nix { inherit pkgs pkgsPath additionalVimrc additionalPlugins;} 
 }:
 pkgs.symlinkJoin {
   name = "onvide";
