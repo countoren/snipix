@@ -145,8 +145,6 @@
                     ( pkgs.writeShellScriptBin "install-home" ''
                       nix run .#homeManagerConfigurations.p1n3.activationPackage
                     '')
-                    #ONIX - nixos p1n3
-                    #ONIX END
 
                     (import ./vim/neovide.nix { inherit pkgs;
                       pkgsPath = toString (import ./pkgsPath.nix);
