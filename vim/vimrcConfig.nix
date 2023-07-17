@@ -28,16 +28,15 @@ in
     let $EDITOR = 'sp'
     let $PATH = "${insideVimVifm}/bin:".$PATH
 
-
     " VIM Shell
     set shell=${pkgs.zsh}/bin/zsh
 
     "Start terminal if not open in file
     autocmd VimEnter * if empty(bufname(''')) | cd $MYPKGS | endif
     autocmd VimEnter * if empty(bufname(''')) | exe "terminal" | endif
+    autocmd BufEnter * let buf=bufname() | if isdirectory(buf) | exec 'terminal' | call feedkeys('icd '.buf."\<CR>") | endif
 
-
-
+    let g:ctrlp_working_path_mode=""
     ''
     + (builtins.readFile ./vimrc) + ''
     "My Nix pkgs
@@ -76,6 +75,7 @@ in
       vim-snippets  # snippet database
       vim-lastplace
       indentLine
+      treesj
 
       {
          plugin = LanguageClient-neovim;

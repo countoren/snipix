@@ -27,6 +27,10 @@
 
   environment.systemPackages = with pkgs; [
     #outside deps
+    # Tree
+    tree
+    (writeShellScriptBin "t" ''tree -C $@ '')
+
     nix-alien
     vifm
     fzf

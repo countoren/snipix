@@ -61,7 +61,7 @@ let mapleader = " "
 
 " /*** vifm config ***/
 
-let g:vifm_replace_netrw = 1
+" let g:vifm_replace_netrw = 1
 let g:vifm_replace_netrw_cmd = "SplitVifm"
 let g:vifm_embed_split = 1
 " let g:vifm_embed_term = 1
@@ -127,6 +127,7 @@ set shellcmdflag=-ic
 " Function to call from the the terminal in order to change working dir
 " arglist : [ cwd ]
 " change window local working directory
+
 function! Tapi_lcd(bufnum, arglist)
 	let winid = bufwinid(a:bufnum)
 	let cwd = get(a:arglist, 0, '''')
