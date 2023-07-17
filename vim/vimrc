@@ -127,6 +127,7 @@ set shellcmdflag=-ic
 " Function to call from the the terminal in order to change working dir
 " arglist : [ cwd ]
 " change window local working directory
+
 function! Tapi_lcd(bufnum, arglist)
 	let winid = bufwinid(a:bufnum)
 	let cwd = get(a:arglist, 0, '''')
