@@ -148,8 +148,6 @@ endfunction
 
 command! -nargs=* Tt :term <args>
 nmap <silent> <leader>t :sp \| term<CR>
-
-tnoremap <C-[><C-[> <C-\><C-n>
 tnoremap <C-w>; <C-w>:
 "window movement
 tnoremap <C-j> <C-w><C-j>
