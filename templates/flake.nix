@@ -1,14 +1,14 @@
 {
-  outputs = { self }:
-  # flake-utils.lib.eachSystem [ "x86_64-linux" ] (system:
-  # flake-utils.lib.eachDefaultSystem (system:
-  rec {
-    templates = {
-      basic = {
-        description = "basic flake"; 
-        path = ./basic; 
-      };
-      default = templates.basic;
+  inputs.flake-utils.url = "github:numtide/flake-utils";
+
+  outputs = {self, nixpkgs, flake-utils }:
+  let templates = import ./templates.nix; in
+  flake-utils.lib.eachDefaultSystem (system:
+  {
+    packages = import ./default.nix { 
+      inherit templates;  
+      pkgs = nixpkgs.legacyPackages.${system}; 
     };
-  };
+  }
+  ) // { inherit templates; };
 }
