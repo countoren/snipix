@@ -23,6 +23,9 @@ let
     #General
     projectFolder = getGitRootFolder;
     sshDeltaServer = ''${ssh} $(whoami)"@"192.168.56.220'';
+    sshFix1ProducationServer = ''${ssh} $(whoami)"@"192.168.61.238'';
+    # anthony chomber's pdf
+    sshFix1ProducationServerProdUser = ''${ssh} production"@"192.168.61.238'';
   }));
 in
 runCommand prefix {
