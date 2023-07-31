@@ -81,6 +81,35 @@
        };
 
        nixosConfigurations = {
+      
+         work = nixpkgsWork.lib.nixosSystem {
+           inherit system;
+           modules = [
+            ./nixos/work/configuration.nix 
+            common
+            {
+              config = {
+                services.xserver.xkbOptions = "ctrl:swapcaps";
+                environment.systemPackages = with pkgs; [
+                  (pkgs.writeShellScriptBin "install-home" ''
+                      nix run .#homeManagerConfigurations.orozen.activationPackage
+                  '')
+                  (import ./work { inherit pkgs;})
+                  (import ./vim/neovide.nix { 
+                    inherit pkgs;
+                    nvimNixPath = ./vim/wvim.nix;
+                    pkgsPath = toString (import ./pkgsPath.nix);
+                  })
+
+                  file
+                  (import ./git { inherit pkgs; })
+                  (import ./nixUtils { inherit pkgs; })
+                  (import ./searchUtils { inherit pkgs; })
+                ];
+              };
+            }
+           ];
+         };
          work-vb = nixpkgsWork.lib.nixosSystem {
            inherit system;
            modules = [
@@ -91,7 +120,7 @@
                 #override swapcaps from common
                 services.xserver.xkbOptions = "ctrl:nocaps";
                 environment.systemPackages = with pkgs; [
-                  ( pkgs.writeShellScriptBin "install-home" ''
+                  (pkgs.writeShellScriptBin "install-home" ''
                       nix run .#homeManagerConfigurations.orozen.activationPackage
                   '')
                   (import ./work { inherit pkgs;})
@@ -107,6 +136,7 @@
             }
            ];
          };
+
          thinkerbell = lib.nixosSystem {
            inherit system;
            modules = [
