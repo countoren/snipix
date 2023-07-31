@@ -8,7 +8,7 @@
     '';
   };
   # Set your time zone.
-  time.timeZone = "US/East-Indiana";
+  time.timeZone = pkgs.lib.mkForce "US/East-Indiana";
 
   # console.useXkbConfig = true;
   # services.xserver.xkbOptions = "ctrl:swapcaps";
