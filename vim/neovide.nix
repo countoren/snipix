@@ -18,7 +18,7 @@ tnoremap <a-;> <c-\><c-n>:
 
 ''
 , additionalPlugins? []
-, nvim ? import ./nvim.nix { inherit pkgs pkgsPath additionalVimrc additionalPlugins;} 
+, nvimNixPath ? ./nvim.nix  
 }:
 pkgs.symlinkJoin {
   name = "onvide";
@@ -35,7 +35,7 @@ pkgs.symlinkJoin {
     })
     */
     pkgs.neovide
-    nvim
+    (import nvimNixPath { inherit pkgs pkgsPath additionalVimrc additionalPlugins;} )
   ];
   buildInputs = [ pkgs.makeWrapper ];
   postBuild = ''

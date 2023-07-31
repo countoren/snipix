@@ -1,6 +1,7 @@
 { pkgs ? import <nixpkgs> {}
 , pkgsPath
 , additionalVimrc 
+, additionalPlugins
 }:
 import ./nvim.nix { inherit pkgs; 
   additionalVimrc = ''
