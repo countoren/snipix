@@ -13,6 +13,7 @@ let
     postBuild = ''
       wrapProgram $out/bin/vifm \
       --add-flags '-c "set vicmd=vsp"' \
+      --add-flags '--choose-dir -' \
       --add-flags ' .'
       #shorter the name for easy of use and remove conflicts
       mv $out/bin/vifm $out/bin/vf 
