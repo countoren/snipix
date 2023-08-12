@@ -31,6 +31,8 @@
     tree
     (writeShellScriptBin "t" ''tree -C $@ '')
 
+    #ls alias
+    (writeShellScriptBin "l" ''ls -la $@ '')
     nix-alien
     vifm
     fzf
