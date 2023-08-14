@@ -17,11 +17,11 @@
        system = "x86_64-linux";
        pkgs = import nixpkgs {
           inherit system;
-          config = import ./config.nix;
+          # config = import ./config.nix;
        };
        pkgsOld = import nixpkgsOld {
           inherit system;
-          config = import ./config.nix;
+          # config = import ./config.nix;
        };
        pkgsWork = import nixpkgsWork {
           inherit system;
