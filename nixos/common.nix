@@ -1,6 +1,8 @@
 { nix-alien } :
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 {
+  
+  environment.etc.nixpkgs.source = pkgs.path;
   nix = {
     package = pkgs.nixFlakes;
     extraOptions = ''
@@ -13,7 +15,9 @@
   # console.useXkbConfig = true;
   # services.xserver.xkbOptions = "ctrl:swapcaps";
 
+
   environment.variables = {
+    NIX_PATH = lib.mkForce "nixpkgs=/etc/nixpkgs";
     GDK_SCALE = "0.75";
     GDK_DPI_SCALE = "1.25";
     _JAVA_OPTIONS = "-Dsun.java2d.uiScale=0.75";
