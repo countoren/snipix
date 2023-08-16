@@ -13,7 +13,7 @@ require "nvim-treesitter.configs".setup {
             init_selection = '<C-S-i>',
             scope_incremental = '<C-S-i>',
             node_incremental = '<C-S-k>',
-            node_decremental = '<C-S-l>',
+            node_decremental = '<C-S-j>',
         },
     },
     -- rainbow = {
