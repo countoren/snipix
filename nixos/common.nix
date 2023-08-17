@@ -37,6 +37,18 @@
 
     #ls alias
     (writeShellScriptBin "l" ''ls -la $@ '')
+
+    # Templates
+    (import ../templates/default.nix {
+      inherit pkgs;
+      templatesFolder = "${toString (import ../pkgsPath.nix)}/templates";
+      installCommand = ''
+        sudo nixos-rebuild switch --flake ${toString (import ../pkgsPath.nix)}
+      '';
+      difftool = "${import ../vim/nvim.nix { inherit pkgs;}}/bin/difftool";
+    })
+    
+
     nix-alien
     vifm
     fzf
