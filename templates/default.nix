@@ -8,6 +8,8 @@
 , templatesFolder ? ''$(${git} rev-parse --show-toplevel)''
 , nix ? "${pkgs.nix}/bin/nix"
 
+, fzf ? "${pkgs.fzf}/bin/fzf"
+
 # Default nix install command for stand alone templates(not with Nixos or HomeManager)
 # The command should be fed as a string with references in order to fed into writeShellScript
 # if used in nixos should be replaced with something like nixos-rebuild switch ...
@@ -65,6 +67,7 @@ let commands = lib.fix (self: lib.mapAttrs pkgs.writeShellScript
     '';
   } // lib.attrsets.concatMapAttrs (name: { description, path }: {
     "${prefix}-${name}" = '' ${self.initWithDiff} ${name} '';
+    "snip-${name}" = ''cat $(${fzf} -1 ${templatesFolder}/${name})'';
     "${prefix}-${name}-edit" = ''$EDITOR ${templatesFolder}/${name} '';
     "${prefix}-${name}-noDiff" = '' ${self.init} ${name} '';
     "${prefix}-${name}-description" = '' echo "${description}" '';
