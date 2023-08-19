@@ -45,7 +45,9 @@
       installCommand = ''
         sudo nixos-rebuild switch --flake ${toString (import ../pkgsPath.nix)}
       '';
-      difftool = "${import ../vim/nvim.nix { inherit pkgs;}}/bin/difftool";
+      difftool = pkgs.writeShellScript "difftool" ''
+        ${import ../vim/nvim.nix { inherit pkgs;}}/bin/vimdiff $1 $2
+      '';
     })
     
 
