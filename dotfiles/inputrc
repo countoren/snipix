@@ -1,6 +1,0 @@
-set show-mode-in-prompt on
-
-## arrow up
-"\C-p":history-search-backward
-## arrow down
-"\C-n":history-search-forward

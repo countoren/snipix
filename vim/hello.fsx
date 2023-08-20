@@ -1,6 +1,0 @@
-type hello =
-     | A
-     | D
-
-
-
