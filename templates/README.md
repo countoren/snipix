@@ -1,4 +1,4 @@
-# Snipix - Simplify Snippet and Template Management for Nix
+# Snipix - Editor Agnostic Snippet and Template Tool 
 
 ## Overview
 
@@ -27,9 +27,8 @@ Choose an installation approach that aligns with your needs and preferences:
    ```bash
    nix build -f default.nix 
    ```
-   * if you going to use NixOS or HomeManager skip this phase 
 
-2. **Full-Featured NixOS and HomeManager Installation** - Seamlessly integrate the repository into your configuration folder, either as a subdirectory, subtree, or submodule. Import Snipix into your `configuration.nix` using the following approach:
+2. **Full-Featured NixOS and HomeManager Installation** - Seamlessly integrate the repository into your configuration folder, either by cloning it as a subdirectory, subtree, or submodule. Import Snipix into your `configuration.nix` using the following approach:
 ```nix
   environment.systemPackages = with pkgs; [
     # Snipix
@@ -50,7 +49,7 @@ Replace `PATH_TO_PARENT` with the appropriate Snipix parent folder path and `PAT
    ```
    Note: Due to the immutable nature of the Nix store, the addition of new templates via `save-templates` might not be supported.
 
-4. **Usage as Nix Templates** - Initiate the tool with a specific template:
+4. **Usage as Nix Templates** - to use as basic nix flake templates:
    ```bash
    nix flake init -t github:countoren/snipix#basic
    ```
@@ -63,7 +62,7 @@ Seamlessly integrate Snipix into your Nix environment. Incorporate it into your 
 **Included Utilities:**
    - `init`: Initialize a template with a specified name (e.g., `nix init -t`).
    - `snip`: Present users with a search and preview tool for all files within the Snipix folder (using fzf by default). The selected file's content is copied to the clipboard and displayed in the terminal.
-     This command also accepts an extra path argument within the Snipix folder.
+     This command also accepts an extra path argument in order to target specific template folder in Snipix.
    - `initWithDiff`: Initialize a template and display changes using a designated diff tool.
    - `save-template`: Create a new template based on the current folder's contents. This utility prompts for a name and description, duplicates the folder, and updates `templates.nix`.
    - `snip-${name}`: Execute `snip` on a specific template folder. If the folder contains a single file, its content is directly used without user interaction.
