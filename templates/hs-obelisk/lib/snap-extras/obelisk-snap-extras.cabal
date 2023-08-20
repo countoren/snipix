@@ -1,0 +1,21 @@
+name: obelisk-snap-extras
+version: 0.1
+synopsis: Extra functionality for Snap that should be considered for upstreaming
+license: BSD3
+build-type: Simple
+cabal-version: >=1.2
+
+library
+  hs-source-dirs: src
+  build-depends:
+      attoparsec
+    , base
+    , bytestring
+    , snap-core
+    , directory
+    , filepath
+    , text
+    , unordered-containers
+  exposed-modules:
+      Obelisk.Snap.Extras
+  ghc-options: -Wall -Werror -Wredundant-constraints -Wincomplete-uni-patterns -Wincomplete-record-updates -O

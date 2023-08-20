@@ -1,0 +1,43 @@
+name: obelisk-route
+version: 0.2
+cabal-version: >= 1.8
+build-type: Simple
+
+library
+  hs-source-dirs: src
+  build-depends: base,
+                 aeson,
+                 bytestring,
+                 categories,
+                 constraints,
+                 constraints-extras,
+                 containers,
+                 dependent-map,
+                 dependent-sum,
+                 dependent-sum-template,
+                 either,
+                 ghcjs-dom,
+                 http-types,
+                 jsaddle,
+                 lens,
+                 mmorph,
+                 monad-control,
+                 mtl,
+                 network-uri,
+                 obelisk-executable-config-lookup,
+                 primitive,
+                 ref-tf,
+                 reflex,
+                 reflex-dom-core,
+                 semigroupoids,
+                 template-haskell,
+                 tabulation,
+                 text,
+                 th-extras,
+                 transformers,
+                 universe,
+                 universe-some
+  exposed-modules: Obelisk.Route
+                   Obelisk.Route.TH
+                   Obelisk.Route.Frontend
+  ghc-options: -Wall -Werror -fprint-potential-instances -Wredundant-constraints -Wincomplete-uni-patterns -Wincomplete-record-updates -O

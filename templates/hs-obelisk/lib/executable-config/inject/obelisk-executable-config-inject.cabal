@@ -1,0 +1,18 @@
+name: obelisk-executable-config-inject
+version: 0.1
+cabal-version: >= 1.2
+build-type: Simple
+
+library
+  hs-source-dirs: src
+
+  build-depends:
+    base,
+    bytestring,
+    base64-bytestring,
+    containers,
+    reflex-dom-core,
+    text
+
+  exposed-modules: Obelisk.ExecutableConfig.Inject
+  ghc-options: -Wall -Werror -Wredundant-constraints -Wincomplete-uni-patterns -Wincomplete-record-updates -O

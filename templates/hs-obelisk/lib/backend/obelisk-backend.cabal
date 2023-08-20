@@ -1,0 +1,30 @@
+name: obelisk-backend
+version: 0.1
+cabal-version: >= 1.2
+build-type: Simple
+
+library
+  hs-source-dirs: src
+  build-depends: base,
+                 bytestring,
+                 categories,
+                 containers,
+                 cookie,
+                 data-default,
+                 dependent-sum,
+                 dependent-sum-template,
+                 lens,
+                 mtl,
+                 obelisk-asset-serve-snap,
+                 obelisk-executable-config-inject,
+                 obelisk-executable-config-lookup,
+                 obelisk-frontend,
+                 obelisk-route,
+                 obelisk-snap-extras,
+                 reflex-dom-core,
+                 snap,
+                 snap-server,
+                 text,
+                 universe
+  exposed-modules: Obelisk.Backend
+  ghc-options: -Wall -Werror -Wredundant-constraints -Wincomplete-uni-patterns -Wincomplete-record-updates -O
