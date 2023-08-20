@@ -1,70 +1,90 @@
-# NTmp
+# Snipix - Simplify Snippet and Template Management for Nix
 
-**Description:**  
-This tool provides a set of useful functions and commands to manage templates based on the nix templates system.
-The library helps you create, initialize, and manage templates and code snippets for any type of project in any language.
+## Overview
 
-**Prerequisites:**  
-Before using this library, ensure you have the following installed on your system:
-- Nix package manager (TODO: add link to download nix)
-- Flakes enabled (TODO: add link for enabling flakes)
+Snipix is a robust tool designed to provide a seamless and modular suite of functions and commands, aimed at enhancing template management within the Nix templates system. This library has been meticulously crafted to simplify the process of creating, initializing, and organizing templates and code snippets across a diverse range of projects and programming languages. Leveraging the elegance of simple and modular Nix expressions, Snipix empowers developers to streamline their workflow efficiently.
 
-**Installation:**
+## Prerequisites
 
-You can chose couple of flavors of installtions:
-1. full-feature standalone - including writing ability for new templates
-in your home folder
-```bash
-    git clone repoaddress
-``` 
-or 
+Before delving into the world of Snipix, it's imperative to have the following prerequisites installed on your system:
 
-```bash
-    nix flake clone github:countoren/templates
-```
-than you could install the first generation of it on a profile with:
-```bash
-    cd ntmp
-    nix build -f default.nix 
-```
+- [Nix Package Manager](https://nixos.org/download.html) - An essential tool for managing Nix packages and configuring environments.
+- Flakes Enabled - Ensure that your Nix environment is [flakes-enabled](https://nixos.wiki/wiki/Flakes) to ensure optimal support.
 
-2. full-feature NixOS, HomeManager - clone the repo as sub directory( or subtree/submodule) inside your configuration folder:
-and inculde it on the top level as follow:
+## Installation
+
+Choose an installation approach that aligns with your needs and preferences:
+
+1. **Full-Featured Standalone Installation** - If you're eager to create templates within your home folder, consider cloning the repository using Git:
+   ```bash
+   git clone https://github.com/countoren/snipix.git
+   ```
+   Alternatively, leverage the Nix flake mechanism:
+   ```bash
+   nix flake clone github:countoren/snipix --dest snipix
+   ```
+   Subsequently, install the tool by navigating to the Snipix directory and executing:
+   ```bash
+   nix build -f default.nix 
+   ```
+   * if you going to use NixOS or HomeManager skip this phase 
+
+2. **Full-Featured NixOS and HomeManager Installation** - Seamlessly integrate the repository into your configuration folder, either as a subdirectory, subtree, or submodule. Import Snipix into your `configuration.nix` using the following approach:
 ```nix
-TODO
+  environment.systemPackages = with pkgs; [
+    # Snipix
+    (import ./snipix {
+      inherit pkgs;
+      templatesFolder = "PATH_TO_PARENT/snipix";
+      installCommand = ''
+        sudo nixos-rebuild switch --flake PATH_TO_YOUR_CONFIGURATION_DIR
+      '';
+    })
+  ];
 ```
+Replace `PATH_TO_PARENT` with the appropriate Snipix parent folder path and `PATH_TO_YOUR_CONFIGURATION_DIR` with your system flake path. For more customization options, refer to `snipix/default.nix`.
 
-3. Just templates utils - 
-```bash
-    nix profile install github:countoren/templates 
-```
-* note that this is should be treated as immutable version of the templates
-  therfor save-templates might not be able to add a new templates( due to the fact it will be stored on the nix store)
-* you should be able to use the utils to initialize any nix templates (levarging initWithDiff command for example)
-like so
-``` bash 
-    TODO
-```
+3. **Templates Utilities Only** - For an immutable version installation within your Nix profile, execute:
+   ```bash
+   nix profile install github:countoren/snipix 
+   ```
+   Note: Due to the immutable nature of the Nix store, the addition of new templates via `save-templates` might not be supported.
 
-4. Use just as nix templates - 
-```bash
-  nix flake init -t github:countoren/templates#basic                           
-```
-replace with *basic* with any template
+4. **Usage as Nix Templates** - Initiate the tool with a specific template:
+   ```bash
+   nix flake init -t github:countoren/snipix#basic
+   ```
+   Replace `basic` with your desired template name.
 
-To use this library, you can include it in your Nix environment. You can integrate it into your NixOS configuration or use it in standalone mode with HomeManager.
+## Usage
 
-**Utils included:**
-   - `init`: Initializes a template with the given template name (just ``` nix init -t ```).
-   - `initWithDiff`: Initializes a template with the given template name and shows a diff of the changes using the specified difftool .
-   - `save-template`: Creates a new template based on the current folder contents. It prompts for a template name and description, copies the current folder into the templates folder, and adds the template to the `templates.nix` file.
-   - `nt-${name}`: Initializes the template with the given name and shows a diff of the changes using the specified difftool.
-   - `nt-${name}-edit`: Opens the template file with the default text editor for manual editing.
-   - `nt-${name}-noDiff`: Initializes the template with the given name without showing any diff.
-   - `nt-${name}-description`: echo the template description.
+Seamlessly integrate Snipix into your Nix environment. Incorporate it into your NixOS configuration or utilize it independently with HomeManager.
 
-**Contributing:**
-Contributions to this library are welcome. If you find any issues, have ideas for improvements, or want to add new features, feel free to open a pull request on the repository.
+**Included Utilities:**
+   - `init`: Initialize a template with a specified name (e.g., `nix init -t`).
+   - `snip`: Present users with a search and preview tool for all files within the Snipix folder (using fzf by default). The selected file's content is copied to the clipboard and displayed in the terminal.
+     This command also accepts an extra path argument within the Snipix folder.
+   - `initWithDiff`: Initialize a template and display changes using a designated diff tool.
+   - `save-template`: Create a new template based on the current folder's contents. This utility prompts for a name and description, duplicates the folder, and updates `templates.nix`.
+   - `snip-${name}`: Execute `snip` on a specific template folder. If the folder contains a single file, its content is directly used without user interaction.
+   For instance, in Vim, use:
+   ```vim
+   :!snip-basic
+   ```
+   Press `p` to paste content into the current buffer, or use:
+   ```vim
+   :r!snip-basic
+   ```
+   If the template folder houses multiple files, run this command from the terminal.
+   - `nt-${name}`: Initialize a template with diff display for changes.
+   - `nt-${name}-edit`: Open the template folder in the default text editor for manual edits.
+   - `nt-${name}-noDiff`: Initialize a template without displaying a diff.
+   - `nt-${name}-description`: Echo the template description.
 
-**License:**  
-This library is licensed under the MIT License. See the `LICENSE` file for more details.
+## Contribute
+
+Contributions to this library are highly appreciated. If you come across issues, have ideas for improvements, or wish to add new features, please submit a pull request on the repository.
+
+## License
+
+This library is licensed under the MIT License. Additional information can be found in the `LICENSE` file.
