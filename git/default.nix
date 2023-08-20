@@ -39,6 +39,12 @@ let
     subtree-add = ''
       ${git} subtree add --prefix $2 git@github.com:$1/$2.git master --squash
     '';
+    subtree-push = ''
+      ${git} subtree push ''${@:4} --prefix $2 git@github.com:$1/$2.git $3
+    '';
+    subtree-push-master = ''
+      ${git} subtree push ''${@:3} --prefix $2 git@github.com:$1/$2.git master
+    '';
 
     show = ''
       ${git} show --color=always "$@"
