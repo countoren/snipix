@@ -39,9 +39,9 @@
     (writeShellScriptBin "l" ''ls -la $@ '')
 
     # Snipix
-    (import ../templates/default.nix {
+    (import ../snipix/default.nix {
       inherit pkgs;
-      templatesFolder = "${toString (import ../pkgsPath.nix)}/templates";
+      templatesFolder = "${toString (import ../pkgsPath.nix)}/snipix";
       installCommand = "sudo nixos-rebuild switch --flake ${toString (import ../pkgsPath.nix)}";
       difftool = pkgs.writeShellScript "difftool" ''
         ${import ../vim/nvim.nix { inherit pkgs;}}/bin/vimdiff $1 $2
