@@ -73,7 +73,7 @@ let commands = lib.fix (self: lib.mapAttrs pkgs.writeShellScript
       ${self.utils-install-command} 
     '';
 
-    save-p = ''
+    create = ''
       read -p "Template Name:" name 
       read -p "Template Desc:" desc 
       echo 'Edit Files?[press y to edit or any key otherwise]'

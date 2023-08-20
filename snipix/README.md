@@ -2,7 +2,7 @@
 
 ## Overview
 
-Snipix is a robust tool designed to provide a seamless and modular suite of functions and commands, aimed at enhancing template management within the Nix templates system. This library has been meticulously crafted to simplify the process of creating, initializing, and organizing templates and code snippets across a diverse range of projects and programming languages. Leveraging the elegance of simple and modular Nix expressions, Snipix empowers developers to streamline their workflow efficiently.
+Snipix is a tool designed to provide a seamless and modular suite of functions and commands, aimed at enhancing template management within the Nix templates system. This library has been crafted to simplify the process of creating, initializing, and organizing templates and code snippets across a diverse range of projects and programming languages. Leveraging the elegance of simple and modular Nix expressions, Snipix empowers developers to streamline their workflow efficiently.
 
 ## Prerequisites
 
@@ -35,9 +35,7 @@ Choose an installation approach that aligns with your needs and preferences:
     (import ./snipix {
       inherit pkgs;
       templatesFolder = "PATH_TO_PARENT/snipix";
-      installCommand = ''
-        sudo nixos-rebuild switch --flake PATH_TO_YOUR_CONFIGURATION_DIR
-      '';
+      installCommand = "sudo nixos-rebuild switch --flake PATH_TO_YOUR_CONFIGURATION_DIR";
     })
   ];
 ```
@@ -60,25 +58,27 @@ Replace `PATH_TO_PARENT` with the appropriate Snipix parent folder path and `PAT
 Seamlessly integrate Snipix into your Nix environment. Incorporate it into your NixOS configuration or utilize it independently with HomeManager.
 
 **Included Utilities:**
-   - `init`: Initialize a template with a specified name (e.g., `nix init -t`).
-   - `snip`: Present users with a search and preview tool for all files within the Snipix folder (using fzf by default). The selected file's content is copied to the clipboard and displayed in the terminal.
+   - `sx-init`: Initialize a template with a specified name (e.g., `nix init -t`).
+   - `sx-snip`: Present users with a search and preview tool for all files within the Snipix folder (using fzf by default). The selected file's content is copied to the clipboard and displayed in the terminal.
      This command also accepts an extra path argument in order to target specific template folder in Snipix.
-   - `initWithDiff`: Initialize a template and display changes using a designated diff tool.
-   - `save-template`: Create a new template based on the current folder's contents. This utility prompts for a name and description, duplicates the folder, and updates `templates.nix`.
-   - `snip-${name}`: Execute `snip` on a specific template folder. If the folder contains a single file, its content is directly used without user interaction.
+   - `sx-init-with-diff`: Initialize a template and display changes using a designated diff tool.
+   - `sx-create`: Create a new template based on the current folder's contents. This utility prompts for a name and description, duplicates the folder, and updates `templates.nix`.
+   - `sx-save`: will create a new template using the current folder name and description from the current flake if exists (wont prompt for editing the content).
+   - `sx-save-edit`: The same as save but will jump into the template folder in order to edit its content.
+   - `sx-snip-${name}`: Execute `sx-snip` on a specific template folder. If the folder contains a single file, its content is directly used without user interaction.
    For instance, in Vim, use:
    ```vim
-   :!snip-basic
+   :!sx-snip-basic
    ```
    Press `p` to paste content into the current buffer, or use:
    ```vim
-   :r!snip-basic
+   :r!sx-snip-basic
    ```
    If the template folder houses multiple files, run this command from the terminal.
-   - `nt-${name}`: Initialize a template with diff display for changes.
-   - `nt-${name}-edit`: Open the template folder in the default text editor for manual edits.
-   - `nt-${name}-noDiff`: Initialize a template without displaying a diff.
-   - `nt-${name}-description`: Echo the template description.
+   - `sx-${name}`: Initialize a template with diff display for changes.
+   - `sx-${name}-edit`: Open the template folder in the default text editor for manual edits.
+   - `sx-${name}-noDiff`: Initialize a template without displaying a diff.
+   - `sx-${name}-description`: Echo the template description.
 
 ## Contribute
 
